@@ -1,0 +1,6 @@
+startPos = {x = 89, y = 1.1, z = -55}
+
+function onLoad()
+    self.setPositionSmooth(startPos)
+    self.setLock(true)
+end

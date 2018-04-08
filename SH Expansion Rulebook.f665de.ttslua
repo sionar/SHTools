@@ -1,0 +1,262 @@
+--[[
+SH Expansion Rulebook
+Made by Sionar
+Version 1.0.6
+--]]
+
+------------------Constants
+rules = {
+'1. Setup: Deal three abilities to each player at the start of the game. Keep two and place one back in the deck.',
+'2. Liberals can only activate one ability per game.',
+'3. Abilities are one time use only unless stated otherwise. Keep them concealed until you use them. Announce when you are using an ability. Text in brackets restricts when they can be used.',
+'4. Abilities that occur on the same turn resolve in the order that they are revealed. The exceptions to this are Saboteur and Hacker, which are played in response to other abilities.',
+'5. Unless stated otherwise, abilities cannot be used while there are policy cards in play. During an active government, abilities can be played before the president draws cards and after a policy is placed on a tracker.',
+'6. A "turn" starts when the presidency placard moves and ends after the presidential power gets used or a play gets downvoted. If the government is interrupted without a vote going through, it does not count as a turn.',
+'7. Saboteur and hacker cannot be used once the player has already started performing the actions of the ability. When you announce an ability, wait at least five seconds to give other players a chance to respond before you play your ability.',
+'8. If a player wants you to wait before you use your ability, give them at least thirty seconds to decide whether or not they want to respond to your ability.',
+'9. Wait five seconds before you draw cards in case someone wants to play an ability.',
+'10. Reshuffle means place all of the discarded cards into the deck and shuffle the deck.',
+'11. If a player uses The Confirmed and another player uses an ability right afterwards, the player with Confirmed can play a card before the other player\'s ability goes off.',
+'12. If Magician and Super-President are both played, the Chancellor draws four cards and hands three to the president, who then hands two policy cards to the Super-President. The chancellor gains the presidential power',
+'13. When a player uses Martyr, the Election Tracker does not move back after the policy is placed on the tracker.',
+'14. If a player uses Big-Brother on another player and decides their vote, and then the target player plays Lobbyist, the targeted player gets to vote how they want. The once-per-game ability on Big-Brother is used up and cannot be used on a future vote.'
+}
+credits = 'Made by: \nPiggy\nSionar\n\nSpecial thanks to the entire\nSecret Hitler community!\n\nCome join us on Discord at:\ncFuFmmm'
+LINE_WIDTH = 58
+LINES_PER_PAGE = 22
+START_POS = {x = 100, y = 1.1, z = -22}
+START_ROT = {x = 0, y = 180, z = 0}
+COLOR_TABLE = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
+
+
+------------------Variables
+rulebook = {}
+page = 1
+
+
+function format()
+    local lineLen, pNumLines, rNumLines = 0,0,0
+    local pageText = ''
+    local ruleText = ''
+    local i = 1
+    for n, rule in pairs(rules) do
+        rNumLines = 0
+        for word in string.gmatch(rule, '%g+') do
+            if string.match(word, '%d') then
+                ruleText = '\n\n' .. word .. ' '
+                lineLen = string.len(word) + 1
+                rNumLines = 2
+            else
+                if lineLen + string.len(word) > LINE_WIDTH then
+                    ruleText = ruleText .. '\n' .. word .. ' '
+                    lineLen = string.len(word) + 1
+                    rNumLines = rNumLines + 1
+                else
+                    ruleText = ruleText .. word .. ' '
+                    lineLen = lineLen + string.len(word) + 1
+                end
+            end
+        end
+        if pNumLines + rNumLines < LINES_PER_PAGE then
+            pageText = pageText .. ruleText
+            pNumLines = pNumLines + rNumLines
+        else
+            while pNumLines < LINES_PER_PAGE do
+                pageText = pageText .. '\n'
+                pNumLines = pNumLines + 1
+            end
+            rulebook[i] = pageText
+            i = i+1
+            pNumLines = rNumLines
+            pageText = ruleText
+        end
+    end
+    while pNumLines < LINES_PER_PAGE do
+        pageText = pageText .. '\n'
+        pNumLines = pNumLines + 1
+    end
+    rulebook[i] = pageText
+end
+
+format()
+last = #rulebook
+
+
+------------------Main Functions
+function onLoad()
+    page = 1
+    refreshText()
+    moveBoard()
+end
+
+function moveBoard()
+    self.setPositionSmooth(START_POS)
+    self.setRotationSmooth(START_ROT)
+    self.setLock(true)
+    refreshText()
+end
+
+function refreshText()
+    self.clearButtons()
+    self.clearInputs()
+
+    local buttonParam = {click_function = 'nullFunc', function_owner = self, label = 'Expansion Rules', color = {0,0,0,1}, font_color = stringColorToRGB('Red'),
+        position = {0,0.1,-1.3}, width = 1, height = 1, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'nullFunc', function_owner = self, label = rulebook[page], color = {0,0,0,1}, font_color = stringColorToRGB('White'),
+        position = {0,0.1,-0.15}, width = 1, height = 1, font_size = 50, alignment = 2}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'firstPage', function_owner = self, label = '[b]⇤[/b]', color = {0,0,0,0.8}, font_color = stringColorToRGB('Red'),
+        position = {-0.9,0.1,1.1}, width = 250, height = 200, font_size = 120, tooltip = 'First Page [Numpad 8]'}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'prevPage', function_owner = self, label = '[b]←[/b]', color = {0,0,0,0.8}, font_color = stringColorToRGB('Red'),
+        position = {-0.3,0.1,1.1}, width = 250, height = 200, font_size = 100, tooltip = 'Previous Page [Numpad 4]'}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'nextPage', function_owner = self, label = '[b]→[/b]', color = {0,0,0,0.8}, font_color = stringColorToRGB('Red'),
+        position = {0.3,0.1,1.1}, width = 250, height = 200, font_size = 100, tooltip = 'Next Page [Numpad 6]'}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'lastPage', function_owner = self, label = '[b]⇥[/b]', color = {0,0,0,0.8}, font_color = stringColorToRGB('Red'),
+        position = {0.9,0.1,1.1}, width = 250, height = 200, font_size = 120, tooltip = 'Last Page [Numpad 2]'}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'givetMenu', function_owner = self, label = '☆', color = {0,0,0,0.8}, font_color = stringColorToRGB('Red'),
+        position = {1.5,0.1,-1.5}, width = 100, height = 100, font_size = 80, tooltip = 'Give Rulebook to:'}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'nullFunc', function_owner = self, label = credits, color = {0,0,0,1}, font_color = stringColorToRGB('White'),
+        position = {0,-0.1,-0.15}, rotation = {180, 180, 0}, width = 1, height = 1, font_size = 100, alignment = 3}
+    self.createButton(buttonParam)
+end
+
+function nullFunc()
+end
+
+function firstPage()
+    page = 1
+    refreshText()
+end
+
+function prevPage()
+    if page ~= 1 then
+        page = page - 1
+    end
+    refreshText()
+end
+
+function nextPage()
+    if page ~= last then
+        page = page + 1
+    end
+    refreshText()
+end
+
+function lastPage()
+    page = last
+    refreshText()
+end
+
+function onScriptingButtonDown(index, playerColor)
+    if index == 8 then
+        firstPage()
+    elseif index == 2 then
+        lastPage()
+    elseif index == 4 then
+        prevPage()
+    elseif index == 6 then
+        nextPage()
+    end
+end
+
+
+function giveTool(clickedButton, playerColor, index)
+    local pos = {forward = -17, right = 0, up = 1}
+    local rot = {x = 0, y = 180, z = 0}
+    if COLOR_TABLE[index] == 'Purple' or COLOR_TABLE[index] == 'Orange' then
+        pos['right'] = 5
+    elseif COLOR_TABLE[index] == 'Pink' or COLOR_TABLE[index] == 'Yellow' then
+        pos['right'] = -5
+    end
+    giveObjectToPlayer(self, COLOR_TABLE[index], pos, rot)
+    refreshText()
+end
+
+for k = 1,10 do
+    _G['giveTool' .. k] = function(obj, col)
+        giveTool(obj, col, k)
+    end
+end
+
+function givetMenu()
+    self.clearButtons()
+    state = 11
+
+    local buttonParam = {click_function = 'giveTool6', label = "Green", color = stringColorToRGB('Green'), function_owner = self,
+        position = {-1,0.1,-0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'giveTool7', label = "Teal", color = stringColorToRGB('Teal'), function_owner = self,
+        position = {0,0.1,-0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'giveTool8', label = "Blue", color = stringColorToRGB('Blue'), function_owner = self,
+        position = {1,0.1,-0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'giveTool3', label = "Red", color = stringColorToRGB('Red'), function_owner = self,
+        position = {-1,0.1,0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'giveTool2', label = "Brown", color = stringColorToRGB('Brown'), function_owner = self,
+        position = {0,0.1,0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'giveTool1', label = "White", color = stringColorToRGB('White'), function_owner = self,
+        position = {1,0.1,0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'giveTool5', label = "Yellow", color = stringColorToRGB('Yellow'), function_owner = self,
+        position = {-1.2,0.1,-0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'giveTool4', label = "Orange", color = stringColorToRGB('Orange'), function_owner = self,
+        position = {-1.2,0.1,0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'giveTool9', label = "Purple", color = stringColorToRGB('Purple'), function_owner = self,
+        position = {1.2,0.1,-0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'giveTool10', label = "Pink", color = stringColorToRGB('Pink'), function_owner = self,
+        position = {1.2,0.1,0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'moveBoard', label = "Cancel", color = {1,1,1,0.8}, function_owner = self,
+        position = {0,0.1,0}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+end
+
+function giveObjectToPlayer(object, playerColor, posAdd, rotAdd, ...)
+	local ph = Player[playerColor].getPlayerHand()
+
+	if ph then
+		if rotAdd['exactRot'] then
+			object.setRotationSmooth({rotAdd['x'], rotAdd['y'], rotAdd['z']}, ...)
+		else
+			object.setRotationSmooth({ph['rot_x'] + rotAdd['x'], ph['rot_y'] + rotAdd['y'], ph['rot_z'] + rotAdd['z']}, ...)
+		end
+		if posAdd['forceHeight'] then
+			object.setPositionSmooth({ph['pos_x'] + ph['trigger_forward_x'] * posAdd['forward'] + ph['trigger_right_x'] * posAdd['right'] + ph['trigger_up_x'] * posAdd['up'],
+											  posAdd['forceHeight'] + tableHeightAdd,
+											  ph['pos_z'] + ph['trigger_forward_z'] * posAdd['forward'] + ph['trigger_right_z'] * posAdd['right'] + ph['trigger_up_z'] * posAdd['up']}, ...)
+		else
+			object.setPositionSmooth({ph['pos_x'] + ph['trigger_forward_x'] * posAdd['forward'] + ph['trigger_right_x'] * posAdd['right'] + ph['trigger_up_x'] * posAdd['up'],
+											  ph['pos_y'] + ph['trigger_forward_y'] * posAdd['forward'] + ph['trigger_right_y'] * posAdd['right'] + ph['trigger_up_y'] * posAdd['up'],
+											  ph['pos_z'] + ph['trigger_forward_z'] * posAdd['forward'] + ph['trigger_right_z'] * posAdd['right'] + ph['trigger_up_z'] * posAdd['up']}, ...)
+		end
+	end
+end

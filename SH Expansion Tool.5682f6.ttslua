@@ -1,0 +1,1395 @@
+--[[
+SH Expansion Tool
+Made by Sionar
+Version 1.5.1
+--]]
+
+------------------Constants
+COLOR_TABLE = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
+DRAW_ZONE_GUID = '6463d3'
+DISCARD_ZONE_GUID = 'b9bd6e'
+EFFECT_ZONE_GUID = '374a16'
+ABILITY_ZONE_GUID = 'eea120'
+
+
+------------------Variables
+state = 0
+player = ""
+pButtonColor = {{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1}}
+sdButtonColor = {{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1}}
+targSelected = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+numSelected = 0
+drawNum = 1
+option = 0
+promOnly = true
+last_gambled = "none"
+shufFlag = false
+policyDeckNum = 17
+efName = ''
+
+
+------------------Load Save
+function onLoad(saveString)
+    clearValues()
+    math.randomseed(os.time())
+    if not (saveString == '') then
+        local save = JSON.decode(saveString)
+        state = save['st']
+        promOnly = save['pr']
+        last_gambled = save['l']
+    end
+    refreshButtons()
+end
+
+function onSave()
+    local save = {}
+    save['st'] = state
+    save['pr'] = promOnly
+    save['l'] = last_gambled
+    local saveString = JSON.encode(save)
+    return saveString
+end
+
+
+------------------Events
+function onObjectDrop(playerColor, dropped_object)
+    if shufFlag then
+        startLuaCoroutine(self, 'deckShufCoroutine')
+    end
+end
+
+function deckShufCoroutine()
+    shufFlag = false
+    wait()
+    sleep(1)
+    local drawDeck = getDeckFromZoneByGUID('6463d3')
+    drawDeck.shuffle()
+
+    return 1
+end
+
+function wait()
+    local drawDeck = getDeckFromZoneByGUID('6463d3')
+    if drawDeck == nil then
+        while drawDeck == nil do
+            drawDeck = getDeckFromZoneByGUID('6463d3')
+            coroutine.yield(0)
+        end
+    else
+        while policyDeckNum >= drawDeck.getQuantity() do
+            coroutine.yield(0)
+        end
+    end
+end
+
+
+------------------Main Functions
+function decDraw()
+    if drawNum ~= 1 then
+        drawNum = drawNum - 1
+    end
+    drawMenu()
+end
+
+function incDraw()
+    drawNum = drawNum + 1
+    drawMenu()
+end
+
+function drawStart(clickedButton, playerColor)
+    if Player[playerColor].admin or not promOnly then
+        if player == "" then
+            broadcastToColor("ERROR: Player not selected.", playerColor, {1,0,0})
+            return
+        end
+        local drawDeck = getDeckFromZoneByGUID('6463d3')
+        if drawDeck == nil then
+            broadcastToColor("ERROR: Policy deck not found.", playerColor, {1,0,0})
+            return
+        end
+
+        drawDeck.dealToColor(drawNum, player)
+        local broadcastString = player .. " draws " .. drawNum .. " cards"
+        broadcastToAll(broadcastString, {1,1,1})
+        if drawNum >= 6 or drawNum >= drawDeck.getQuantity() then
+            shufFlag = true
+            policyDeckNum = drawDeck.getQuantity() - drawNum
+        end
+        returnFunc()
+    end
+end
+
+function sdStart(clickedButton, playerColor)
+    if Player[playerColor].admin or not promOnly then
+        local lib, fas, random = 0, 0, 0
+        local inspectedRoles = {}
+        local players = Global.getTable('players')
+        local roles = Global.getTable('roles')
+        local numPlayers = #players
+        numPlayers = (numPlayers + numPlayers%2)/2
+
+        if numSelected < numPlayers then
+            broadcastToColor("ERROR: Not enough players selected", playerColor, {1,0,0})
+            return
+        elseif numSelected > numPlayers then
+            broadcastToColor("ERROR: Too many players selected", playerColor, {1,0,0})
+            return
+        end
+        if player == "" then
+            broadcastToColor("ERROR: Inspector not selected", playerColor, {1,0,0})
+            return
+        end
+
+        local broadcastString = player .. " inspects "
+        for i = 1,10 do
+            if targSelected[i] == 1 then
+                broadcastString = broadcastString .. COLOR_TABLE[i] .. " "
+                if roles[COLOR_TABLE[i]] == "liberal" then
+                    table.insert(inspectedRoles, "liberal")
+                else
+                    table.insert(inspectedRoles, "fascist")
+                end
+            end
+        end
+        random = math.random(1,numSelected)
+        table.remove(inspectedRoles, random)
+        for i = 1, numSelected-1 do
+            if inspectedRoles[i] == "liberal" then
+                lib = lib + 1
+            else
+                fas = fas + 1
+            end
+        end
+        broadcastToAll(broadcastString, {1,1,1})
+        broadcastToColor("You found " .. lib .. " liberals and " .. fas .. " fascists.", player, {1,1,1})
+
+        returnFunc()
+    end
+end
+
+function spyStart(clickedButton, playerColor)
+    if Player[playerColor].admin or not promOnly then
+        if player == "" then
+            broadcastToColor("ERROR: Player not selected.", playerColor, {1,0,0})
+            return
+        end
+
+        local inspected = Global.getTable('inspected')
+        local broadcastString = player .. " gains the inspect power"
+        local pres = Global.getVar('lastPres')
+        Global.setVar('lastPres',player)
+        broadcastToAll(broadcastString, {1,1,1})
+        local membershipCard = getObjectFromGUID('55d1c3')
+
+        if not inTable(inspected, pres) then
+            local params = {}
+            params.rotation = {0, 0, 180}
+            card = membershipCard.clone(params)
+            card.setDescription('Fake Party Card')
+            card.setLuaScript(
+                'playerColor = \'' .. pres .. '\'\r\n\r\n' ..
+                'function onCollisionEnter(collision_info)\r\n' ..
+                '	local ph = Player[playerColor].getPlayerHand()\r\n' ..
+                '	if ph then\r\n' ..
+                '		self.setRotation({0, ph[\'rot_y\']+180, 180})\r\n' ..
+                '		self.setLock(true)\r\n' ..
+                '	end\r\n' ..
+                'end\r\n\r\n' ..
+                'function onLoad(saveString)\r\n' ..
+                '	local button = {}\r\n' ..
+                '	button.click_function = \'' .. pres .. 'Inspected\'\r\n' ..
+                '	button.label = \'Inspect\\n' .. pres .. '\'\r\n' ..
+                '	button.function_owner = Global\r\n' ..
+                '	button.position = {0, 3, 0}\r\n' ..
+                '	button.rotation = {0, 0, 180}\r\n' ..
+                '	button.width = 1000\r\n' ..
+                '	button.height = 1500\r\n' ..
+                '	button.font_size = 150\r\n' ..
+                '	self.createButton(button)\r\n' ..
+                'end')
+            card.setPosition({0, 5, 0})
+            card.setLock(false)
+            giveObjectToPlayer(card, pres, {forward = 16.5, right = 0, up = 0}, {x = 0, y = 180, z = 180})
+        end
+
+        returnFunc()
+    end
+end
+
+function inspectStart(clickedButton, playerColor)
+    if Player[playerColor].admin or not promOnly then
+        if player == "" then
+            broadcastToColor("ERROR: Player not selected", playerColor, {1,0,0})
+            return
+        end
+        if numSelected == 0 then
+            broadcastToColor("ERROR: Target not selected", playerColor, {1,0,0})
+            return
+        end
+
+        local roles = Global.getTable('roles')
+        local broadcastString = player .. " inspects "
+        local inspectMessage
+        for i = 1,10 do
+            if targSelected[i] == 1 then
+                broadcastString = broadcastString .. COLOR_TABLE[i] .. " "
+                if roles[COLOR_TABLE[i]] == "liberal" then
+                    inspectMessage = COLOR_TABLE[i] .. " is a Liberal!"
+                    broadcastToColor(inspectMessage, player, {0,0,1})
+                else
+                    inspectMessage = COLOR_TABLE[i] .. " is a Fascist!"
+                    broadcastToColor(inspectMessage, player, {1,0,0})
+                end
+            end
+        end
+        broadcastToAll(broadcastString, {1,1,1})
+
+        returnFunc()
+    end
+end
+
+function spelunStart(clickedButton, playerColor)
+    if Player[playerColor].admin or not promOnly then
+        if player == "" then
+            broadcastToColor("ERROR: Player not selected.", playerColor, {1,0,0})
+            return
+        end
+        local tmpDeck = getDeckFromZoneByGUID(DISCARD_ZONE_GUID)
+        if tmpDeck == nil then
+            broadcastToColor("ERROR: Discard pile not found.", playerColor, {1,0,0})
+            return
+        end
+
+        local params = {index = option}
+        local card = tmpDeck.takeObject(params)
+        card.deal(1, player)
+        local broadcastString
+        if option == 0 then
+            broadcastString = player .. " looks at the top card of the discard pile"
+        else
+            broadcastString = player .. " looks at the second card of the discard pile"
+        end
+        broadcastToAll(broadcastString, {1,1,1})
+
+        returnFunc()
+    end
+end
+
+function gambleStart(clickedButton, playerColor)
+    if Player[playerColor].admin or not promOnly then
+        if player == "" then
+            broadcastToColor("ERROR: Player not selected.", playerColor, {1,0,0})
+            return
+        end
+        local drawDeck = getDeckFromZoneByGUID(DRAW_ZONE_GUID)
+        local abilityDeck = getDeckFromZoneByGUID(ABILITY_ZONE_GUID)
+
+        if drawDeck == nil then
+            broadcastToColor("ERROR: Policy deck not found.", playerColor, {1,0,0})
+            return
+        end
+
+        if abilityDeck == nil then
+            broadcastToColor("ERROR: Ability deck not found.", playerColor, {1,0,0})
+            return
+        end
+
+        startLuaCoroutine(self, 'gambleCoroutine')
+        mainMenu()
+    end
+end
+
+function fisherStart(clickedButton, playerColor)
+    if Player[playerColor].admin or not promOnly then
+        if player == "" then
+            broadcastToColor("ERROR: Player not selected.", playerColor, {1,0,0})
+            return
+        end
+        local discDeck = getDeckFromZoneByGUID(DISCARD_ZONE_GUID)
+        local drawDeck = getDeckFromZoneByGUID(DRAW_ZONE_GUID)
+        if discDeck == nil then
+            broadcastToColor("ERROR: Discard pile not found.", playerColor, {1,0,0})
+            return
+        end
+        if discDeck.getQuantity() < 4 then
+            broadcastToColor("ERROR: Not enough cards in the discard pile.", playerColor, {1,0,0})
+            return
+        end
+        discDeck.shuffle()
+        discDeck.dealToColor(3, player)
+        local broadcastString = player .. " draws 3 cards from the discard pile."
+        broadcastToAll(broadcastString, {1,1,1})
+        shufFlag = true
+        policyDeckNum = drawDeck.getQuantity()
+
+        returnFunc()
+    end
+end
+
+function martyrStart(clickedButton, playerColor)
+    if Player[playerColor].admin or not promOnly then
+        if player == "" then
+            broadcastToColor("ERROR: Player not selected.", playerColor, {1,0,0})
+            return
+        end
+        local drawDeck = getDeckFromZoneByGUID(DRAW_ZONE_GUID)
+        if drawDeck == nil then
+            broadcastToColor("ERROR: Policy deck not found.", playerColor, {1,0,0})
+            return
+        end
+
+        reshuffle()
+        local deckTable = drawDeck.getObjects()
+        local size = drawDeck.getQuantity()
+        local found = 0
+        found = getIndex(option, size, deckTable, "Liberal Policy", "Fascist Policy")
+        local broadcastString
+        if option == 0 then
+            broadcastString = player .. " played a Liberal policy card and died!"
+        else
+            broadcastString = player .. " played a Fascist policy card and died!"
+        end
+        broadcastToAll(broadcastString, {1,1,1})
+        local params = {index = found-1}
+        local card = drawDeck.takeObject(params)
+        card.deal(1, player)
+        reshuffle()
+
+        local playerStat = Global.getTable('playerStatus')
+        playerStat[player] = 5
+        Global.setTable('playerStatus', playerStat)
+        Global.call('refreshStatusButtons')
+
+        returnFunc()
+    end
+end
+
+function shufStart()
+    local drawDeck = getDeckFromZoneByGUID(DRAW_ZONE_GUID)
+    if drawDeck == nil then
+        broadcastToColor("ERROR: Policy deck not found.", playerColor, {1,0,0})
+        return
+    end
+    drawDeck.shuffle()
+end
+
+function passedStart(clickedButton, playerColor)
+    if Player[playerColor].admin or not promOnly then
+        Global.setVar('votePassed', true)
+		Global.setVar('blockDraw', false)
+    end
+end
+
+function reshufStart(clickedButton, playerColor)
+    if Player[playerColor].admin or not promOnly then
+        reshuffle()
+
+        returnFunc()
+    end
+end
+
+function givepStart(clickedButton, playerColor)
+    if Player[playerColor].admin or not promOnly then
+        local effectDeck = getDeckFromZoneByGUID(EFFECT_ZONE_GUID)
+        local size = effectDeck.getQuantity()
+        local deckTable = effectDeck.getObjects()
+        local foundLib = getIndex(0, size, deckTable, "Fake Liberal Party Card", "Fake Fascist Party Card")
+        local foundFas = getIndex(1, size, deckTable, "Fake Liberal Party Card", "Fake Fascist Party Card")
+
+        if numSelected == 0 then
+            broadcastToColor("ERROR: Target not selected", playerColor, {1,0,0})
+            return
+        end
+        if effectDeck == nil then
+            broadcastToColor("ERROR: Effect deck not found.", playerColor, {1,0,0})
+            return
+        end
+        if foundLib == -1 then
+            broadcastToColor("ERROR: Liberal party membership card not found.", playerColor, {1,0,0})
+            return
+        end
+        if foundFas == -1 then
+            broadcastToColor("ERROR: Fascist party membership card not found.", playerColor, {1,0,0})
+            return
+        end
+
+        startLuaCoroutine(self, 'givePCoroutine')
+    end
+end
+
+function givePCoroutine()
+    local effectDeck = getDeckFromZoneByGUID(EFFECT_ZONE_GUID)
+    local roles = Global.getTable('roles')
+    local broadcastString
+    local deckTable = effectDeck.getObjects()
+    local size = effectDeck.getQuantity()
+    local found
+    local params = {}
+    local card, cardClone
+    local pos = effectDeck.getPosition()
+
+    for i = 1,10 do
+        if targSelected[i] == 1 then
+            deckTable = effectDeck.getObjects()
+            if roles[COLOR_TABLE[i]] == "liberal" then
+                broadcastString = COLOR_TABLE[i] .. " is a Liberal!"
+                broadcastToAll(broadcastString, {0,0,1})
+                found = getIndex(0, size, deckTable, "Fake Liberal Party Card", "Fake Fascist Party Card")
+            else
+                broadcastString = COLOR_TABLE[i] .. " is a Fascist!"
+                broadcastToAll(broadcastString, {1,0,0})
+                found = getIndex(1, size, deckTable, "Fake Liberal Party Card", "Fake Fascist Party Card")
+            end
+            params = {index = found - 1}
+            card = effectDeck.takeObject(params)
+            cardClone = card.clone()
+            giveObjectToPlayer(cardClone, COLOR_TABLE[i], {forward = 16.5, right = 0, up = 0}, {x = 0, y = 180, z = 0})
+            card.setPosition({pos['x'], pos['y'], pos['z']})
+
+            sleep(0.1)
+        end
+
+    end
+    returnFunc()
+    return 1
+end
+
+function giveEfStart(clickedButton, playerColor)
+    if Player[playerColor].admin or not promOnly then
+        local effectDeck = getDeckFromZoneByGUID(EFFECT_ZONE_GUID)
+        if player == "" then
+            broadcastToColor("ERROR: Player not selected.", playerColor, {1,0,0})
+            return
+        end
+        if effectDeck == nil then
+            broadcastToColor("ERROR: Effect deck not found.", playerColor, {1,0,0})
+            return
+        end
+        startLuaCoroutine(self, 'giveEFCoroutine')
+    end
+end
+
+function giveEFCoroutine()
+    local tab = self.getInputs()
+    local input = tab[1].value
+    local effectDeck = getDeckFromZoneByGUID(EFFECT_ZONE_GUID)
+    local deckTable = effectDeck.getObjects()
+    local size = effectDeck.getQuantity()
+    local found = 0
+    local params = {}
+    local card
+
+    if option == 0 then
+        for i = 1,size do
+            if deckTable[i].nickname == '1 Poisoned Drink' then
+                found = 1
+                break
+            elseif deckTable[i].nickname == '2 Poisoned Drink' then
+                found = 2
+                break
+            end
+        end
+        if found == 0 then
+            broadcastToAll('ERROR: Poisoner effect cards not found in effects deck.', {1,0,0})
+            clearValues()
+            mainMenu()
+            return 1
+        end
+
+        for i = size,1,-1 do
+            if deckTable[i].nickname == found .. ' Poisoned Drink' or deckTable[i].nickname == found .. ' Water' then
+                params = {index = i-1}
+                card = effectDeck.takeObject(params)
+                giveObjectToPlayer(card, player, {forward = 16.5, right = 0, up = 0}, {x = 0, y = 180, z = 180})
+                sleep(0.1)
+            end
+        end
+        broadcastToAll('The Poisoner effect cards have been dealt to ' .. player .. '.', {1,1,1})
+    elseif option == 1 then
+        for i = 1,size do
+            if deckTable[i].nickname == '1 Inspected' then
+                found = 1
+                break
+            elseif deckTable[i].nickname == '2 Inspected' then
+                found = 2
+                break
+            end
+        end
+        if found == 0 then
+            broadcastToAll('ERROR: Inspected effect cards not found in effects deck.', {1,0,0})
+            clearValues()
+            mainMenu()
+            return 1
+        end
+        for i = size,1,-1 do
+            if deckTable[i].nickname == found .. ' Inspected' then
+                params = {index = i-1}
+                card = effectDeck.takeObject(params)
+                giveObjectToPlayer(card, player, {forward = 16.5, right = 0, up = 0}, {x = 0, y = 180, z = 0})
+                sleep(0.1)
+            end
+        end
+        broadcastToAll('The Super-Inspector effect cards have been dealt to ' .. player .. '.', {1,1,1})
+    elseif option == 2 then
+        for i = 1,size do
+            if deckTable[i].nickname == '1 Artifact: Cursed Crown' then
+                found = 1
+                break
+            elseif deckTable[i].nickname == '2 Artifact: Cursed Crown' then
+                found = 2
+                break
+            elseif deckTable[i].nickname == '3 Artifact: Cursed Crown' then
+                found = 3
+                break
+            end
+        end
+        if found == 0 then
+            broadcastToAll('ERROR: Artifact effect cards not found in effects deck.', {1,0,0})
+            clearValues()
+            mainMenu()
+            return 1
+        end
+
+        for i = size,1,-1 do
+            if string.sub(deckTable[i].nickname, 1, 10) == found .. ' Artifact' then
+                params = {index = i-1}
+                card = effectDeck.takeObject(params)
+                giveObjectToPlayer(card, player, {forward = 16.5, right = 0, up = 0}, {x = 0, y = 180, z = 180})
+                sleep(0.1)
+            end
+        end
+        broadcastToAll('The Collector effect cards have been dealt to ' .. player .. '.', {1,1,1})
+    else
+        for i = size,1,-1 do
+            if string.match(string.lower(deckTable[i].nickname), string.lower(input)) then
+                found = i
+                params = {index = i-1, flip = true}
+                card = effectDeck.takeObject(params)
+                giveObjectToPlayer(card, player, {forward = 16.5, right = 0, up = 0}, {x = 0, y = 180, z = 0})
+                broadcastToAll('The ' .. deckTable[i].nickname .. ' effect card has been dealt to ' .. player .. '.', {1,1,1})
+                break
+            end
+        end
+        if found == 0 then
+            broadcastToAll('ERROR: Effect card with name ' .. input .. ' not found in effects deck.', {1,0,0})
+        end
+    end
+    efName = ''
+    clearValues()
+    mainMenu()
+    return 1
+end
+
+
+function giveTool(clickedButton, playerColor, index)
+    if Player[playerColor].admin or not promOnly then
+        self.setLock(true)
+        local tempScale = self.getScale()[1]
+        self.scale(1/tempScale)
+        self.scale(6.1)
+        local pos = {forward = -13, right = 0, up = 1}
+        local rot = {x = 0, y = 180, z = 0}
+        if COLOR_TABLE[index] == 'Purple' or COLOR_TABLE[index] == 'Orange' then
+            pos['right'] = 5
+        elseif COLOR_TABLE[index] == 'Pink' or COLOR_TABLE[index] == 'Yellow' then
+            pos['right'] = -5
+        end
+        giveObjectToPlayer(self, COLOR_TABLE[index], pos, rot)
+        returnFunc()
+    end
+end
+
+for k = 1,10 do
+    _G['giveTool' .. k] = function(obj, col)
+        giveTool(obj, col, k)
+    end
+end
+
+function promStart(clickedButton, playerColor)
+    if Player[playerColor].admin then
+        if promOnly == true then
+            promOnly = false
+            broadcastToAll("Expansion tool access has been granted to all users", {1,1,1})
+        else
+            promOnly = true
+            broadcastToAll("Expansion tool access has been granted to promoted users only", {1,1,1})
+        end
+    end
+    mainMenu()
+end
+
+function lockStart(clickedButton, playerColor)
+    if Player[playerColor].admin or not promOnly then
+        lock()
+    end
+end
+
+function returnFunc()
+    state = 0
+    clearValues()
+    mainMenu()
+end
+
+function reshuffle()
+    local pos
+    local tmpDeck = getDeckFromZoneByGUID(DRAW_ZONE_GUID)
+    if tmpDeck then
+        pos = tmpDeck.getPosition()
+    else
+        local tmpZone = getObjectFromGUID(DRAW_ZONE_GUID)
+        pos = tmpZone.getPosition()
+    end
+    local discardDeck = getDeckFromZoneByGUID(DISCARD_ZONE_GUID)
+    if discardDeck == nil then
+        tmpZone = getObjectFromGUID(DISCARD_ZONE_GUID)
+        local tab = tmpZone.getObjects()
+        if tab[2] ~= nil then
+            tab[2].setPositionSmooth({pos['x'], pos['y'], pos['z']}, false, true)
+        end
+    end
+
+    if discardDeck ~= nil then
+        discardDeck.setPositionSmooth({pos['x'], pos['y'], pos['z']}, false, true)
+    end
+    startLuaCoroutine(self, 'shuffleCoroutine')
+    broadcastToAll('Deck reshuffled', {1,1,1})
+end
+
+function lock()
+    local abilityDeck = getDeckFromZoneByGUID(ABILITY_ZONE_GUID)
+    if abilityDeck == nil then
+        broadcastToColor("ERROR: Ability deck not found", playerColor, {1,0,0})
+        return
+    end
+
+    if abilityDeck.interactable == false then
+        broadcastToAll("The ability deck has been unlocked", {1,1,1})
+    else
+        broadcastToAll("The ability deck has been locked", {1,1,1})
+    end
+    abilityDeck.interactable = not abilityDeck.interactable
+    mainMenu()
+end
+
+function opt0()  option = 0   refreshButtons()    end
+function opt1()  option = 1   refreshButtons()    end
+function opt2()  option = 2   refreshButtons()    end
+
+function getIndex(flag, size, table, string1, string2)
+    for i = 1,size,1 do
+        if flag == 0 then
+            if table[i].description == string1 then
+                return i
+            end
+        else
+            if table[i].description == string2 then
+                return i
+            end
+        end
+    end
+    return -1
+end
+
+function shuffleCoroutine()
+    sleep(1)
+    local drawDeck = getDeckFromZoneByGUID(DRAW_ZONE_GUID)
+    drawDeck.shuffle()
+    return 1
+end
+
+function gambleCoroutine()
+    local drawDeck = getDeckFromZoneByGUID(DRAW_ZONE_GUID)
+    local deckTable = drawDeck.getObjects()
+    local abilityDeck = getDeckFromZoneByGUID(ABILITY_ZONE_GUID)
+    local pos1 = abilityDeck.getPosition()
+    local rotUp = {x = 0, y = 180, z = 0}
+    local rotDown = {x = 0, y = 180, z = 180}
+    local broadcastString = player.." bet on a "
+    local allObjs = getAllObjects()
+	local tmpObj
+    local gambleResult
+    for _, tmpObj in ipairs(allObjs) do
+        tmpPos = tmpObj.getPosition()
+        if tmpObj.getName() == last_gambled and tmpObj.getName() ~= "" and tmpPos['x'] >= pos1['x'] - 15 and tmpPos['x'] <= pos1['x'] and tmpPos['z'] >= pos1['z'] - 8 and tmpPos['z'] <= pos1['z'] + 8 then
+            tmpObj.setRotationSmooth(rotDown)
+            tmpObj.setPositionSmooth(pos1)
+            sleep(0.5)
+        end
+    end
+    abilityDeck.shuffle()
+    if option == 1 then
+        broadcastString = broadcastString .. "Liberal policy card and "
+    else
+        broadcastString = broadcastString .. "Fascist policy card and "
+    end
+    if (deckTable[1].description == "Liberal Policy" and option == 1) or (deckTable[1].description == "Fascist Policy" and option == 0) then
+        broadcastString = broadcastString .. "won!"
+        local params = {index = 1}
+        local card = abilityDeck.takeObject(params)
+        card.setPositionSmooth({pos1['x'] - 5, pos1['y'], pos1['z']})
+        card.setRotationSmooth({rotUp['x'], rotUp['y'], rotUp['z']})
+        last_gambled = card.getName()
+        gambleResult = 'w'
+    else
+        broadcastString = broadcastString .. "lost!"
+        gambleResult = 'l'
+    end
+
+    ---Scoreboard code
+    local tab = getAllObjects()
+    for _, v in pairs(tab) do
+        if string.match(v.getName(), "Scoreboard") then
+            tmpObj = v
+            break
+        end
+    end
+    if tmpObj ~= nil then
+        tmpObj.call('recGamble', {player, gambleResult})
+    end
+    ---
+    broadcastToAll(broadcastString, {1,1,1})
+    local pos2 = drawDeck.getPosition()
+
+    local params = {index = 0}
+    local card = drawDeck.takeObject(params)
+    card.setPosition({pos2['x'], pos2['y']+1, pos2['z']})
+    card.setRotationSmooth({rotUp['x'], rotUp['y'], rotUp['z']})
+    sleep(3)
+    card.setRotationSmooth({rotDown['x'], rotDown['y'], rotDown['z']})
+    sleep(1)
+    drawDeck.shuffle()
+    clearValues()
+    return 1
+end
+
+function sleep(numSeconds)
+	local t0 = os.clock()
+	while os.clock() - t0 <= numSeconds do
+        coroutine.yield(0)
+    end
+
+end
+
+function giveObjectToPlayer(object, playerColor, posAdd, rotAdd, ...)
+	local ph = Player[playerColor].getPlayerHand()
+
+	if ph then
+		if rotAdd['exactRot'] then
+			object.setRotationSmooth({rotAdd['x'], rotAdd['y'], rotAdd['z']}, ...)
+		else
+			object.setRotationSmooth({ph['rot_x'] + rotAdd['x'], ph['rot_y'] + rotAdd['y'], ph['rot_z'] + rotAdd['z']}, ...)
+		end
+		if posAdd['forceHeight'] then
+			object.setPositionSmooth({ph['pos_x'] + ph['trigger_forward_x'] * posAdd['forward'] + ph['trigger_right_x'] * posAdd['right'] + ph['trigger_up_x'] * posAdd['up'],
+											  posAdd['forceHeight'] + tableHeightAdd,
+											  ph['pos_z'] + ph['trigger_forward_z'] * posAdd['forward'] + ph['trigger_right_z'] * posAdd['right'] + ph['trigger_up_z'] * posAdd['up']}, ...)
+		else
+			object.setPositionSmooth({ph['pos_x'] + ph['trigger_forward_x'] * posAdd['forward'] + ph['trigger_right_x'] * posAdd['right'] + ph['trigger_up_x'] * posAdd['up'],
+											  ph['pos_y'] + ph['trigger_forward_y'] * posAdd['forward'] + ph['trigger_right_y'] * posAdd['right'] + ph['trigger_up_y'] * posAdd['up'],
+											  ph['pos_z'] + ph['trigger_forward_z'] * posAdd['forward'] + ph['trigger_right_z'] * posAdd['right'] + ph['trigger_up_z'] * posAdd['up']}, ...)
+		end
+	end
+end
+
+function inTable(tableIn, valueIn)
+	local value
+	if tableIn then
+		for _, value in pairs(tableIn) do
+			if value == valueIn then
+				return true
+			end
+		end
+	end
+	return false
+end
+
+function getDeckFromZoneByGUID(guidIn)
+	local deck = nil
+	local deck_ct = 0
+	local zone = getObjectFromGUID(guidIn)
+	local object
+
+	if zone then
+		local inZone = zone.getObjects()
+		for _, object in ipairs(inZone) do
+			if object.name == 'Card' then
+				deck_ct = 2
+			elseif object.name == 'Deck' then
+				deck = object
+				deck_ct = deck_ct + 1
+			elseif object.name == 'DeckCustom' then
+				deck = object
+				deck_ct = deck_ct + 1
+			end
+		end
+	end
+	if deck_ct == 1 then
+		return deck
+	end
+	return nil
+end
+
+
+------------------User Interface
+function nulFunc()
+end
+
+function mainMenu()
+    self.clearButtons()
+    self.clearInputs()
+
+    local buttonParam = {click_function = 'drawMenu', label = "Draw", color = {1,1,1}, function_owner = self,
+        position = {-1.7,0.1,-0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'sdMenu', label = "Super\nInspector", color = {1,1,1}, function_owner = self,
+        position = {-1.7,0.1,-0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'spyMenu', label = "Spy", color = {1,1,1}, function_owner = self,
+        position = {-1.7,0.1,0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'inspMenu', label = "Inspect", color = {1,1,1}, function_owner = self,
+        position = {-1.7,0.1,0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'spelunMenu', label = "Spelunker", color = {1,1,1}, function_owner = self,
+        position = {-0.575,0.1,-0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'gambleMenu', label = "Gambler", color = {1,1,1}, function_owner = self,
+        position = {-0.575,0.1,-0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'fisherMenu', label = "Fisherman", color = {1,1,1}, function_owner = self,
+        position = {-0.575,0.1,0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'martyrMenu', label = "Martyr", color = {1,1,1}, function_owner = self,
+        position = {-0.575,0.1,0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'shufStart', label = "Shuffle\nDeck", color = {1,1,1}, function_owner = self,
+        position = {0.575,0.1,-0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'passedStart', label = "Vote\nPassed", color = {1,1,1}, function_owner = self,
+        position = {0.575,0.1,-0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'reshufMenu', label = "Reshuffle", color = {1,1,1}, function_owner = self,
+        position = {0.575,0.1,0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'givepMenu', label = "Give\nParty Card", color = {1,1,1}, function_owner = self,
+        position = {0.575,0.1,0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'givetMenu', label = "Give\nTool to", color = {1,1,1}, function_owner = self,
+        position = {1.7,0.1,-0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'promStart', color = {1,1,1}, function_owner = self,
+        position = {1.7,0.1,-0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 70}
+    if promOnly == false then    buttonParam.label = "Tool Access:\nAll Players"
+    else                    buttonParam.label = "Tool Access:\nPromoted Only"
+    end
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'lockStart', label = "Toggle Lock\nAbility Deck", color = {1,1,1}, function_owner = self,
+        position = {1.7,0.1,0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 70}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'giveEfMenu', label = "Deal\nEffect Cards", color = {1,1,1}, function_owner = self,
+        position = {1.7,0.1,0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 70}
+    self.createButton(buttonParam)
+end
+
+function drawMenu()
+    self.clearButtons()
+    self.clearInputs()
+    state = 1
+
+    local buttonParam = {click_function = 'nulFunc', label = "Draw", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {0,0.1,-1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 150}
+    self.createButton(buttonParam)
+
+    local inputParam = {input_function = 'drawInput', label = drawNum, color = {0,0,0}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {0,0.1,-0.5}, rotation = {0,0,0}, width = 300, height = 200, font_size = 150, alignment = 3, validation = 2}
+    self.createInput(inputParam)
+
+    local buttonParam = {click_function = 'decDraw', label = "-", color = stringColorToRGB('White'), function_owner = self,
+        position = {-0.25,0.1,0}, rotation = {0,0,0}, width = 250, height = 100, font_size = 150}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'incDraw', label = "+", color = stringColorToRGB('White'), function_owner = self,
+        position = {0.25,0.1,0}, rotation = {0,0,0}, width = 250, height = 100, font_size = 150}
+    self.createButton(buttonParam)
+
+    createLabelButton()
+    createPlayerButtons()
+    createStartButton()
+    createReturnButton()
+end
+
+function drawInput()
+    local tab = self.getInputs()
+    if tab[1].value == '' then
+        drawNum = 1
+    else
+        drawNum = tonumber(tab[1].value)
+    end
+    return drawNum
+end
+
+function sdMenu()
+    self.clearButtons()
+    state = 2
+
+    createInspectedButtons()
+    createLabelButton()
+    createPlayerButtons()
+    createStartButton()
+    createReturnButton()
+end
+
+function spyMenu()
+    self.clearButtons()
+    state = 3
+
+    createLabelButton()
+    createPlayerButtons()
+    createStartButton()
+    createReturnButton()
+end
+
+function inspMenu()
+    self.clearButtons()
+    state = 4
+
+    createInspectedButtons()
+    createLabelButton()
+    createPlayerButtons()
+    createStartButton()
+    createReturnButton()
+end
+
+function spelunMenu()
+    self.clearButtons()
+    state = 5
+
+    local buttonParam = {click_function = 'opt0', label = "Top Card", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {0,0.1,-0.3}, rotation = {0,0,0}, width = 500, height = 300}
+    if option == 0 then
+        buttonParam.font_size = 150
+    else
+        buttonParam.font_size = 50
+    end
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'opt1', label = "Second Card", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {0,0.1,0.3}, rotation = {0,0,0}, width = 500, height = 300}
+    if option == 0 then
+        buttonParam.font_size = 50
+    else
+        buttonParam.font_size = 150
+    end
+    self.createButton(buttonParam)
+
+    createLabelButton()
+    createPlayerButtons()
+    createStartButton()
+    createReturnButton()
+end
+
+function gambleMenu()
+    self.clearButtons()
+    state = 6
+
+    local buttonParam = {click_function = 'opt0', label = "Fascist", color = {1,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {0,0.1,-0.3}, rotation = {0,0,0}, width = 500, height = 300}
+    if option == 0 then
+        buttonParam.font_size = 150
+    else
+        buttonParam.font_size = 50
+    end
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'opt1', label = "Liberal", color = {0,0,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {0,0.1,0.3}, rotation = {0,0,0}, width = 500, height = 300}
+    if option == 0 then
+        buttonParam.font_size = 50
+    else
+        buttonParam.font_size = 150
+    end
+    self.createButton(buttonParam)
+
+    createPlayerButtons()
+    createLabelButton()
+    createStartButton()
+    createReturnButton()
+end
+
+function martyrMenu()
+    self.clearButtons()
+    state = 7
+
+    createLibFasButtons()
+    createLabelButton()
+    createPlayerButtons()
+    createStartButton()
+    createReturnButton()
+end
+
+
+function givepMenu()
+    self.clearButtons()
+    state = 8
+
+    createLabelButton()
+    createInspectedButtons()
+    createStartButton()
+    createReturnButton()
+end
+
+function giveEfMenu()
+    self.clearButtons()
+    self.clearInputs()
+    state = 9
+
+    local buttonParam = {click_function = 'opt0', label = "Poisoner", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {0,0.1,-0.5}, rotation = {0,0,0}, width = 800, height = 200, font_size = 80}
+    if option == 0 then
+        buttonParam.font_color = stringColorToRGB('Red')
+    end
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'opt1', label = "Super-Inspector", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {0,0.1,-0.1}, rotation = {0,0,0}, width = 800, height = 200, font_size = 80}
+    if option == 1 then
+        buttonParam.font_color = stringColorToRGB('Red')
+    end
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'opt2', label = "Collector", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {0,0.1,0.3}, rotation = {0,0,0}, width = 800, height = 200, font_size = 80}
+    if option == 2 then
+        buttonParam.font_color = stringColorToRGB('Red')
+    end
+    self.createButton(buttonParam)
+
+    local inputParam = {input_function = 'efInputFunc', function_owner = self, color = stringColorToRGB('White'), function_owner = self, font_color = stringColorToRGB('Black'), function_owner = self,
+        position = {0,0.1,0.7}, rotation = {0,0,0}, width = 800, height = 103, font_size = 80, alignment = 3, validation = 1, tab = 1, value = efName}
+    self.createInput(inputParam)
+
+    createLabelButton()
+    createPlayerButtons()
+    createStartButton()
+    createReturnButton()
+end
+
+function efInputFunc(obj, color, input, stillEditing)
+    efName = input
+    option = 3
+end
+
+function reshufMenu()
+    self.clearButtons()
+    state = 10
+
+    createLabelButton()
+    createStartButton()
+    createReturnButton()
+end
+
+function givetMenu()
+    self.clearButtons()
+    state = 11
+
+    local buttonParam = {click_function = 'giveTool6', label = "Green", color = stringColorToRGB('Green'), function_owner = self,
+        position = {-1,0.1,-0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'giveTool7', label = "Teal", color = stringColorToRGB('Teal'), function_owner = self,
+        position = {0,0.1,-0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'giveTool8', label = "Blue", color = stringColorToRGB('Blue'), function_owner = self,
+        position = {1,0.1,-0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'giveTool3', label = "Red", color = stringColorToRGB('Red'), function_owner = self,
+        position = {-1,0.1,0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'giveTool2', label = "Brown", color = stringColorToRGB('Brown'), function_owner = self,
+        position = {0,0.1,0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'giveTool1', label = "White", color = stringColorToRGB('White'), function_owner = self,
+        position = {1,0.1,0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'giveTool5', label = "Yellow", color = stringColorToRGB('Yellow'), function_owner = self,
+        position = {-1.7,0.1,-0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'giveTool4', label = "Orange", color = stringColorToRGB('Orange'), function_owner = self,
+        position = {-1.7,0.1,0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'giveTool9', label = "Purple", color = stringColorToRGB('Purple'), function_owner = self,
+        position = {1.7,0.1,-0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'giveTool10', label = "Pink", color = stringColorToRGB('Pink'), function_owner = self,
+        position = {1.7,0.1,0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'returnFunc', label = "Cancel", color = {1,1,1,0.8}, function_owner = self,
+        position = {0,0.1,0}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+end
+
+function fisherMenu()
+    self.clearButtons()
+    state = 12
+
+    createLabelButton()
+    createPlayerButtons()
+    createStartButton()
+    createReturnButton()
+end
+
+
+function createStartButton()
+    local buttonParam = {label = "Start", color = {1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
+        position = {1.7,0.1,-0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 150}
+    if     state == 1 then          buttonParam.click_function = 'drawStart'
+    elseif state == 2 then          buttonParam.click_function = 'sdStart'
+    elseif state == 3 then          buttonParam.click_function = 'spyStart'
+    elseif state == 4 then          buttonParam.click_function = 'inspectStart'
+    elseif state == 5 then          buttonParam.click_function = 'spelunStart'
+    elseif state == 6 then          buttonParam.click_function = 'gambleStart'
+    elseif state == 7 then          buttonParam.click_function = 'martyrStart'
+    elseif state == 8 then          buttonParam.click_function = 'givepStart'
+    elseif state == 9 then          buttonParam.click_function = 'giveEfStart'
+    elseif state == 10 then         buttonParam.click_function = 'reshufStart'
+    elseif state == 12 then         buttonParam.click_function = 'fisherStart'
+    end
+    self.createButton(buttonParam)
+end
+
+function createReturnButton()
+    local buttonParam = {click_function = 'returnFunc', label = "Cancel", color = {1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
+        position = {1.7,0.1,0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 150}
+    self.createButton(buttonParam)
+end
+
+function createPlayerButtons()
+    local buttonParam = {click_function = 'setPButtonColor1', label = "White", color = pButtonColor[1], font_color = stringColorToRGB('White'), function_owner = self,
+        position = {-1.4,0.1,0.7}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'setPButtonColor2', label = "Brown", color = pButtonColor[2], font_color = stringColorToRGB('Brown'), function_owner = self,
+        position = {-1.4,0.1,1.1}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'setPButtonColor3', label = "Red", color = pButtonColor[3], font_color = stringColorToRGB('Red'), function_owner = self,
+        position = {-2.0,0.1,1.1}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'setPButtonColor4', label = "Orange", color = pButtonColor[4], font_color = stringColorToRGB('Orange'), function_owner = self,
+        position = {-2.0,0.1,0.7}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'setPButtonColor5', label = "Yellow", color = pButtonColor[5], font_color = stringColorToRGB('Yellow'), function_owner = self,
+        position = {-2,0.1,0.3}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'setPButtonColor6', label = "Green", color = pButtonColor[6], font_color = stringColorToRGB('Green'), function_owner = self,
+        position = {-2,0.1,-0.1}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'setPButtonColor7', label = "Teal", color = pButtonColor[7], font_color = stringColorToRGB('Teal'), function_owner = self,
+        position = {-2,0.1,-0.5}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'setPButtonColor8', label = "Blue", color = pButtonColor[8], font_color = stringColorToRGB('Blue'), function_owner = self,
+        position = {-1.4,0.1,-0.5}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'setPButtonColor9', label = "Purple", color = pButtonColor[9], font_color = stringColorToRGB('Purple'), function_owner = self,
+        position = {-1.4,0.1,-0.1}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'setPButtonColor10', label = "Pink", color = pButtonColor[10], font_color = stringColorToRGB('Pink'), function_owner = self,
+        position = {-1.4,0.1,0.3}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
+    self.createButton(buttonParam)
+end
+
+function createInspectedButtons()
+    if state ~= 8 then
+        local buttonParam = {click_function = 'nulFunc', label = "Inspected", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
+            position = {0,0.1,-1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 150}
+        self.createButton(buttonParam)
+    end
+
+    local buttonParam = {click_function = 'setSDButtonColor1', label = "White", color = sdButtonColor[1], font_color = stringColorToRGB('White'), function_owner = self,
+        position = {0.3,0.1,0.7}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'setSDButtonColor2', label = "Brown", color = sdButtonColor[2], font_color = stringColorToRGB('Brown'), function_owner = self,
+        position = {0.3,0.1,1.1}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'setSDButtonColor3', label = "Red", color = sdButtonColor[3], font_color = stringColorToRGB('Red'), function_owner = self,
+        position = {-0.3,0.1,1.1}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'setSDButtonColor4', label = "Orange", color = sdButtonColor[4], font_color = stringColorToRGB('Orange'), function_owner = self,
+        position = {-0.3,0.1,0.7}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'setSDButtonColor5', label = "Yellow", color = sdButtonColor[5], font_color = stringColorToRGB('Yellow'), function_owner = self,
+        position = {-0.3,0.1,0.3}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'setSDButtonColor6', label = "Green", color = sdButtonColor[6], font_color = stringColorToRGB('Green'), function_owner = self,
+        position = {-0.3,0.1,-0.1}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'setSDButtonColor7', label = "Teal", color = sdButtonColor[7], font_color = stringColorToRGB('Teal'), function_owner = self,
+        position = {-0.3,0.1,-0.5}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'setSDButtonColor8', label = "Blue", color = sdButtonColor[8], font_color = stringColorToRGB('Blue'), function_owner = self,
+        position = {0.3,0.1,-0.5}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'setSDButtonColor9', label = "Purple", color = sdButtonColor[9], font_color = stringColorToRGB('Purple'), function_owner = self,
+        position = {0.3,0.1,-0.1}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'setSDButtonColor10', label = "Pink", color = sdButtonColor[10], font_color = stringColorToRGB('Pink'), function_owner = self,
+        position = {0.3,0.1,0.3}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
+    self.createButton(buttonParam)
+end
+
+function createLabelButton()
+    local buttonParam = {click_function = 'nulFunc', color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
+            position = {-1.7,0.1,-1}, rotation = {0,0,0}, width = 1, height = 1, font_size = 150}
+    if      state == 1 then         buttonParam.label = "Player"
+    elseif  state == 2 then         buttonParam.label = "Super\nInspector"
+    elseif  state == 3 then         buttonParam.label = "Spy"
+    elseif  state == 4 then         buttonParam.label = "Inspector"
+    elseif  state == 5 then         buttonParam.label = "Spelunker"
+    elseif  state == 6 then         buttonParam.label = "Gambler"
+    elseif  state == 7 then         buttonParam.label = "Martyr"
+    elseif  state == 8 then         buttonParam.label = "Give Party\nCard"
+    elseif  state == 9 then         buttonParam.label = "Deal\nEffects"
+    elseif  state == 10 then        buttonParam.label = "Reshuffle"
+    elseif  state == 12 then        buttonParam.label = "Fisherman"
+    end
+    self.createButton(buttonParam)
+end
+
+function createLibFasButtons()
+    local buttonParam = {click_function = 'opt0', label = "Liberal", color = {0,0,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {0,0.1,-0.3}, rotation = {0,0,0}, width = 500, height = 300}
+    if option == 0 then
+        buttonParam.font_size = 150
+    else
+        buttonParam.font_size = 50
+    end
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'opt1', label = "Fascist", color = {1,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {0,0.1,0.3}, rotation = {0,0,0}, width = 500, height = 300}
+    if option == 0 then
+        buttonParam.font_size = 50
+    else
+        buttonParam.font_size = 150
+    end
+    self.createButton(buttonParam)
+end
+
+function setPButtonColor(clickedButton, playerColor, index)
+    if Player[playerColor].admin or not promOnly then
+        for i = 1,10 do
+            pButtonColor[i] = {0,0,0,1}
+        end
+        pButtonColor[index] = stringColorToRGB(COLOR_TABLE[index])
+        player = COLOR_TABLE[index]
+        refreshButtons()
+    end
+end
+
+for k = 1,10 do
+    _G['setPButtonColor' .. k] = function(obj, col)
+        setPButtonColor(obj, col, k)
+    end
+end
+
+function setSDButtonColor(clickedButton, playerColor, index)
+    if Player[playerColor].admin or not promOnly then
+        if targSelected[index] == 0 then
+            sdButtonColor[index] = stringColorToRGB(COLOR_TABLE[index])
+            targSelected[index] = 1
+            numSelected = numSelected + 1
+        else
+            sdButtonColor[index] = {0,0,0,1}
+            targSelected[index] = 0
+            numSelected = numSelected -1
+        end
+        refreshButtons()
+    end
+end
+
+for k = 1,10 do
+    _G['setSDButtonColor' .. k] = function(obj, col)
+        setSDButtonColor(obj, col, k)
+    end
+end
+
+function refreshButtons()
+    if state == 0 then
+        mainMenu()
+    elseif state == 1 then
+        drawMenu()
+    elseif state == 2 then
+        sdMenu()
+    elseif state == 3 then
+        spyMenu()
+    elseif state == 4 then
+        inspMenu()
+    elseif state == 5 then
+        spelunMenu()
+    elseif state == 6 then
+        gambleMenu()
+    elseif state == 7 then
+        martyrMenu()
+    elseif state == 8 then
+        givepMenu()
+    elseif state == 9 then
+        giveEfMenu()
+    elseif state == 10 then
+        reshufMenu()
+    elseif state == 11 then
+        givetMenu()
+    elseif state == 12 then
+        fisherMenu()
+    end
+end
+
+function clearValues()
+    self.clearInputs()
+    player = ""
+    pButtonColor = {{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1}}
+    sdButtonColor = {{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1}}
+    targSelected = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+    numSelected = 0
+    drawNum = 1
+    option = 0
+end

@@ -1,0 +1,148 @@
+local buttonParam = {click_function = 'name', label = "Name", color = {1,1,1}, function_owner = self,
+    position = {0,0.1,0}, rotation = {0,0,0}, width = 500, height = 500, font_size = 100}
+self.createButton(buttonParam)
+
+function name()
+    local namer_zone_guid = 'de8a67'
+    local new_zone_guid = '43f223'
+    local deck = getDeckFromZoneByGUID(namer_zone_guid)
+    local newDeck = getDeckFromZoneByGUID(new_zone_guid)
+	for i=35,1,-1 do
+		local params = {}
+		local card = deck.takeObject(params)
+        if i == 1 then
+            card.setName("Mimic")
+            card.setDescription("Copy another player\'s ability.")
+        elseif i == 2 then
+            card.setName("Saboteur")
+            card.setDescription("Right after a player reveals an ability, negate its effects.")
+        elseif i == 3 then
+            card.setName("The Confirmed")
+            card.setDescription("Cannot be negated.\n\nIf you are fascist, reveal your role card. Draw any two abilities from the deck.\n-OR-\nCannot be copied. Right before a player dies, reveal your role card. You become the target of the shot. ")
+        elseif i == 4 then
+            card.setName("Martyr")
+            card.setDescription("Reshuffle the deck. Play a policy card from the deck and use the presidential power. Reshuffle. You die. Cannot be used to win the game. If you are Hitler, the game does not end.")
+        elseif i == 5 then
+            card.setName("Hacker")
+            card.setDescription("[Right after a player reveals an ability that alters the deck, discard pile, election tracker or placards], you use the ability instead.")
+        elseif i == 6 then
+            card.setName("Assassin")
+            card.setDescription("[After Hitler Territory], choose a player. At the start of the third turn after this turn, that player dies if you are not dead.")
+        elseif i == 7 then
+            card.setName("Poisoner")
+            card.setDescription("[After Hitler Territory], place one poison and two water effects face down on three other players. At the start of the fifth turn after this turn, reveal the effects. The player with the poison dies.")
+        elseif i == 8 then
+            card.setName("Spy")
+            card.setDescription("[When a player gains the inspect power], steal the inspect power.\n-OR-\nIf you are Fascist, choose any number of living players. They reveal their roles and give you an ability.")
+        elseif i == 9 then
+            card.setName("Super-Detective")
+            card.setDescription("[Entering Hitler Territory], choose half of the other players. Shuffle their party membership cards, discard one, and investigate them.\nYou cannot be in government for two turns.")
+        elseif i == 10 then
+            card.setName("Collector")
+            card.setDescription("Draw two random artifacts. Choose one and place it on a player. You may choose to reveal the artifact when the conditions are met.")
+        elseif i == 11 then
+            card.setName("Jester")
+            card.setDescription("Reshuffle the discard pile into the deck.\n-OR-\n[When another player tries to examine or steal your abilities], you take one of their abilities instead. You may use that ability.")
+        elseif i == 12 then
+            card.setName("Surgeon")
+            card.setDescription("[After a reshuffle, if there are seven or more cards in the deck], look at the top six cards of the deck. Discard two cards, then shuffle the deck.")
+        elseif i == 13 then
+            card.setName("Soulmate")
+            card.setDescription("[Right after you die], choose another player. They die with you.")
+        elseif i == 14 then
+            card.setName("Gravedigger")
+            card.setDescription("Investigate each dead player\'s party membership card.\n-OR-\nCopy a dead player\'s ability.")
+        elseif i == 15 then
+            card.setName("Trader")
+            card.setDescription("When this ability is played, each player (including dead players) may give unused abilities to other players. You may play one ability that is given to you.")
+        elseif i == 16 then
+            card.setName("Guardian-Angel")
+            card.setDescription("Choose another player. Remove all effects from that player. That player cannot be targeted by other players\' abilities.")
+        elseif i == 17 then
+            card.setName("Elitist")
+            card.setDescription("[As the president], after drawing the policy cards, shuffle them back into the deck and draw three new cards.\n-OR-\n[As the chancellor], discard both cards and play the top card of the deck.")
+        elseif i == 18 then
+            card.setName("Super-President")
+            card.setDescription("Play before voting. After the next government passes, draw four policy cards. Discard one, and give the rest to the president.")
+        elseif i == 19 then
+            card.setName("Gambler")
+            card.setDescription("Guess the top card of the policy deck. Reveal the policy then shuffle the deck. If you are right, reveal the top card of the ability deck. You may either use it or reshuffle it to reuse Gambler on a future turn. You cannot gamble after failing twice.")
+        elseif i == 20 then
+            card.setName("Puppeteer")
+            card.setDescription("[Right after a player is targeted by an ability], choose a player. That player becomes the new target.")
+        elseif i == 21 then
+            card.setName("Spiritualist")
+            card.setDescription("Choose a dead player. That player votes for the rest of the game but cannot speak, be in government, or use abilities. You may play to the resurrected player.")
+        elseif i == 22 then
+            card.setName("Senator")
+            card.setDescription("Move the election tracker left or right by one step.")
+        elseif i == 23 then
+            card.setName("Historian")
+            card.setDescription("Move the previously elected president and chancellor placards.")
+        elseif i == 24 then
+            card.setName("Usurper")
+            card.setDescription("Force a special election where you are the president.")
+        elseif i == 25 then
+            card.setName("Lobbyist")
+            card.setDescription("Reveal this ability before voting. Your next vote cannot be affected and counts for three votes. This ability cannot be copied on the same turn.")
+        elseif i == 26 then
+            card.setName("Fisherman")
+            card.setDescription("[When there are four or more cards in the discard pile], shuffle the discard pile. Look at the top three cards of the discard pile. You may place one card in the draw pile. Shuffle the draw pile. ")
+        elseif i == 27 then
+            card.setName("Bandit")
+            card.setDescription("[Right after a topdeck], take the unused power.\n-OR-\nLook at a player\'s abilities. Take an ability from them.")
+        elseif i == 28 then
+            card.setName("Decider")
+            card.setDescription("Force a govt. with tied votes to pass.\n-OR-\n[Right before topdeck], look at the top two cards in the deck and discard one.")
+        elseif i == 29 then
+            card.setName("Insurgent")
+            card.setDescription("Reveal this ability before voting. Take the chancellor placard. Ignore the previously elected president and chancellor placards.")
+        elseif i == 30 then
+            card.setName("Silencer")
+            card.setDescription("Choose a player. That player cannot vote, speak, or use abilities until the turn after the next policy is placed on a track.")
+        elseif i == 31 then
+            card.setName("Naysayer")
+            card.setDescription("[As the president], discard all of the cards and move the election tracker one step to the right.\n-OR-\n[As the chancellor], you may ask the president for a veto.")
+        elseif i == 32 then
+            card.setName("Scout")
+            card.setDescription("[When a player looks at policy, ability or vote cards], you also look at it and anything they discard.\n-OR-\nLook at the top card of the deck, and choose whether or not to discard it.")
+        elseif i == 33 then
+            card.setName("Spelunker")
+            card.setDescription("[When there are eight or less cards in the policy deck], look at the deck then shuffle it.\n-OR-\nLook at either the first or second card at the top of the discard pile.")
+        elseif i == 34 then
+            card.setName("Big-Brother")
+            card.setDescription("Choose a player. You may look at their abilities and their vote every turn. Once per game, you decide how they vote.")
+        elseif i == 35 then
+            card.setName("Magician")
+            card.setDescription("[After a government is elected], the chancellor draws three cards and hands two to the president. The chancellor gains the presidential power")
+        end
+        card.putObject(newDeck)
+
+    end
+end
+
+function getDeckFromZoneByGUID(guidIn)
+	local deck = nil
+	local deck_ct = 0
+	local zone = getObjectFromGUID(guidIn)
+	local object
+
+	if zone then
+		local inZone = zone.getObjects()
+		for _, object in ipairs(inZone) do
+			if object.name == 'Card' then
+				deck_ct = 2
+			elseif object.name == 'Deck' then
+				deck = object
+				deck_ct = deck_ct + 1
+			elseif object.name == 'DeckCustom' then
+				deck = object
+				deck_ct = deck_ct + 1
+			end
+		end
+	end
+	if deck_ct == 1 then
+		return deck
+	end
+	return nil
+end
