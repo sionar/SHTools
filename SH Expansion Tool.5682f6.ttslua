@@ -767,7 +767,6 @@ function sleep(numSeconds)
 	while os.clock() - t0 <= numSeconds do
         coroutine.yield(0)
     end
-
 end
 
 function giveObjectToPlayer(object, playerColor, posAdd, rotAdd, ...)
