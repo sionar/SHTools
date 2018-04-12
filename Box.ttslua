@@ -1,0 +1,146 @@
+--[[
+SH Expansion Box
+Made by Lost Savage, Modified by Sionar
+Version 1.0.1
+--]]
+
+------------------Constants
+UPDATE_VERSION = 92
+ADD_ON_VERSION = 5
+BOX_OBJECTS_NUM = 9
+ADD_ON_NAME = 'Expansion Deck'
+ABILITY_DECK_NAME = 'Abilities'
+EFFECT_DECK_NAME = 'Effects'
+ABILITY_REFERENCE_NAME = 'Ability Reference'
+EFFECT_REFERENCE_NAME = 'Effect Reference'
+TOOL_NAME = 'SH Expansion Tool'
+RULEBOOK_NAME = 'SH Expansion Rulebook'
+SELF_NAME = 'Counters'
+SELF_POS = {20, 1.71, 11}
+SELF_SCALE = {2.5, 2.5, 2.5}
+SHOWN_ROT = {0,180,0}
+HIDDEN_ROT = {0,180,180}
+DEFAULT_POS = {0,1,0}
+ABILITY_DECK_POS = {-20, 2, 6.25}
+EFFECT_DECK_POS = {20, 2, 6.25}
+TOOL_POS = {0,2,-16}
+RULEBOOK_POS = {100, 1.1, -22}
+
+
+------------------Functions
+function onLoad(saveString)
+	local parameters = {}
+	parameters.identifier = 'setupExpansionSP'
+	parameters.function_name = 'setupExpansion'
+	parameters.function_owner = self
+	parameters.delay = 1
+	Timer.create(parameters)
+end
+
+function setupExpansion()
+	local global_name = Global.getVar('mod_name')
+	local global_version = Global.getVar('update_version')
+	local global_add_on = Global.getVar('add_on_version')
+	local started = Global.getVar('started')
+	if not global_add_on then global_add_on = 1 end
+
+	if not global_version or global_name ~= 'Secret Hitler: CE' then
+		printToAll('ERROR: Secret Hitler: CE not found.', {1,0,0})
+	else
+		if global_version < UPDATE_VERSION or global_add_on < ADD_ON_VERSION then
+			printToAll('ERROR: Secret Hitler: CE version is too old; try updating.', {1,0,0})
+		else
+			if ADD_ON_VERSION < global_add_on then
+				printToAll('ERROR: Add on is too old; try updating.', {1,0,0})
+			else
+				if started then
+					printToAll('ERROR: Can not add this option. Game has already started.', {1,0,0})
+				else
+					local lastVote_guids = Global.getTable('lastVote_guids')
+
+					for _, lastVoteGuid in ipairs(lastVote_guids) do
+						local lastVote = getObjectFromGUID(lastVoteGuid)
+						if lastVote then
+							local txtValue = lastVote.TextTool.getValue()
+							if txtValue == 'Last Vote' then
+								txtValue = 'Extra Options: ' .. ADD_ON_NAME
+							elseif not string.match(txtValue, ADD_ON_NAME) then
+								txtValue = txtValue .. ', ' .. ADD_ON_NAME
+							end
+							lastVote.TextTool.setValue(txtValue)
+						end
+					end
+					if #self.getObjects() >= BOX_OBJECTS_NUM then
+						local options = Global.getTable('options')
+						options.expansionAmount = 3
+						Global.setTable('options', options)
+						startLuaCoroutine(self, 'setupExpansionCoroutine')
+					end
+				end
+			end
+		end
+	end
+end
+
+function setupExpansionCoroutine()
+	self.setPosition(SELF_POS)
+	self.setScale(SELF_SCALE)
+	self.setName(SELF_NAME)
+	self.setLock(true)
+
+	local tempTable = self.getObjects()
+	local tempDeck = ABILITY_DECK_NAME
+	local tempEffects = EFFECT_DECK_NAME
+	local tempAbilityReference = ABILITY_REFERENCE_NAME
+	local tempEffectsReference = EFFECT_REFERENCE_NAME
+	local tempTool = TOOL_NAME
+	local tempRules = RULEBOOK_NAME
+	local params = {}
+	local tempObject
+
+	for _, v in ipairs(tempTable) do
+		if v.name == tempDeck then
+			params.rotation = HIDDEN_ROT
+			params.guid = v.guid
+			params.position = ABILITY_DECK_POS
+			self.takeObject(params)
+		end
+		if v.name == tempEffects then
+			params.rotation = HIDDEN_ROT
+			params.guid = v.guid
+			params.position = EFFECT_DECK_POS
+			self.takeObject(params)
+		end
+		if v.name == tempAbilityReference then
+			params.rotation = SHOWN_ROT
+			params.guid = v.guid
+			params.position = DEFAULT_POS
+			self.takeObject(params)
+		end
+		if v.name == tempEffectsReference then
+			params.rotation = SHOWN_ROT
+			params.guid = v.guid
+			params.position = DEFAULT_POS
+			self.takeObject(params)
+		end
+		if v.name == tempTool then
+			params.rotation = SHOWN_ROT
+			params.guid = v.guid
+			params.position = TOOL_POS
+			self.takeObject(params)
+		end
+		if v.name == tempRules then
+			params.rotation = SHOWN_ROT
+			params.guid = v.guid
+			params.position = RULEBOOK_POS
+			self.takeObject(params)
+		end
+	end
+
+	return true
+end
+
+function sleep(numSeconds)
+	local t0 = os.clock()
+	while os.clock() - t0 <= numSeconds do coroutine.yield(0) end
+end

@@ -1,7 +1,7 @@
 --[[
 Card Namer
 Made by Sionar
-Version 1.1.1
+Version 1.2.0
 --]]
 
 ------------------Constants
@@ -32,12 +32,12 @@ ABILITIES =
     {name = 'Historian', desc = 'Move the previously elected president and chancellor placards.'},
     {name = 'Usurper', desc = 'Force a special election where you are the president.'},
     {name = 'Lobbyist', desc = 'Reveal this ability before voting. Your next vote cannot be affected and counts for three votes. This ability cannot be copied on the same turn.'},
-    {name = 'Fisherman', desc = '[When there are four or more cards in the discard pile], shuffle the discard pile. Look at the top three cards of the discard pile. You may place one card in the draw pile. Shuffle the draw pile.'},
+    {name = 'Fisherman', desc = '[When there are four or more cards in the discard pile], shuffle and draw three from the discard pile. You may place two cards in the draw pile, then shuffle the draw pile.'},
     {name = 'Bandit', desc = '[Right after a topdeck], take the unused power.\n-OR-\nLook at a player\'s abilities. Take an ability from them.'},
     {name = 'Decider', desc = 'Force a govt. with tied votes to pass.\n-OR-\n[Right before topdeck], look at the top two cards in the deck and discard one.'},
     {name = 'Insurgent', desc = 'Reveal this ability before voting. Take the chancellor placard. Ignore the previously elected president and chancellor placards.'},
     {name = 'Silencer', desc = 'Choose a player. That player cannot vote, speak, or use abilities until the turn after the next policy is placed on a track.'},
-    {name = 'Naysayer', desc = '[As the president], discard all of the cards and move the election tracker one step to the right.\n-OR-\n[As the chancellor], you may ask the president for a veto.'},
+    {name = 'Naysayer', desc = '[As the president or chancellor], discard all of the policy cards and move the election tracker one step to the right.'},
     {name = 'Scout', desc = '[When a player looks at policy, ability or vote cards], you also look at it and anything they discard.\n-OR-\nLook at the top card of the deck, and choose whether or not to discard it.'},
     {name = 'Spelunker', desc = '[When there are eight or less cards in the policy deck], look at the deck then shuffle it.\n-OR-\nLook at either the first or second card at the top of the discard pile.'},
     {name = 'Big-Brother', desc = 'Choose a player. You may look at their abilities and their vote every turn. Once per game, you decide how they vote.'},
@@ -65,32 +65,39 @@ EFFECTS =
     {name = '2 Inspected', desc = 'You have been inspected by the Super-Inspector.'},
     {name = '2 Inspected', desc = 'You have been inspected by the Super-Inspector.'},
     {name = '2 Inspected', desc = 'You have been inspected by the Super-Inspector.'},
-    {name = '1 Artifact: Cursed Crown', desc = '[Reveal right after the player is elected as president.] You die. The government is cancelled and the election tracker does not move.'},
-    {name = '1 Artifact: Ring of Power', desc = '[Reveal right after the player is elected as president and Super-President is not active.] You draw four policy cards instead of three and discard two of them.'},
-    {name = '1 Artifact: Amulet of Warding', desc = '[Reveal anytime.] You gain the Aegis effect for three turns.'},
-    {name = '1 Artifact: Nullification Collar', desc = '[Reveal right after the player plays an ability.] Your ability is negated.'},
-    {name = '1 Artifact: Last Horcrux', desc = '[Reveal right before the player dies.] You do not die.'},
-    {name = '2 Artifact: Cursed Crown', desc = '[Reveal right after the player is elected as president.] You die. The government is cancelled and the election tracker does not move.'},
-    {name = '2 Artifact: Ring of Power', desc = '[Reveal right after the player is elected as president and Super-President is not active.] You draw four policy cards instead of three and discard two of them.'},
-    {name = '2 Artifact: Amulet of Warding', desc = '[Reveal anytime.] You gain the Aegis effect for three turns.'},
-    {name = '2 Artifact: Nullification Collar', desc = '[Reveal right after the player plays an ability.] Your ability is negated.'},
-    {name = '2 Artifact: Last Horcrux', desc = '[Reveal right before the player dies.] You do not die.'},
-    {name = '3 Artifact: Cursed Crown', desc = '[Reveal right after the player is elected as president.] You die. The government is cancelled and the election tracker does not move.'},
-    {name = '3 Artifact: Ring of Power', desc = '[Reveal right after the player is elected as president and Super-President is not active.] You draw four policy cards instead of three and discard two of them.'},
-    {name = '3 Artifact: Amulet of Warding', desc = '[Reveal anytime.] You gain the Aegis effect for three turns.'},
-    {name = '3 Artifact: Nullification Collar', desc = '[Reveal right after the player plays an ability.] Your ability is negated.'},
-    {name = '3 Artifact: Last Horcrux', desc = '[Reveal right before the player dies.] You do not die.'},
     {name = '1 Poisoned Drink', desc = 'You have been poisoned. You die.'},
     {name = '1 Water', desc = 'Just ordinary water. No effect.'},
     {name = '1 Water', desc = 'Just ordinary water. No effect.'},
     {name = '2 Poisoned Drink', desc = 'You have been poisoned. You die.'},
     {name = '2 Water', desc = 'Just ordinary water. No effect.'},
-    {name = '2 Water', desc = 'Just ordinary water. No effect.'}
+    {name = '2 Water', desc = 'Just ordinary water. No effect.'},
+    {name = '1 Artifact: Cursed Crown', desc = '[Reveal right after the player is elected as president.] You die. The government is cancelled and the election tracker does not move.'},
+    {name = '1 Artifact: Ring of Power', desc = '[Reveal right after the player is elected as president and Super-President is not active.] You draw four policy cards instead of three and discard two of them.'},
+    {name = '1 Artifact: Amulet of Warding', desc = '[Reveal anytime.] You gain the Aegis effect for three turns.'},
+    {name = '1 Artifact: Nullification Collar', desc = '[Reveal right after the player plays an ability.] Your ability is negated.'},
+    {name = '1 Artifact: Last Horcrux', desc = '[Reveal right before the player dies.] You do not die.'},
+    {name = '1 Artifact: Mirror of Kalandra', desc = '[Reveal anytime.] The Collector plays a copy of your ability.'},
+    {name = '2 Artifact: Cursed Crown', desc = '[Reveal right after the player is elected as president.] You die. The government is cancelled and the election tracker does not move.'},
+    {name = '2 Artifact: Ring of Power', desc = '[Reveal right after the player is elected as president and Super-President is not active.] You draw four policy cards instead of three and discard two of them.'},
+    {name = '2 Artifact: Amulet of Warding', desc = '[Reveal anytime.] You gain the Aegis effect for three turns.'},
+    {name = '2 Artifact: Nullification Collar', desc = '[Reveal right after the player plays an ability.] Your ability is negated.'},
+    {name = '2 Artifact: Last Horcrux', desc = '[Reveal right before the player dies.] You do not die.'},
+    {name = '2 Artifact: Mirror of Kalandra', desc = '[Reveal anytime.] The Collector plays a copy of your ability.'},
+    {name = '3 Artifact: Cursed Crown', desc = '[Reveal right after the player is elected as president.] You die. The government is cancelled and the election tracker does not move.'},
+    {name = '3 Artifact: Ring of Power', desc = '[Reveal right after the player is elected as president and Super-President is not active.] You draw four policy cards instead of three and discard two of them.'},
+    {name = '3 Artifact: Amulet of Warding', desc = '[Reveal anytime.] You gain the Aegis effect for three turns.'},
+    {name = '3 Artifact: Nullification Collar', desc = '[Reveal right after the player plays an ability.] Your ability is negated.'},
+    {name = '3 Artifact: Last Horcrux', desc = '[Reveal right before the player dies.] You do not die.'},
+    {name = '3 Artifact: Mirror of Kalandra', desc = '[Reveal anytime.] The Collector plays a copy of your ability.'}
 }
 
 NAMER_ZONE_GUID = 'de8a67'
 END_ZONE_GUID = '43f223'
 NEW_POS = {x = 25.5, y = 1, z = -20.3}
+CARD_POS = {x = 37, y = 1, z = -20.5}
+MARGIN_OF_ERROR = 1
+ABILITY_DECK_NAME = 'Abilities'
+EFFECT_DECK_NAME = 'Effects'
 
 ------------------Main Functions
 function nameAbilities()
@@ -124,7 +131,7 @@ function nameAbilitiesCoroutine()
     allObjects = getAllObjects()
     for k,v in pairs(allObjects) do
         pos = v.getPosition()
-        if pos.x < 38 and pos.x > 36 and pos.z < -20 and pos.z > -21 then
+        if pos.x < CARD_POS.x + MARGIN_OF_ERROR and pos.x > CARD_POS.x - MARGIN_OF_ERROR and pos.z < CARD_POS.z + MARGIN_OF_ERROR and pos.z > CARD_POS.z - MARGIN_OF_ERROR then
             card = v
         end
     end
@@ -133,7 +140,7 @@ function nameAbilitiesCoroutine()
     card.setPosition(NEW_POS)
     sleep(0.1)
     deck = getDeckFromZoneByGUID(END_ZONE_GUID)
-    deck.setName('Secret Hitler Expansion Deck')
+    deck.setName(ABILITY_DECK_NAME)
     deck.setDescription('Made by Piggy and Sionar')
     deck.use_grid = false
     return 1
@@ -170,16 +177,16 @@ function nameEffectsCoroutine()
     allObjects = getAllObjects()
     for k,v in pairs(allObjects) do
         pos = v.getPosition()
-        if pos.x < 38 and pos.x > 36 and pos.z < -20 and pos.z > -21 then
+        if pos.x < CARD_POS.x + MARGIN_OF_ERROR and pos.x > CARD_POS.x - MARGIN_OF_ERROR and pos.z < CARD_POS.z + MARGIN_OF_ERROR and pos.z > CARD_POS.z - MARGIN_OF_ERROR then
             card = v
         end
     end
-    card.setName(EFFECTS[#ABILITIES].name)
-    card.setDescription(EFFECTS[#ABILITIES].desc)
+    card.setName(EFFECTS[#EFFECTS].name)
+    card.setDescription(EFFECTS[#EFFECTS].desc)
     card.setPosition(NEW_POS)
     sleep(0.1)
     deck = getDeckFromZoneByGUID(END_ZONE_GUID)
-    deck.setName('Effects')
+    deck.setName(EFFECT_DECK_NAME)
     deck.use_grid = false
     return 1
 end
