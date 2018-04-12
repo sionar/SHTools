@@ -1,29 +1,26 @@
 --[[
 Secret Hitler Probability Calculator
-v 1.1.0
+v 1.2.0
 Made by Sionar
-
 --]]
 
+------------------Constants
+COL = {0.5, 1, 1.5, 2}
+ROW = {-1, -0.6, -0.2, 0.2, 0.6, 1}
+
+------------------Variables
 lib = 6
 fas = 11
 draw = 3
-drawLabel = "Draw 3"
-FFF, FFL, FLL, LLL, onePlus = 0,0,0,0,0
-FFFF, FFFL, FFLL, FLLL, LLLL = 0,0,0,0,0
-nameLabels = {"FFF", "FFL", "FLL", "LLL", "   ", "1+L"}
-valLabels = {"0%", "0%", "0%", "0%", "  ", "0%"}
-
-local totalCards, denom
-local tempString
+nameLabels = {}
+valLabels = {}
 
 function onLoad(saveString)
     if not (saveString == '') then
         local save = JSON.decode(saveString)
         lib = save['lib']
         fas = save['fas']
-        draw = save['draw']
-        drawLabel = save['dL']
+        draw = save['draw'] or draw
         nameLabels = save['nL']
         valLabels = save['vL']
     end
@@ -35,7 +32,6 @@ function onSave()
     save['lib'] = lib
     save['fas'] = fas
     save['draw'] = draw
-    save['dL'] = drawLabel
     save['nL'] = nameLabels
     save['vL'] = valLabels
     local saveString = JSON.encode(save)
@@ -47,111 +43,91 @@ function refreshButtons()
     self.clearButtons()
     self.clearInputs()
 
-    local buttonParam = {click_function = 'nullFunc', label = "Fas", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-1.7,0.1,-1}, rotation = {0,0,0}, width = 1, height = 1, font_size = 100}
+    local buttonParam = {click_function = 'nullFunc', label = 'Fas', color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {-1.7,0.1,-1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 100}
     self.createButton(buttonParam)  --Num Fascist button
 
-    local buttonParam = {click_function = 'nullFunc', label = "Lib", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-0.5,0.1,-1}, rotation = {0,0,0}, width = 1, height = 1, font_size = 100}
+    local buttonParam = {click_function = 'nullFunc', label = 'Lib', color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {-0.5,0.1,-1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 100}
     self.createButton(buttonParam) --Num Liberal button
 
     local inputParam = {input_function = 'nullFunc', color = stringColorToRGB('Red'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-1.7,0.1,-0.7}, rotation = {0,0,0}, width = 500, height = 180, font_size = 150, value = fas, alignment = 3, validation = 2, tab = 2}
+        position = {-1.7,0.1,-0.7}, rotation = {0,0,0}, width = 500, height = 174, font_size = 150, value = fas, alignment = 3, validation = 2, tab = 2}
     self.createInput(inputParam)
 
     local inputParam = {input_function = 'nullFunc', color = stringColorToRGB('Blue'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-0.5,0.1,-0.7}, rotation = {0,0,0}, width = 500, height = 180, font_size = 150, value = lib, alignment = 3, validation = 2, tab = 2}
+        position = {-0.5,0.1,-0.7}, rotation = {0,0,0}, width = 500, height = 174, font_size = 150, value = lib, alignment = 3, validation = 2, tab = 2}
     self.createInput(inputParam)
 
-    local buttonParam = {click_function = 'decFas', label = "-", color = stringColorToRGB('White'), function_owner = self,
+    local buttonParam = {click_function = 'decFas', label = '-', color = stringColorToRGB('White'), function_owner = self,
         position = {-1.95,0.1,-0.25}, rotation = {0,0,0}, width = 250, height = 100, font_size = 150}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'incFas', label = "+", color = stringColorToRGB('White'), function_owner = self,
+    local buttonParam = {click_function = 'incFas', label = '+', color = stringColorToRGB('White'), function_owner = self,
         position = {-1.45,0.1,-0.25}, rotation = {0,0,0}, width = 250, height = 100, font_size = 150}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'decLib', label = "-", color = stringColorToRGB('White'), function_owner = self,
+    local buttonParam = {click_function = 'decLib', label = '-', color = stringColorToRGB('White'), function_owner = self,
         position = {-0.75,0.1,-0.25}, rotation = {0,0,0}, width = 250, height = 100, font_size = 150}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'incLib', label = "+", color = stringColorToRGB('White'), function_owner = self,
+    local buttonParam = {click_function = 'incLib', label = '+', color = stringColorToRGB('White'), function_owner = self,
         position = {-0.25,0.1,-0.25}, rotation = {0,0,0}, width = 250, height = 100, font_size = 150}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'drawFunc', label = drawLabel, color = stringColorToRGB('White'), function_owner = self,
-        position = {-1.7,0.1,0.25}, rotation = {0,0,0}, width = 500, height = 200, font_size = 100}
+    local buttonParam = {click_function = 'nullFunc', label = 'Draw:', color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {-1.9,0.1,0.25}, rotation = {0,0,0}, width = 0, height = 0, font_size = 100}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'resetFunc', label = "Reset", color = stringColorToRGB('White'), function_owner = self,
+    local inputParam = {input_function = 'nullFunc', color = stringColorToRGB('Purple'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {-1.4,0.1,0.25}, rotation = {0,0,0}, width = 150, height = 123, font_size = 100, value = draw, alignment = 3, validation = 2, tab = 2}
+    self.createInput(inputParam)
+
+    local buttonParam = {click_function = 'resetFunc', label = 'Reset', color = stringColorToRGB('White'), function_owner = self,
         position = {-0.5,0.1,0.25}, rotation = {0,0,0}, width = 500, height = 200, font_size = 100}
     self.createButton(buttonParam)
 
-    local buttonParam = {label = "Calc", color = stringColorToRGB('Green'), function_owner = self,
+    local buttonParam = {click_function = 'calcValues', label = 'Calc', color = stringColorToRGB('Green'), function_owner = self,
         position = {-1.1,0.1,0.9}, rotation = {0,0,0}, width = 1100, height = 300, font_size = 150}
-    if draw == 3 then
-        buttonParam.click_function = 'calcValues3'
-    else
-        buttonParam.click_function = 'calcValues4'
+    self.createButton(buttonParam)
+
+    for i = 1,6 do
+        local buttonParam = {click_function = 'nullFunc', label = nameLabels[i], color = {0,0,0,1}, function_owner = self,
+            position = {COL[1],0.1,ROW[i]}, rotation = {0,0,0}, width = 0, height = 0, font_size = 80}
+        if i == 1 then
+            if valLabels[i] == nil then
+                buttonParam.font_color = {1, 1, 1}
+            else
+                local value = tonumber(string.sub(valLabels[i],1,-2))/100
+                buttonParam.font_color = {1-value, 0, value}
+            end
+        else
+            buttonParam.font_color = {(draw-i+2)/draw, 0, (i-2)/draw}
+        end
+        self.createButton(buttonParam)
+
+        local buttonParam = {click_function = 'nullFunc', label = valLabels[i], color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
+            position = {COL[2],0.1,ROW[i]}, rotation = {0,0,0}, width = 0, height = 0, font_size = 80}
+        self.createButton(buttonParam)
     end
-    self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'nullFunc', label = nameLabels[1], color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0.8,0.1,-1}, rotation = {0,0,0}, width = 1, height = 1, font_size = 100}
-    self.createButton(buttonParam)
+    for i = 7,12 do
+        local buttonParam = {click_function = 'nullFunc', label = nameLabels[i], color = {0,0,0,1}, function_owner = self,
+            position = {COL[3],0.1,ROW[i-6]}, rotation = {0,0,0}, width = 0, height = 0, font_size = 80}
+        buttonParam.font_color = {(draw-i+2)/draw, 0, (i-2)/draw}
+        self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'nullFunc', label = nameLabels[2], color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0.8,0.1,-0.6}, rotation = {0,0,0}, width = 1, height = 1, font_size = 100}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'nullFunc', label = nameLabels[3], color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0.8,0.1,-0.2}, rotation = {0,0,0}, width = 1, height = 1, font_size = 100}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'nullFunc', label = nameLabels[4], color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0.8,0.1,0.2}, rotation = {0,0,0}, width = 1, height = 1, font_size = 100}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'nullFunc', label = nameLabels[5], color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0.8,0.1,0.6}, rotation = {0,0,0}, width = 1, height = 1, font_size = 100}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'nullFunc', label = nameLabels[6], color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0.8,0.1,1}, rotation = {0,0,0}, width = 1, height = 1, font_size = 100}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'nullFunc', label = valLabels[1], color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {1.75,0.1,-1}, rotation = {0,0,0}, width = 1, height = 1, font_size = 100}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'nullFunc', label = valLabels[2], color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {1.75,0.1,-0.6}, rotation = {0,0,0}, width = 1, height = 1, font_size = 100}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'nullFunc', label = valLabels[3], color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {1.75,0.1,-0.2}, rotation = {0,0,0}, width = 1, height = 1, font_size = 100}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'nullFunc', label = valLabels[4], color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {1.75,0.1,0.2}, rotation = {0,0,0}, width = 1, height = 1, font_size = 100}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'nullFunc', label = valLabels[5], color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {1.75,0.1,0.6}, rotation = {0,0,0}, width = 1, height = 1, font_size = 100}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'nullFunc', label = valLabels[6], color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {1.75,0.1,1}, rotation = {0,0,0}, width = 1, height = 1, font_size = 100}
-    self.createButton(buttonParam)
-
-
+        local buttonParam = {click_function = 'nullFunc', label = valLabels[i], color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
+            position = {COL[4],0.1,ROW[i-6]}, rotation = {0,0,0}, width = 0, height = 0, font_size = 80}
+        self.createButton(buttonParam)
+    end
 end
 
 function nullFunc() end
 
 function decFas()
     local tab = self.getInputs()
-    if tab[1].value == "" then
+    if tab[1].value == '' then
         fas = 0
     else
         fas = tonumber(tab[1].value)
@@ -164,7 +140,7 @@ end
 
 function incFas()
     local tab = self.getInputs()
-    if tab[1].value == "" then
+    if tab[1].value == '' then
         fas = 1
     else
         fas = tonumber(tab[1].value)
@@ -175,7 +151,7 @@ end
 
 function decLib()
     local tab = self.getInputs()
-    if tab[2].value == "" then
+    if tab[2].value == '' then
         lib = 0
     else
         lib = tonumber(tab[2].value)
@@ -184,12 +160,11 @@ function decLib()
         end
     end
     refreshButtons()
-
 end
 
 function incLib()
     local tab = self.getInputs()
-    if tab[2].value == "" then
+    if tab[2].value == '' then
         lib = 1
     else
         lib = tonumber(tab[2].value)
@@ -198,105 +173,118 @@ function incLib()
     refreshButtons()
 end
 
-function drawFunc()
-    local tab = self.getInputs()
-    fas = tab[1].value
-    lib = tab[2].value
-    if draw == 3 then
-        draw = 4
-        drawLabel = "Draw 4"
-        nameLabels = {"FFFF", "FFFL", "FFLL", "FLLL", "LLLL", "1+L"}
-        valLabels = {"0%", "0%", "0%", "0%", "  ", "0%"}
-    else
-        draw = 3
-        drawLabel = "Draw 3"
-        nameLabels = {"FFF", "FFL", "FLL", "LLL", "    ", "1+L"}
-        valLabels = {"0%", "0%", "0%", "0%", "  ", "0%"}
+function refreshLabels()
+    local name
+    nameLabels = {}
+    valLabels = {}
+    table.insert(nameLabels, '1+ L')
+    for i = 0,draw do
+        name = draw-i .. 'F ' .. i .. 'L'
+        table.insert(nameLabels, name)
     end
-    refreshButtons()
 end
 
 function resetFunc()
     fas = 11
     lib = 6
+    draw = 3
+    refreshLabels()
     refreshButtons()
 end
 
-function calcValues3(objectButton, playerColor)
-    refreshValues()
-    totalCards = lib + fas
-    if totalCards < 3 then
-        broadcastToAll("Error: Not enough cards to draw", {1,0,0})
-        return
-    end
-
-    denom = (totalCards-0) * (totalCards-1) * (totalCards-2)
-    FFF = round(((fas-0) * (fas-1) * (fas-2))/denom * 100 * 1)
-    FFL = round(((fas-0) * (fas-1) * (lib-0))/denom * 100 * 3)
-    FLL = round(((fas-0) * (lib-0) * (lib-1))/denom * 100 * 3)
-    LLL = round(((lib-0) * (lib-1) * (lib-2))/denom * 100 * 1)
-    onePlus = 100 - FFF
-
-    valLabels[1] = FFF.."%"
-    valLabels[2] = FFL.."%"
-    valLabels[3] = FLL.."%"
-    valLabels[4] = LLL.."%"
-    valLabels[5] = ""
-    valLabels[6] = onePlus.."%"
-
-    tempString = "\n" .. fas .. " fas, " .. lib .. " lib, draw three:"
-    broadcastToColor(tempString, playerColor, {1,1,1})
-    tempString = "FFF: " .. FFF .. "%    FFL: " .. FFL .. "%    FLL: " .. FLL .. "%    LLL:" .. LLL .. "%    1+Libs: " .. onePlus .. "%"
-    broadcastToColor(tempString, playerColor, {1,1,1})
-
-    refreshButtons()
-end
-
-function calcValues4()
-    refreshValues()
-    totalCards = lib + fas
-    if totalCards < 4 then
-        broadcastToAll("Error: Not enough cards to draw", {1,0,0})
-        return
-    end
-
-    denom = (totalCards-0) * (totalCards-1) * (totalCards-2) * (totalCards-3)
-    FFFF = round(((fas-0) * (fas-1) * (fas-2) * (fas-3))/denom * 100 * 1)
-    FFFL = round(((fas-0) * (fas-1) * (fas-2) * (lib-0))/denom * 100 * 4)
-    FFLL = round(((fas-0) * (fas-1) * (lib-0) * (lib-1))/denom * 100 * 6)
-    FLLL = round(((fas-0) * (lib-0) * (lib-1) * (lib-2))/denom * 100 * 4)
-    LLLL = round(((lib-0) * (lib-1) * (lib-2) * (lib-3))/denom * 100 * 1)
-    onePlus = 100 - FFFF
-
-    valLabels[1] = FFFF.."%"
-    valLabels[2] = FFFL.."%"
-    valLabels[3] = FFLL.."%"
-    valLabels[4] = FLLL.."%"
-    valLabels[5] = LLLL.."%"
-    valLabels[6] = onePlus.."%"
-
-    tempString = "\n" .. fas .. " fas, " .. lib .. " lib, draw four:"
-    broadcastToColor(tempString, playerColor, {1,1,1})
-    tempString = "FFFF: " .. FFFF .. "%    FFFL: " .. FFFL .. "%    FFLL: " .. FFLL .. "%    FLLL:" .. FLLL .. "%    LLLL:" .. LLLL .. "%    1+Libs: " .. onePlus .. "%"
-    broadcastToColor(tempString, playerColor, {1,1,1})
-
-    refreshButtons()
-end
-
-function refreshValues()
+function calcValues(objectButton, playerColor)
     local tab = self.getInputs()
-    fas = tab[1].value
-    if tab[1].value == "" then
+    if tab[1].value == '' then
+        fas = 0
+    else
+        fas = tonumber(tab[1].value)
+    end
+    if fas < 0 then
         fas = 0
     end
 
-    lib = tab[2].value
-    if tab[2].value == "" then
+    if tab[2].value == '' then
+        lib = 0
+    else
+        lib = tonumber(tab[2].value)
+    end
+    if lib < 0 then
         lib = 0
     end
+
+    if tab[3].value == '' then
+        draw = 3
+    else
+        draw = tonumber(tab[3].value)
+    end
+    if draw > 10 then
+        draw = 10
+    end
+    if draw < 1 then
+        draw = 1
+    end
+    refreshLabels()
+
+    local totalCards = lib + fas
+    local denom, numer = 1,1
+    local value, numLibs, numFas
+    local name, broadcastColor
+
+    if totalCards < draw then
+        broadcastToAll('Error: Not enough cards to draw', {1,0,0})
+        return
+    end
+
+    for i = 0, draw-1 do
+        denom = denom * (totalCards - i)
+    end
+    valLabels = {}
+    for numLibs = 0, draw do
+        numer = 1
+        for i = 1, numLibs do
+            numer = numer * (lib - i + 1)
+        end
+        numFas = draw - numLibs
+        for i = 1, numFas do
+            numer = numer * (fas - i + 1)
+        end
+        value = round(numer/denom * combi(draw, numLibs) * 100)
+        table.insert(valLabels, value..'%')
+
+        if numLibs == 0 then
+            value = 100 - value
+            table.insert(valLabels, 1, value..'%')
+        end
+    end
+
+    broadcastToAll(fas .. ' F, ' .. lib .. ' L, draw ' .. draw .. ':', {1,1,1})
+    for i = 1, draw+2 do
+        if i == 1 then
+            broadcastColor = {0,0,1}
+        else
+            broadcastColor = {(draw-i+2)/draw, 0, (i-2)/draw}
+        end
+        broadcastToAll(nameLabels[i] .. ': [FFFFFF]' .. valLabels[i], broadcastColor)
+    end
+
     refreshButtons()
 end
 
 function round(n)
     return n % 1 >= 0.5 and math.ceil(n) or math.floor(n)
+end
+
+function combi(n, k)
+    local function factorial(x)
+        if x == 0 then
+            return 1
+        else
+            local product = 1
+            for i = x,1,-1 do
+                product = product * i
+            end
+            return product
+        end
+    end
+    return factorial(n)/(factorial(k) * factorial(n-k))
 end
