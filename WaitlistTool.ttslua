@@ -1,14 +1,15 @@
 --Waitlist Tool
---Version 1.1.4
+--Version 1.1.5
 --Made by Sionar
 
 ------------------Constants
+MOVE_BOARD_ON_LOAD = false
 START_POS = {x = 100, y = 1.1, z = 42}
 COLOR_TABLE = {'White', 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple', 'Pink', 'Teal', 'Brown'}
 ROW_S = -1
 ROW_W = 0.25
 BUTTON_SIZE = 100
-COLUMN = {-0.6, 0.3, 0.7, 0.9, 1.1}
+COLUMN = {-0.8, 0.1, 0.7, 0.9, 1.1}
 ROW = {ROW_S + 0 * ROW_W, ROW_S + 1 * ROW_W, ROW_S + 2 * ROW_W, ROW_S + 3 * ROW_W, ROW_S + 4 * ROW_W, ROW_S + 5 * ROW_W, ROW_S + 6 * ROW_W, ROW_S + 7 * ROW_W, ROW_S + 8 * ROW_W, ROW_S + 9 * ROW_W, ROW_S + 10 * ROW_W}
 LOGIN_MSG = '[000000]-------------------------\n[FFFFFF]Waitlist Commands:\n[FFD700]!j [000000]or [FFD700]!join [FFFFFF]-- Join the waitlist.\n[FFD700]!l [000000]or [FFD700]!leave [FFFFFF]-- Leave the waitlist.\n[FFD700]!s [DDA0DD]Color [000000]or [FFD700]!sit [DDA0DD]Color [FFFFFF]-- Sit down at a color.\n[FFD700]!n [000000]or [FFD700]!nudge [FFFFFF]-- Nudge the player at the top of the waitlist.\n[FFD700]!h [000000]or [FFD700]!help [FFFFFF]-- Brings up this text\n[000000]-------------------------'
 ADMIN_MSG = '[000000]-------------------------\n[FFFFFF]Admin Commands:\n[FFD700]!a [FF7F50]Player [000000]or [FFD700]!add [FF7F50]Player [FFFFFF]-- Add a player to the waitlist.\n[FFD700]!r [FF7F50]Player [000000]or [FFD700]!remove [FF7F50]Player [FFFFFF]-- Remove a player from the waitlist.\n[FFD700]!m [FF7F50]Player [DDA0DD]Color [000000]or [FFD700]!move [FF7F50]Player [DDA0DD]Color [FFFFFF]-- Move a player to a seat.\n[FFD700]!b [FF7F50]Player [000000]or [FFD700]!bump [FF7F50]Player [FFFFFF]-- Move a player to the bottom of the waitlist.\n[FFD700]!k [FF7F50]Player [000000]or [FFD700]!kick [FF7F50]Player [FFFFFF]-- Kick a player from the lobby.\n[FFD700]!c [000000]or [FFD700]!clear [FFFFFF]-- Clear the waitlist.\n[FFD700]!p [DDA0DD]Number [000000]or [FFD700]!players [DDA0DD]Number [FFFFFF]-- Set the max number of players that can sit down.\n[FFD700]!ams [DDA0DD]Message [FFFFFF]-- Set the announcement message that players see when they join the lobby.\n[FFD700]!amc [FFFFFF]-- Clear the announcement message.\n[000000]-------------------------'
@@ -26,35 +27,47 @@ function onLoad(saveString)
     if not (saveString == '') then
         local save = JSON.decode(saveString)
         waitlist = save['w']
+        annouMsg = save['am']
     end
     moveBoard()
     pruneWaitlist()
     refreshButtons()
     seatedList = getSeatedList()
-
     Timer.create({
-    identifier     = self.getGUID() .. ' Refresh',
-    function_name  = 'TimerRefresh',
-    delay          = 1,
-    repetitions    = 0,
+        identifier     = self.getGUID() .. ' Refresh',
+        function_name  = 'TimerRefresh',
+        delay          = 1,
+        repetitions    = 0,
     })
+    broadcastToAll(LOGIN_MSG, stringColorToRGB('White'))
+    for k,v in pairs(Player.getPlayers()) do
+        if v.admin then
+            v.broadcast(ADMIN_MSG)
+        end
+    end
+    broadcastToAll(annouMsg, stringColorToRGB('Green'))
 end
 
 function TimerRefresh()
     for i=1, #waitlist do
-        time = os.time() - waitlist[i].time
-        time = time - time % 1
-        minutes = (time / 60)
-        minutes = minutes - minutes % 1
-        seconds = string.format("%02d",time % 60)
-        timeLabel = minutes .. ':' .. seconds
-        self.editButton({index=(i-1)*5 + 2, label= timeLabel})
+        local timeLabel = getWaitTime(i)
+        self.editButton({index=(i-1)*5 + 2, label = timeLabel})
     end
+end
+
+function getWaitTime(entryNum)
+    local diff, minutes, seconds, label
+    diff = math.floor(os.time() - waitlist[entryNum].time)
+    minutes = math.floor((diff / 60))
+    seconds = string.format("%02d",diff % 60)
+    label = minutes .. ':' .. seconds
+    return label
 end
 
 function onSave()
     local save = {}
     save['w'] = waitlist
+    save['am'] = annouMsg
     local saveString = JSON.encode(save)
     return saveString
 end
@@ -64,8 +77,10 @@ function onDestroy()
 end
 
 function moveBoard()
-    self.setPositionSmooth(START_POS)
-    self.setLock(true)
+    if MOVE_BOARD_ON_LOAD then
+        self.setPositionSmooth(START_POS)
+        self.setLock(true)
+    end
 end
 
 function pruneWaitlist()
@@ -84,7 +99,7 @@ function onChat(message, player)
     local result = false
 
     for i in string.gmatch(message, "%S+") do
-        if(command == nil) then
+        if command == nil then
             command = string.lower(i)
         else
             args[#args + 1] = i
@@ -137,9 +152,10 @@ function onPlayerConnect(player)
     end
     local entry = {id = player.steam_id, time = os.time()}
     table.insert(waitlist, entry)
-    player.broadcast(LOGIN_MSG,stringColorToRGB('Yellow'))
+    player.broadcast(LOGIN_MSG)
     player.broadcast(annouMsg,stringColorToRGB('Green'))
     refreshButtons()
+
 end
 
 function onPlayerDisconnect(player)
@@ -315,6 +331,14 @@ end
 function sitCom(player, seatColor)
     local openSeat, seat
     local colorsFound = 0
+    if player.color ~= 'Grey' and player.color ~= 'Black' then
+        player.broadcast('Only spectators can interact with the waitlist.',stringColorToRGB('Red'))
+        return true
+    end
+    if waitlist[1] == nil then
+        player.broadcast('You must join the waitlist in order to sit down.',stringColorToRGB('Red'))
+        return true
+    end
     if waitlist[1].id == player.steam_id then
         if seatColor ~= nil then
             for k,v in pairs(COLOR_TABLE) do
@@ -330,8 +354,10 @@ function sitCom(player, seatColor)
                 player.broadcast('Too many colors found. Try narrowing your search.',stringColorToRGB('Red'))
                 return true
             end
-            if Player[seat].seated == false then
-                openSeat = seat
+            if not Player[seat].seated then
+                if findSeat() ~= nil then   --Check to see if the number of players is over capacity
+                    openSeat = seat
+                end
             else
                 openSeat = findSeat()
             end
@@ -566,9 +592,9 @@ function bumpCom(player_name, user)
         else
             for i = 1,#waitlist do
                 if waitlist[i].id == player.steam_id then
+                    local tempEntry = waitlist[i]
                     table.remove(waitlist,i)
-                    local entry = {id = player.steam_id, time = os.time()}
-                    table.insert(waitlist,entry)
+                    table.insert(waitlist,tempEntry)
                     user.broadcast(player.steam_name .. ' has been bumped to the bottom of the waitlist.',stringColorToRGB('Green'))
                     refreshButtons()
                     return true
@@ -707,27 +733,21 @@ end
 ------------------User Interface
 function refreshButtons()
     self.clearButtons()
-    local time, min, sec
+    local timeLabel
 
     local buttonParam = {click_function = 'nullFunc', function_owner = self, label = 'Waitlist', color = {0,0,0,1}, font_color = stringColorToRGB('Blue'),
-        position = {0,0.1,-1.3}, width = 1, height = 1, font_size = 100}
+        position = {0,0.1,-1.3}, width = 0, height = 0, font_size = 100}
     self.createButton(buttonParam)
 
     for i = 1,#waitlist do
-        local buttonParam = {click_function = 'move'..i, function_owner = self, label = getPlayerBySteamID(waitlist[i].id).steam_name, color = {0,0,0,1}, font_color = stringColorToRGB('Grey'),
-            position = {COLUMN[1],0.1,ROW[i]}, width = 800, height = BUTTON_SIZE, font_size = 80, tooltip = 'Seat player'}
+        local buttonParam = {click_function = 'move'..i, function_owner = self, label = getPlayerBySteamID(waitlist[i].id).steam_name, color = {0,0,0,1}, font_color = stringColorToRGB('White'),
+            position = {COLUMN[1],0.1,ROW[i]}, width = 700, height = BUTTON_SIZE, font_size = 80, tooltip = 'Seat player'}
             if string.len(buttonParam.label) > 15 then
                buttonParam.font_size = 40
             end
         self.createButton(buttonParam)
 
-        time = os.time() - waitlist[i].time
-        time = time - time % 1
-        minutes = (time / 60)
-        minutes = minutes - minutes % 1
-        seconds = string.format("%02d",time % 60)
-        timeLabel = minutes .. ':' .. seconds
-
+        timeLabel = getWaitTime(i)
         local buttonParam = {click_function = 'nullFunc', function_owner = self, label = timeLabel, color = {0,0,0,1}, font_color = stringColorToRGB('Grey'),
             position = {COLUMN[2],0.1,ROW[i]}, width = 0, height = 0, font_size = 80}
         self.createButton(buttonParam)
