@@ -1,7 +1,7 @@
 --[[
 SH Expansion Tool
 Made by Sionar
-Version 1.5.1
+Version 1.5.2
 --]]
 
 ------------------Constants
@@ -107,10 +107,8 @@ function drawStart(clickedButton, playerColor)
             broadcastToColor("ERROR: Policy deck not found.", playerColor, {1,0,0})
             return
         end
-
-        drawDeck.dealToColor(drawNum, player)
-        local broadcastString = player .. " draws " .. drawNum .. " cards"
-        broadcastToAll(broadcastString, {1,1,1})
+        -- This sets lastPres and lastChan for better notes
+        Global.call('callFunction', {fcn = 'drawCards', params = {drawNum, player}})
         if drawNum >= 6 or drawNum >= drawDeck.getQuantity() then
             shufFlag = true
             policyDeckNum = drawDeck.getQuantity() - drawNum
