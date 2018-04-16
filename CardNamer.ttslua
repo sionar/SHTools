@@ -4,6 +4,7 @@ Made by Sionar
 Version 1.2.0
 --]]
 
+
 ------------------Constants
 ABILITIES =
 {
@@ -98,6 +99,7 @@ CARD_POS = {x = 37, y = 1, z = -20.5}
 MARGIN_OF_ERROR = 1
 ABILITY_DECK_NAME = 'Abilities'
 EFFECT_DECK_NAME = 'Effects'
+
 
 ------------------Main Functions
 function nameAbilities()

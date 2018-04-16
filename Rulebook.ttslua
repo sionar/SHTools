@@ -1,11 +1,12 @@
-﻿--[[
-SH Expansion Rulebook
-Made by Sionar
-Version 1.0.7
+--[[
+--SH Expansion Rulebook
+--Made by Sionar
+--Version 1.0.7
 --]]
 
+
 ------------------Constants
-rules = {
+RULES = {
 '1. Setup: Deal three abilities to each player at the start of the game. Keep two and place one back in the deck.',
 '2. Liberals can only activate one ability per game.',
 '3. Abilities are one time use only unless stated otherwise. Keep them concealed until you use them. Announce when you are using an ability. Text in brackets restricts when they can be used.',
@@ -23,8 +24,8 @@ rules = {
 '15. Abilities that can be Hacked: Martyr, Jester, Surgeon, Super-President, Gambler, Senator, Historian, Usurper, Fisherman, Decider, Insurgent, Scout and Spelunker.',
 '16. Abilities that can be Puppeteered: Assassin, Poisoner (one target), Spy (one target), Super-Detective (one target), Collector, Soulmate, Gravedigger, Guardian-Angel, Spiritualist (if there is a valid target to change to), Bandit, Silencer and Big-Brother.'
 }
-credits = 'Made by: \nPiggy\nSionar\n\nSpecial thanks to the entire\nSecret Hitler community!\n\nCome join us on Discord at:\ncFuFmmm'
-notebookTitle = 'Expansion'
+CREDITS = 'Made by: \nPiggy\nSionar\n\nSpecial thanks to the entire\nSecret Hitler community!\n\nCome join us on Discord at:\ncFuFmmm'
+NOTEBOOK_TITLE = 'Expansion'
 LINE_WIDTH = 58
 LINES_PER_PAGE = 22
 START_POS = {x = 100, y = 1.1, z = -22}
@@ -42,7 +43,7 @@ function format()
     local pageText = ''
     local ruleText = ''
     local i = 1
-    for n, rule in pairs(rules) do
+    for n, rule in pairs(RULES) do
         rNumLines = 0
         for word in string.gmatch(rule, '%g+') do
             if string.match(word, '%d') then
@@ -95,14 +96,14 @@ end
 
 function addEditNotebookTab()
     local params = {}
-    params.title = notebookTitle
-    params.body = '[u][b]' .. notebookTitle .. '[/b][/u]\n\n'
-    for _, rule in pairs(rules) do
+    params.title = NOTEBOOK_TITLE
+    params.body = '[u][b]' .. NOTEBOOK_TITLE .. '[/b][/u]\n\n'
+    for _, rule in pairs(RULES) do
         params.body = params.body .. rule .. '\n\n'
     end
-    params.body = params.body .. credits
+    params.body = params.body .. CREDITS
     for _, tab in ipairs(getNotebookTabs()) do
-        if tab.title == notebookTitle then
+        if tab.title == NOTEBOOK_TITLE then
            params.index = tab.index
            break
         end
@@ -126,11 +127,11 @@ function refreshText()
     self.clearInputs()
 
     local buttonParam = {click_function = 'nullFunc', function_owner = self, label = 'Expansion Rules', color = {0,0,0,1}, font_color = stringColorToRGB('Red'),
-        position = {0,0.1,-1.3}, width = 1, height = 1, font_size = 100}
+        position = {0,0.1,-1.3}, width = 0, height = 0, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', function_owner = self, label = rulebook[page], color = {0,0,0,1}, font_color = stringColorToRGB('White'),
-        position = {0,0.1,-0.15}, width = 1, height = 1, font_size = 50, alignment = 2}
+        position = {0,0.1,-0.15}, width = 0, height = 0, font_size = 50, alignment = 2}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'firstPage', function_owner = self, label = '[b]⇤[/b]', color = {0,0,0,0.8}, font_color = stringColorToRGB('Red'),
@@ -153,8 +154,8 @@ function refreshText()
         position = {1.5,0.1,-1.5}, width = 100, height = 100, font_size = 80, tooltip = 'Give Rulebook to:'}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'nullFunc', function_owner = self, label = credits, color = {0,0,0,1}, font_color = stringColorToRGB('White'),
-        position = {0,-0.1,-0.15}, rotation = {180, 180, 0}, width = 1, height = 1, font_size = 100, alignment = 3}
+    local buttonParam = {click_function = 'nullFunc', function_owner = self, label = CREDITS, color = {0,0,0,1}, font_color = stringColorToRGB('White'),
+        position = {0,-0.1,-0.15}, rotation = {180, 180, 0}, width = 0, height = 0, font_size = 100, alignment = 3}
     self.createButton(buttonParam)
 end
 
@@ -196,7 +197,6 @@ function onScriptingButtonDown(index, playerColor)
         nextPage()
     end
 end
-
 
 function giveTool(clickedButton, playerColor, index)
     local pos = {forward = -17, right = 0, up = 1}

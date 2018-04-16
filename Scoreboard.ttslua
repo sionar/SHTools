@@ -4,6 +4,7 @@ Made by Sionar
 Version 1.5.2
 --]]
 
+
 ------------------Constants
 DEBUG = false
 COLOR_TABLE = {'White', 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple', 'Pink', 'Teal', 'Brown'}

@@ -4,6 +4,7 @@ Made by Sionar
 Version 1.5.2
 --]]
 
+
 ------------------Constants
 COLOR_TABLE = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 DRAW_ZONE_GUID = '6463d3'
@@ -107,8 +108,9 @@ function drawStart(clickedButton, playerColor)
             broadcastToColor("ERROR: Policy deck not found.", playerColor, {1,0,0})
             return
         end
-        -- This sets lastPres and lastChan for better notes
         Global.call('callFunction', {fcn = 'drawCards', params = {drawNum, player}})
+        local broadcastString = player .. " draws " .. drawNum .. " cards"
+        broadcastToAll(broadcastString, {1,1,1})
         if drawNum >= 6 or drawNum >= drawDeck.getQuantity() then
             shufFlag = true
             policyDeckNum = drawDeck.getQuantity() - drawNum
@@ -297,6 +299,71 @@ function gambleStart(clickedButton, playerColor)
     end
 end
 
+function gambleCoroutine()
+    local drawDeck = getDeckFromZoneByGUID(DRAW_ZONE_GUID)
+    local deckTable = drawDeck.getObjects()
+    local abilityDeck = getDeckFromZoneByGUID(ABILITY_ZONE_GUID)
+    local pos1 = abilityDeck.getPosition()
+    local rotUp = {x = 0, y = 180, z = 0}
+    local rotDown = {x = 0, y = 180, z = 180}
+    local broadcastString = player.." bet on a "
+    local allObjs = getAllObjects()
+	local tmpObj
+    local gambleResult
+    for _, tmpObj in ipairs(allObjs) do
+        tmpPos = tmpObj.getPosition()
+        if tmpObj.getName() == last_gambled and tmpObj.getName() ~= "" and tmpPos['x'] >= pos1['x'] - 15 and tmpPos['x'] <= pos1['x'] and tmpPos['z'] >= pos1['z'] - 8 and tmpPos['z'] <= pos1['z'] + 8 then
+            tmpObj.setRotationSmooth(rotDown)
+            tmpObj.setPositionSmooth(pos1)
+            sleep(0.5)
+        end
+    end
+    abilityDeck.shuffle()
+    if option == 1 then
+        broadcastString = broadcastString .. "Liberal policy card and "
+    else
+        broadcastString = broadcastString .. "Fascist policy card and "
+    end
+    if (deckTable[1].description == "Liberal Policy" and option == 1) or (deckTable[1].description == "Fascist Policy" and option == 0) then
+        broadcastString = broadcastString .. "won!"
+        local params = {index = 1}
+        local card = abilityDeck.takeObject(params)
+        card.setPositionSmooth({pos1['x'] - 5, pos1['y'], pos1['z']})
+        card.setRotationSmooth({rotUp['x'], rotUp['y'], rotUp['z']})
+        last_gambled = card.getName()
+        gambleResult = 'w'
+    else
+        broadcastString = broadcastString .. "lost!"
+        gambleResult = 'l'
+    end
+
+    ---Scoreboard code
+    local tab = getAllObjects()
+    for _, v in pairs(tab) do
+        if string.match(v.getName(), "Scoreboard") then
+            tmpObj = v
+            break
+        end
+    end
+    if tmpObj ~= nil then
+        tmpObj.call('recGamble', {player, gambleResult})
+    end
+    ---
+    broadcastToAll(broadcastString, {1,1,1})
+    local pos2 = drawDeck.getPosition()
+
+    local params = {index = 0}
+    local card = drawDeck.takeObject(params)
+    card.setPosition({pos2['x'], pos2['y']+1, pos2['z']})
+    card.setRotationSmooth({rotUp['x'], rotUp['y'], rotUp['z']})
+    sleep(3)
+    card.setRotationSmooth({rotDown['x'], rotDown['y'], rotDown['z']})
+    sleep(1)
+    drawDeck.shuffle()
+    clearValues()
+    return 1
+end
+
 function fisherStart(clickedButton, playerColor)
     if Player[playerColor].admin or not promOnly then
         if player == "" then
@@ -352,7 +419,8 @@ function martyrStart(clickedButton, playerColor)
         local card = drawDeck.takeObject(params)
         card.deal(1, player)
         reshuffle()
-
+        Global.setVar('lastPres', player)
+        Global.setVar('lastChan', player)
         local playerStat = Global.getTable('playerStatus')
         playerStat[player] = 5
         Global.setTable('playerStatus', playerStat)
@@ -653,6 +721,13 @@ function reshuffle()
     broadcastToAll('Deck reshuffled', {1,1,1})
 end
 
+function shuffleCoroutine()
+    sleep(1)
+    local drawDeck = getDeckFromZoneByGUID(DRAW_ZONE_GUID)
+    drawDeck.shuffle()
+    return 1
+end
+
 function lock()
     local abilityDeck = getDeckFromZoneByGUID(ABILITY_ZONE_GUID)
     if abilityDeck == nil then
@@ -686,78 +761,6 @@ function getIndex(flag, size, table, string1, string2)
         end
     end
     return -1
-end
-
-function shuffleCoroutine()
-    sleep(1)
-    local drawDeck = getDeckFromZoneByGUID(DRAW_ZONE_GUID)
-    drawDeck.shuffle()
-    return 1
-end
-
-function gambleCoroutine()
-    local drawDeck = getDeckFromZoneByGUID(DRAW_ZONE_GUID)
-    local deckTable = drawDeck.getObjects()
-    local abilityDeck = getDeckFromZoneByGUID(ABILITY_ZONE_GUID)
-    local pos1 = abilityDeck.getPosition()
-    local rotUp = {x = 0, y = 180, z = 0}
-    local rotDown = {x = 0, y = 180, z = 180}
-    local broadcastString = player.." bet on a "
-    local allObjs = getAllObjects()
-	local tmpObj
-    local gambleResult
-    for _, tmpObj in ipairs(allObjs) do
-        tmpPos = tmpObj.getPosition()
-        if tmpObj.getName() == last_gambled and tmpObj.getName() ~= "" and tmpPos['x'] >= pos1['x'] - 15 and tmpPos['x'] <= pos1['x'] and tmpPos['z'] >= pos1['z'] - 8 and tmpPos['z'] <= pos1['z'] + 8 then
-            tmpObj.setRotationSmooth(rotDown)
-            tmpObj.setPositionSmooth(pos1)
-            sleep(0.5)
-        end
-    end
-    abilityDeck.shuffle()
-    if option == 1 then
-        broadcastString = broadcastString .. "Liberal policy card and "
-    else
-        broadcastString = broadcastString .. "Fascist policy card and "
-    end
-    if (deckTable[1].description == "Liberal Policy" and option == 1) or (deckTable[1].description == "Fascist Policy" and option == 0) then
-        broadcastString = broadcastString .. "won!"
-        local params = {index = 1}
-        local card = abilityDeck.takeObject(params)
-        card.setPositionSmooth({pos1['x'] - 5, pos1['y'], pos1['z']})
-        card.setRotationSmooth({rotUp['x'], rotUp['y'], rotUp['z']})
-        last_gambled = card.getName()
-        gambleResult = 'w'
-    else
-        broadcastString = broadcastString .. "lost!"
-        gambleResult = 'l'
-    end
-
-    ---Scoreboard code
-    local tab = getAllObjects()
-    for _, v in pairs(tab) do
-        if string.match(v.getName(), "Scoreboard") then
-            tmpObj = v
-            break
-        end
-    end
-    if tmpObj ~= nil then
-        tmpObj.call('recGamble', {player, gambleResult})
-    end
-    ---
-    broadcastToAll(broadcastString, {1,1,1})
-    local pos2 = drawDeck.getPosition()
-
-    local params = {index = 0}
-    local card = drawDeck.takeObject(params)
-    card.setPosition({pos2['x'], pos2['y']+1, pos2['z']})
-    card.setRotationSmooth({rotUp['x'], rotUp['y'], rotUp['z']})
-    sleep(3)
-    card.setRotationSmooth({rotDown['x'], rotDown['y'], rotDown['z']})
-    sleep(1)
-    drawDeck.shuffle()
-    clearValues()
-    return 1
 end
 
 function sleep(numSeconds)

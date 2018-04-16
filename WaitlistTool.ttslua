@@ -1,6 +1,9 @@
---Waitlist Tool
---Version 1.1.5
---Made by Sionar
+--[[
+Waitlist Tool
+Made by Sionar
+Version 1.1.5
+--]]
+
 
 ------------------Constants
 MOVE_BOARD_ON_LOAD = false
@@ -21,6 +24,7 @@ nudgeBlock = false
 maxPlayers = 10
 waitlist = {}
 seatedList = {}
+
 
 ------------------Save Load
 function onLoad(saveString)
