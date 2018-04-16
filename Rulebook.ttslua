@@ -1,7 +1,7 @@
---[[
+﻿--[[
 SH Expansion Rulebook
 Made by Sionar
-Version 1.0.6
+Version 1.0.7
 --]]
 
 ------------------Constants
@@ -24,6 +24,7 @@ rules = {
 '16. Abilities that can be Puppeteered: Assassin, Poisoner (one target), Spy (one target), Super-Detective (one target), Collector, Soulmate, Gravedigger, Guardian-Angel, Spiritualist (if there is a valid target to change to), Bandit, Silencer and Big-Brother.'
 }
 credits = 'Made by: \nPiggy\nSionar\n\nSpecial thanks to the entire\nSecret Hitler community!\n\nCome join us on Discord at:\ncFuFmmm'
+notebookTitle = 'Expansion'
 LINE_WIDTH = 58
 LINES_PER_PAGE = 22
 START_POS = {x = 100, y = 1.1, z = -22}
@@ -89,6 +90,28 @@ function onLoad()
     page = 1
     refreshText()
     moveBoard()
+    addEditNotebookTab()
+end
+
+function addEditNotebookTab()
+    local params = {}
+    params.title = notebookTitle
+    params.body = '[u][b]' .. notebookTitle .. '[/b][/u]\n\n'
+    for _, rule in pairs(rules) do
+        params.body = params.body .. rule .. '\n\n'
+    end
+    params.body = params.body .. credits
+    for _, tab in ipairs(getNotebookTabs()) do
+        if tab.title == notebookTitle then
+           params.index = tab.index
+           break
+        end
+    end
+    if params.index then
+        editNotebookTab(params)
+    else
+        addNotebookTab(params)
+    end
 end
 
 function moveBoard()

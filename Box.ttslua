@@ -1,11 +1,11 @@
 --[[
 SH Expansion Box
 Made by Lost Savage, Modified by Sionar
-Version 1.0.1
+Version 1.0.2
 --]]
 
 ------------------Constants
-UPDATE_VERSION = 92
+UPDATE_VERSION = 94
 ADD_ON_VERSION = 5
 BOX_OBJECTS_NUM = 9
 ADD_ON_NAME = 'Expansion Deck'
@@ -33,7 +33,7 @@ function onLoad(saveString)
 	parameters.identifier = 'setupExpansionSP'
 	parameters.function_name = 'setupExpansion'
 	parameters.function_owner = self
-	parameters.delay = 1
+	parameters.delay = 0.1
 	Timer.create(parameters)
 end
 
@@ -56,24 +56,32 @@ function setupExpansion()
 				if started then
 					printToAll('ERROR: Can not add this option. Game has already started.', {1,0,0})
 				else
-					local lastVote_guids = Global.getTable('lastVote_guids')
-
-					for _, lastVoteGuid in ipairs(lastVote_guids) do
-						local lastVote = getObjectFromGUID(lastVoteGuid)
-						if lastVote then
-							local txtValue = lastVote.TextTool.getValue()
-							if txtValue == 'Last Vote' then
-								txtValue = 'Extra Options: ' .. ADD_ON_NAME
-							elseif not string.match(txtValue, ADD_ON_NAME) then
-								txtValue = txtValue .. ', ' .. ADD_ON_NAME
-							end
-							lastVote.TextTool.setValue(txtValue)
-						end
-					end
 					if #self.getObjects() >= BOX_OBJECTS_NUM then
+						local lastVote_guids = Global.getTable('lastVote_guids')
+
+						for _, lastVoteGuid in ipairs(lastVote_guids) do
+							local lastVote = getObjectFromGUID(lastVoteGuid)
+							if lastVote then
+								local txtValue = lastVote.TextTool.getValue()
+								if txtValue == 'Last Vote' then
+									txtValue = 'Extra Options: ' .. ADD_ON_NAME
+								elseif not string.match(txtValue, ADD_ON_NAME) then
+									txtValue = txtValue .. ', ' .. ADD_ON_NAME
+								end
+								lastVote.TextTool.setValue(txtValue)
+							end
+						end
+
 						local options = Global.getTable('options')
 						options.expansionAmount = 3
+						options.expansionOptionEnabled = 5
+						options.policySafety = false
+						options.shufflePlayers = true
+						options.shuffleHost = false
+						options.voteHistory = true
+						options.zoneType = 3
 						Global.setTable('options', options)
+						Global.call('refreshExpansionButtons')
 						startLuaCoroutine(self, 'setupExpansionCoroutine')
 					end
 				end
@@ -138,9 +146,4 @@ function setupExpansionCoroutine()
 	end
 
 	return true
-end
-
-function sleep(numSeconds)
-	local t0 = os.clock()
-	while os.clock() - t0 <= numSeconds do coroutine.yield(0) end
 end
