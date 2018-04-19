@@ -1,7 +1,7 @@
 --[[
 SH Scoreboard
 Made by Sionar
-Version 1.5.2
+Version 1.6.0
 --]]
 
 
@@ -22,7 +22,6 @@ START_POS = {x = 100, y = 1.1, z = 8}
 
 ------------------Variables
 db = {}
-webdb = {}
 saveStorage = {}
 winStorage = {}
 name = {}
@@ -42,14 +41,13 @@ ratesDisp = {}
 passHash = ''
 recordCheck = false
 startTime = 0
-dbOption = 1
 minGames = 10
-lastAMID = 1
 fWins = 0
 lWins = 0
 state = 0
 saveNames = {'Name 1', 'Name 2', 'Name 3', 'Name 4'}
 roles = Global.getTable('roles')
+sessionPlayers = {}
 
 
 ------------------Events
@@ -60,27 +58,17 @@ function onLoad(saveString)
         deserialize(save['dbStr'])
         fWins = save['fw']
         lWins = save['lw']
-        lastAMID = save["amid"]
         saveNames = save['sn']
         saveStorage = save['dbs'] or saveStorage
-        dbOption = save['dbo'] or dbOption
+        sessionPlayers = save['sp'] or {}
     end
+
     roles = Global.getTable('roles')
     recordCheck = false
     startTime = os.time()
     refreshStart()
     moveBoard()
-
-    for _, v in pairs(Player.getPlayers()) do
-      if(v.seated) then
-        params = {}
-        params["SteamID"] = v.steam_id
-        params["PlayerName"] = v.steam_name
-        registerPlayer(params)
-      end
-    end
-
-    startAnnTimer()
+    startLuaCoroutine(self, 'checkStarted')
 end
 
 function onSave()
@@ -91,28 +79,9 @@ function onSave()
     save['lw'] = lWins
     save['sn'] = saveNames
     save['dbs'] = saveStorage
-    save['dbo'] = dbOption
-    save['amid'] = lastAMID
+    save['sp'] = sessionPlayers
     local saveString = JSON.encode(save)
     return saveString
-end
-
-function onDestroy()
-    Timer.destroy(self.getGUID())
-end
-
-function onPlayerChangeColor(player_color)
-    local started = Global.getVar('started')
-    if state == 0 and started then
-        refreshStart()
-    end
-    if player_color == 'Grey' then
-        return
-    end
-    params = {}
-    params["SteamID"] = Player[player_color].steam_id
-    params["PlayerName"] = Player[player_color].steam_name
-    registerPlayer(params)
 end
 
 function onChat(message, player)
@@ -140,16 +109,45 @@ function onChat(message, player)
     end
 end
 
-function moveBoard()
-    local tab = getAllObjects()
-    local foundTab = {}
-    for _, v in pairs(tab) do
-        if string.match(v.getName(), "Scoreboard") then
-            table.insert(foundTab,1,v)
-        end
+function checkStarted()
+    sleep(0.1)
+    Timer.destroy(self.getGUID())
+    Timer.create({
+        identifier     = self.getGUID(),
+        function_name  = 'checkStartedTimer',
+        delay          = 5,
+        repetitions    = 1,
+    })
+    return 1
+end
+
+function checkStartedTimer()
+    local started = Global.getVar('started')
+    if started then
+        updateFunc()
+        Timer.destroy(self.getGUID())
+    else
+        startLuaCoroutine(self, 'checkStarted')
     end
-    self.setPositionSmooth({START_POS['x']  + (#foundTab-1) * 30, START_POS['y'], START_POS['z']})
-    self.setLock(true)
+end
+
+function onDestroy()
+    Timer.destroy(self.getGUID())
+end
+
+function moveBoard()
+    local global_name = Global.getVar('mod_name')
+    if global_name == 'Secret Hitler: CE' then
+        local tab = getAllObjects()
+        local foundTab = {}
+        for _, v in pairs(tab) do
+            if string.match(v.getName(), "Scoreboard") then
+                table.insert(foundTab,1,v)
+            end
+        end
+        self.setPositionSmooth({START_POS['x']  + (#foundTab-1) * 30, START_POS['y'], START_POS['z']})
+        self.setLock(true)
+    end
 end
 
 
@@ -157,116 +155,68 @@ end
 function nullFunc() end
 
 function refreshStart()
-    startLuaCoroutine(self, 'refreshFunc')
+    for i = 1, 10 do
+        if Player[COLOR_TABLE[i]].seated == false then
+            gamesPlayed[i] = ""
+            libWR[i] = ""
+            fasWR[i] = ""
+            hitWR[i] = ""
+            fhWR[i] = ""
+            totWR[i] = ""
+        else
+            if db[Player[COLOR_TABLE[i]].steam_id] == nil then
+                db[Player[COLOR_TABLE[i]].steam_id] = {lw = 0, fw = 0, hw = 0, lg = 0, fg = 0, hg = 0, gw = 0, gn = 0,
+                    sn = Player[COLOR_TABLE[i]].steam_name, fr = 1000, lr = 1000}
+            end
+
+            local lw = db[Player[COLOR_TABLE[i]].steam_id].lw
+            local fw = db[Player[COLOR_TABLE[i]].steam_id].fw
+            local hw = db[Player[COLOR_TABLE[i]].steam_id].hw
+            local lg = db[Player[COLOR_TABLE[i]].steam_id].lg
+            local fg = db[Player[COLOR_TABLE[i]].steam_id].fg
+            local hg = db[Player[COLOR_TABLE[i]].steam_id].hg
+
+            if lg+fg+hg == 0 then
+                gamesPlayed[i] = 0
+                libWR[i] = "0%"
+                fasWR[i] = "0%"
+                hitWR[i] = "0%"
+                fhWR[i] = "0%"
+                totWR[i] = "0%"
+            else
+                gamesPlayed[i] = lg + fg + hg
+                libWR[i] = round(lw/lg * 100) .. "%"
+                fasWR[i] = round(fw/fg * 100) .. "%"
+                hitWR[i] = round(hw/hg * 100) .. "%"
+                fhWR[i] = round((fw+hw)/(fg+hg) * 100) .. "%"
+                totWR[i] = round((fw+hw+lw)/(fg+hg+lg) * 100) .. "%"
+            end
+        end
+    end
     mainMenu()
 end
 
-function refreshFunc()
-    if dbOption == 1 then
-        for i = 1, 10 do
-            if Player[COLOR_TABLE[i]].seated == false then
-                gamesPlayed[i] = ""
-                libWR[i] = ""
-                fasWR[i] = ""
-                hitWR[i] = ""
-                fhWR[i] = ""
-                totWR[i] = ""
-            else
-                if db[Player[COLOR_TABLE[i]].steam_id] == nil then
-                    db[Player[COLOR_TABLE[i]].steam_id] = {lw = 0, fw = 0, hw = 0, lg = 0, fg = 0, hg = 0, gw = 0, gn = 0,
-                        sn = Player[COLOR_TABLE[i]].steam_name, fr = 1000, lr = 1000}
-                end
-
-                local lw = db[Player[COLOR_TABLE[i]].steam_id].lw
-                local fw = db[Player[COLOR_TABLE[i]].steam_id].fw
-                local hw = db[Player[COLOR_TABLE[i]].steam_id].hw
-                local lg = db[Player[COLOR_TABLE[i]].steam_id].lg
-                local fg = db[Player[COLOR_TABLE[i]].steam_id].fg
-                local hg = db[Player[COLOR_TABLE[i]].steam_id].hg
-
-                if lg+fg+hg == 0 then
-                    gamesPlayed[i] = 0
-                    libWR[i] = "0%"
-                    fasWR[i] = "0%"
-                    hitWR[i] = "0%"
-                    fhWR[i] = "0%"
-                    totWR[i] = "0%"
-                else
-                    gamesPlayed[i] = lg + fg + hg
-                    libWR[i] = round(lw/lg * 100) .. "%"
-                    fasWR[i] = round(fw/fg * 100) .. "%"
-                    hitWR[i] = round(hw/hg * 100) .. "%"
-                    fhWR[i] = round((fw+hw)/(fg+hg) * 100) .. "%"
-                    totWR[i] = round((fw+hw+lw)/(fg+hg+lg) * 100) .. "%"
-                end
-            end
-        end
+function updateStart(clickedObject, playerColor)
+    if Player[playerColor].admin then
+        updateFunc()
+        broadcastToColor("Seated players updated.", playerColor, {0,0,1})
     else
-        local params = {}
-        local url
-        if dbOption == 2 then
-            url = 'http://52.165.159.78:1337/retrievestats'
-        else
-            url = 'http://52.165.159.78:1337/retrievehoststats'
-            params.host = getHost().steam_id
-        end
-        for i = 1, 10 do
-            if Player[COLOR_TABLE[i]].seated == true then
-                table.insert(params, Player[COLOR_TABLE[i]].steam_id)
-            end
-        end
-        debug_print(#params)
-        WebRequest.post(url, params, self, "retrievestatsCB")
+        broadcastToColor("Only promoted players can update the seated players.", playerColor, {1,0,0})
     end
-    return 1
 end
 
-function retrievestatsCB(req)
-    if req.is_done and not req.is_error then
-        local lw, fw, hw, lg, fg, hg, id, tg
-        local response = req.text
-        webdb = JSON.decode(req.text)
-        for v in pairs(webdb) do
-            debug_print(v)
-        end
-
-        for i = 1, 10 do
-            if Player[COLOR_TABLE[i]].seated == false then
-                gamesPlayed[i] = ""
-                libWR[i] = ""
-                fasWR[i] = ""
-                hitWR[i] = ""
-                fhWR[i] = ""
-                totWR[i] = ""
-                gamesPlayed[i] = ""
-            else
-                id = Player[COLOR_TABLE[i]].steam_id
-                if webdb[id] == nil then
-                    libWR[i] = "0%"
-                    fasWR[i] = "0%"
-                    hitWR[i] = "0%"
-                    fhWR[i] = "0%"
-                    totWR[i] = "0%"
-                    gamesPlayed[i] = 0
-                else
-                    lw = webdb[id].LibWins
-                    fw = webdb[id].FascWins
-                    hw = webdb[id].HitlerWins
-                    lg = webdb[id].LibGames
-                    fg = webdb[id].FascGames
-                    hg = webdb[id].HitlerGames
-                    tg = webdb[id].TotalGames
-
-                    libWR[i] = round(lw/lg * 100) .. "%"
-                    fasWR[i] = round(fw/fg * 100) .. "%"
-                    hitWR[i] = round(hw/hg * 100) .. "%"
-                    fhWR[i] = round((fw+hw)/(fg+hg) * 100) .. "%"
-                    totWR[i] = round((fw+hw+lw)/(fg+hg+lg) * 100) .. "%"
-                    gamesPlayed[i] = tg
-                end
-            end
+function updateFunc()
+    local entry = {}
+    sessionPlayers = {}
+    roles = Global.getTable('roles')
+    local players = Global.getTable('players')
+    if players ~= nil then
+        for k,v in pairs(players) do
+            entry = {id = Player[v].steam_id, role = roles[v]}
+            table.insert(sessionPlayers,entry)
         end
     end
+    refreshStart()
 end
 
 function refreshMisc()
@@ -293,83 +243,77 @@ end
 function recLFunc(clickedObject, playerColor)
     if Player[playerColor].admin then
         if checkValid(clickedObject, playerColor) then
-            roles = Global.getTable('roles')
-            for _, v in pairs(getSeatedPlayers()) do
-                if roles[v] == 'liberal' then
-                    db[Player[v].steam_id].lw = db[Player[v].steam_id].lw + 1
-                    db[Player[v].steam_id].lg = db[Player[v].steam_id].lg + 1
-                    sendStats(formatStats(Player[v].steam_id, getHost().steam_id, 0, 1, #getSeatedPlayers(), isPlayingWithAbilities(), 0, 0))
-                elseif roles[v] == 'fascist' then
-                    db[Player[v].steam_id].fg = db[Player[v].steam_id].fg + 1
-                    sendStats(formatStats(Player[v].steam_id, getHost().steam_id, 1, 0, #getSeatedPlayers(), isPlayingWithAbilities(), 0, 0))
+            for k,v in pairs(sessionPlayers) do
+                if v.role == 'liberal' then
+                    db[v.id].lw = db[v.id].lw + 1
+                    db[v.id].lg = db[v.id].lg + 1
+                elseif v.role == 'fascist' then
+                    db[v.id].fg = db[v.id].fg + 1
                 else
-                    db[Player[v].steam_id].hg = db[Player[v].steam_id].hg + 1
-                    sendStats(formatStats(Player[v].steam_id, getHost().steam_id, 2, 0, #getSeatedPlayers(), isPlayingWithAbilities(), 0, 0))
+                    db[v.id].hg = db[v.id].hg + 1
                 end
             end
+
             lWins = lWins + 1
-            broadcastToColor("Liberal victory recorded.", player, {0,0,1})
+            broadcastToAll("Liberal victory recorded.", {0,0,1})
             updateRatings('lib')
             onSave()
             refreshStart()
         end
+    else
+        broadcastToColor("Only promoted players can record the game.", playerColor, {1,0,0})
     end
 end
 
 function recFFunc(clickedObject, playerColor)
     if Player[playerColor].admin then
         if checkValid(clickedObject, playerColor) then
-            roles = Global.getTable('roles')
-            for _, v in pairs(getSeatedPlayers()) do
-                if roles[v] == 'liberal' then
-                    db[Player[v].steam_id].lg = db[Player[v].steam_id].lg + 1
-                    sendStats(formatStats(Player[v].steam_id, getHost().steam_id, 0, 0, #getSeatedPlayers(), isPlayingWithAbilities(), 0, 0))
-                elseif roles[v] == 'fascist' then
-                    db[Player[v].steam_id].fw = db[Player[v].steam_id].fw + 1
-                    db[Player[v].steam_id].fg = db[Player[v].steam_id].fg + 1
-                    sendStats(formatStats(Player[v].steam_id, getHost().steam_id, 1, 1, #getSeatedPlayers(), isPlayingWithAbilities(), 0, 0))
-
+            for k,v in pairs(sessionPlayers) do
+                if v.role == 'liberal' then
+                    db[v.id].lg = db[v.id].lg + 1
+                elseif v.role == 'fascist' then
+                    db[v.id].fw = db[v.id].fw + 1
+                    db[v.id].fg = db[v.id].fg + 1
                 else
-                    db[Player[v].steam_id].hw = db[Player[v].steam_id].hw + 1
-                    db[Player[v].steam_id].hg = db[Player[v].steam_id].hg + 1
-                    sendStats(formatStats(Player[v].steam_id, getHost().steam_id, 2, 1, #getSeatedPlayers(), isPlayingWithAbilities(), 0, 0))
+                    db[v.id].hw = db[v.id].hw + 1
+                    db[v.id].hg = db[v.id].hg + 1
                 end
             end
             fWins = fWins + 1
-            broadcastToColor("Fascist victory recorded.", player, {0,0,1})
+            broadcastToAll("Fascist victory recorded.", {1,0,0})
             updateRatings('fas')
             onSave()
             refreshStart()
         end
+    else
+        broadcastToColor("Only promoted players can record the game.", playerColor, {1,0,0})
     end
 end
 
 function updateRatings(winner)
-    local players = getSeatedPlayers()
     local libTeam = {}
     local fasTeam = {}
     local libShare = {}
     local fasShare = {}
     local tLib, tFas = 0, 0
     local aLib, aFas, rLib, rFas, eLib, eFas, sLib, sFas
-    roles = Global.getTable('roles')
-    for _,v in pairs(players) do
-        if roles[v] == 'liberal' then
-            table.insert(libTeam, Player[v].steam_id)
+    for k,v in pairs(sessionPlayers) do
+        if v.role == 'liberal' then
+            table.insert(libTeam, v.id)
         else
-            table.insert(fasTeam, Player[v].steam_id)
+            table.insert(fasTeam, v.id)
         end
     end
-    for _,v in pairs(libTeam) do
+    for k,v in pairs(libTeam) do
         tLib = tLib + db[v].lr
     end
-    for _,v in pairs(libTeam) do
+    for k,v in pairs(libTeam) do
         libShare[v] = db[v].lr / tLib
     end
-    for _,v in pairs(fasTeam) do
+    for k,v in pairs(fasTeam) do
         tFas = tFas + db[v].fr
     end
-    for _,v in pairs(fasTeam) do
+    for k,v in pairs(fasTeam) do
         fasShare[v] = db[v].fr / tFas
     end
     aLib = tLib/#libTeam
@@ -387,30 +331,30 @@ function updateRatings(winner)
     end
     tLib = tLib + 200 * (sLib - eLib)
     tFas = tFas + 200 * (sFas - eFas)
-    for _,v in pairs(libTeam) do
+    for k,v in pairs(libTeam) do
         db[v].lr = round(tLib * libShare[v])
     end
-    for _,v in pairs(fasTeam) do
+    for k,v in pairs(fasTeam) do
         db[v].fr = round(tFas * fasShare[v])
     end
 end
 
-function checkValid(obj, player)
+function checkValid(clickedButton, playerColor)
     local started = Global.getVar('started')
     local players = getSeatedPlayers()
     local currTime = os.time()
 
     if not started then
-        broadcastToColor("Game not started.", player, {1,0,0})
+        broadcastToColor("Game not started.", playerColor, {1,0,0})
         return false
     elseif recordCheck then
-        broadcastToColor("Game already recorded for this session.", player, {1,0,0})
+        broadcastToColor("Game already recorded for this session.", playerColor, {1,0,0})
         return false
-    elseif #players < 5 then
-        broadcastToColor("Not enough players seated", player, {1,0,0})
+    elseif #sessionPlayers < 5 then
+        broadcastToColor("Not enough players seated", playerColor, {1,0,0})
         return false
     elseif currTime - startTime < 120 then
-        broadcastToColor("Please wait a couple of minutes before submitting.", player, {1,0,0})
+        broadcastToColor("Please wait a couple of minutes before submitting.", playerColor, {1,0,0})
         return false
     else
         recordCheck = true
@@ -460,6 +404,8 @@ function clearPass(clickedButton, playerColor)
         passHash = ''
         broadcastToColor("Password cleared.", playerColor, {0,0,1})
         adminMenu(clickedObject, playerColor)
+    else
+        broadcastToColor("Only the host can clear the password for the scoreboard.", playerColor, {1,0,0})
     end
 end
 
@@ -478,6 +424,8 @@ function checkPass(clickedButton, playerColor)
         else
             broadcastToColor("Incorrect password.", playerColor, {1,0,0})
         end
+    else
+        broadcastToColor("Only promoted players can use the admin functions.", playerColor, {1,0,0})
     end
 end
 
@@ -495,6 +443,8 @@ function saveDB(clickedButton,playerColor,index)
         broadcastToColor(broadcastString, playerColor, {0,0,1})
         saveloadMenu(clickedButton, playerColor)
         onSave()
+    else
+        broadcastToColor("Only promoted players can use the admin functions.", playerColor, {1,0,0})
     end
 end
 
@@ -516,6 +466,8 @@ function loadDB(clickedButton,playerColor,index)
         broadcastString = "Data loaded from slot \"" .. tab[index].value .. "\""
         broadcastToColor(broadcastString, playerColor, {0,0,1})
         refreshStart()
+    else
+        broadcastToColor("Only promoted players can use the admin functions.", playerColor, {1,0,0})
     end
 end
 
@@ -592,6 +544,8 @@ function importFunc(clickedButton,playerColor)
         end
         startLuaCoroutine(self, 'refreshFunc')
         onSave()
+    else
+        broadcastToColor("Only promoted players can use the admin functions.", playerColor, {1,0,0})
     end
 end
 
@@ -859,164 +813,6 @@ function debug_print(string)
 end
 
 
-------------------Online Scoreboard
-function sendStats(params)
-    function innerFunc1()
-        local url = "http://52.165.159.78:1337/registerstats"
-        WebRequest.post(url, params, self, "sendStatsCallbackFunc")
-        return 1
-    end
-    startLuaCoroutine(self, "innerFunc1")
-end
-
-function registerPlayer(params)
-    function innerFunc2()
-        local url = "http://52.165.159.78:1337/adduser"
-        WebRequest.post(url, params, self, "registerPlayerCallbackFunc")
-        return 1
-    end
-    startLuaCoroutine(self, "innerFunc2")
-end
-
-function sendStatsCallbackFunc(req)
-    if(req.is_done ~= true) then
-        return
-    end
-    if(req.is_error == true) then
-        debug_print("Morten's website returned an error when recording a stat")
-        debug_print("req body = " .. req.text)
-        return
-    end
-end
-
-function registerPlayerCallbackFunc(req)
-    if(req.is_done ~= true) then
-        return
-    end
-
-    if(req.is_error == true) then
-        debug_print("Morten's website returned an error when adding a player")
-        debug_print("req body = " .. req.text)
-        return
-    end
-    debug_print("player registered")
-end
-
-function getHost()
-    for k, v in pairs(Player.getPlayers()) do
-        if(v.host) then
-            return v
-        end
-    end
-end
-
-function isPlayingWithAbilities()
-    local deck = getDeckFromZoneByGUID("eea120")
-    if(deck) then
-        return 1
-    else
-        return 0
-    end
-end
-
-function startAnnTimer()
-    local parameters = {}
-
-    Timer.destroy(self.getGUID())
-
-    parameters.identifier = self.getGUID()
-    parameters.function_name = 'checkIfNewAnn'
-    parameters.delay = 60
-    parameters.repetitions = 0
-    Timer.create(parameters)
-end
-
-function checkIfNewAnn()
-    WebRequest.get("http://52.165.159.78:1337/am", self, "annMessage")
-end
-
-function annMessage(req)
-    if(req.is_done == false) then
-    return
-    end
-
-    if(req.is_error) then
-    return
-    end
-
-    jsonRes = JSON.decode(req.text)
-    if(jsonRes["ID"] == "") then -- No message set
-    return
-    end
-
-    if(jsonRes["ID"] == lastAMID or jsonRes["ID"] == tostring(lastAMID)) then -- No NEW message set
-    return
-    end
-
-    lastAMID = jsonRes["ID"]
-    printAnnouncement(jsonRes["Message"])
-end
-
-function printAnnouncement(message)
-broadcastToAll("", stringColorToRGB("White"))
-broadcastToAll("", stringColorToRGB("White"))
-broadcastToAll("!Announcement!", stringColorToRGB("Teal"))
-broadcastToAll("-----------------------", stringColorToRGB("Red"))
-broadcastToAll("-----------------------", stringColorToRGB("Red"))
-broadcastToAll(message, stringColorToRGB("White"))
-broadcastToAll("-----------------------", stringColorToRGB("Red"))
-broadcastToAll("-----------------------", stringColorToRGB("Red"))
-broadcastToAll("", stringColorToRGB("White"))
-broadcastToAll("", stringColorToRGB("White"))
-end
-
-function hasValue(tab, val)
-    for index, value in ipairs(tab) do
-        if value == val then
-            return true
-        end
-    end
-
-    return false
-end
-
-function getDeckFromZoneByGUID(guidIn)
-	local deck = nil
-	local deck_ct = 0
-	local zone = getObjectFromGUID(guidIn)
-	local object
-
-	if zone then
-		local inZone = zone.getObjects()
-		for _, object in ipairs(inZone) do
-			if object.tag == 'Card' then
-				deck_ct = 2
-			elseif object.tag == 'Deck' then
-				deck = object
-				deck_ct = deck_ct + 1
-			end
-		end
-	end
-	if deck_ct == 1 then
-		return deck
-	end
-	return nil
-end
-
-function formatStats(steamID, hostSteamID, roleType, didWin, amountOfPlayers, withAbilitites, amountLibsPlayed, amountFascPlayed)
-    params = {}
-    params["SteamID"] = steamID
-    params["HostSteamID"] = hostSteamID
-    params["RoleType"] = roleType
-    params["DidWin"] = didWin
-    params["AmountOfPlayers"] = amountOfPlayers
-    params["WithAbilities"] = withAbilitites
-    params["AmountLibsPlayed"] = amountLibsPlayed
-    params["AmountFascPlayed"] = amountFascPlayed
-    return params
-end
-
-
 ------------------User Interface
 function mainMenu()
     self.clearButtons()
@@ -1050,7 +846,7 @@ function mainMenu()
         position = {COL[7],0.1,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'refreshStart', label = "Refresh", color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
+    local buttonParam = {click_function = 'updateStart', label = "Update\nPlayers", color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
         position = {-1.6,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50}
     self.createButton(buttonParam)
 
@@ -1069,13 +865,7 @@ function mainMenu()
     local buttonParam = {click_function = 'adminMenu', label = "Admin", color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
         position = {1.6,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50}
     self.createButton(buttonParam)
-    startLuaCoroutine(self, 'showScoreboardValues')
-end
 
-function showScoreboardValues()
-    if dbOption ~= 1 then
-        sleep(0.7)
-    end
     local name_size
     for i = 1,10 do
         if Player[COLOR_TABLE[i]].steam_name ~= nil and string.len(Player[COLOR_TABLE[i]].steam_name) > 10 then
@@ -1112,7 +902,6 @@ function showScoreboardValues()
             position = {COL[7],0.1,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
         self.createButton(buttonParam)
     end
-    return 1
 end
 
 function miscMenu()
@@ -1193,7 +982,7 @@ function miscMenu()
 end
 
 function createMiscButtons()
-    local buttonParam = {click_function = 'mainMenu', label = "Main\nStats", color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
+    local buttonParam = {click_function = 'refreshStart', label = "Main\nStats", color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
         position = {-1.6,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50}
     self.createButton(buttonParam)
 
@@ -1494,20 +1283,16 @@ function adminMenu(clickedObject, playerColor)
             position = {-0.7,0.1,-0.4}, rotation = {0,0,0}, width = 500, height = 300, font_size = 80}
         self.createButton(buttonParam)
 
-        local buttonParam = {click_function = 'dbSetMenu', label = "Database\nSettings", color = stringColorToRGB('White'), function_owner = self,
-            position = {0.7,0.1,-0.4}, rotation = {0,0,0}, width = 500, height = 300, font_size = 80}
+        local buttonParam = {click_function = 'importFunc', label = "Load Data From\nOther Board", color = stringColorToRGB('White'), function_owner = self,
+            position = {0.7,0.1,-0.4}, rotation = {0,0,0}, width = 500, height = 300, font_size = 65}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'resMenu', label = "Reset\nScores", color = stringColorToRGB('White'), function_owner = self,
             position = {-0.7,0.1,0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 80}
         self.createButton(buttonParam)
 
-        local buttonParam = {click_function = 'importFunc', label = "Load Data From\nOther Board", color = stringColorToRGB('White'), function_owner = self,
-            position = {0.7,0.1,0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 70}
-        self.createButton(buttonParam)
-
         local buttonParam = {click_function = 'passMenu', label = "Manage\nPassword", color = stringColorToRGB('White'), function_owner = self,
-            position = {-0.7,0.1,1}, rotation = {0,0,0}, width = 500, height = 300, font_size = 80}
+            position = {0.7,0.1,0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 80}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'refreshStart', label = "Cancel", color = stringColorToRGB('White'), function_owner = self,
@@ -1578,64 +1363,8 @@ function saveloadMenu(clickedObject, playerColor)
         local buttonParam = {click_function = 'adminMenu', label = "Cancel", color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
             position = {0,0.1,1.4}, rotation = {0,0,0}, width = 500, height = 200, font_size = 80}
         self.createButton(buttonParam)
-
-    end
-end
-
-function dbSetMenu(clickedObject, playerColor)
-    if Player[playerColor].admin then
-        self.clearButtons()
-        self.clearInputs()
-
-        local buttonParam = {click_function = 'nullFunc', label = "Select which scoreboard to use:", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-            position = {0,0.1,-1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 120}
-        self.createButton(buttonParam)
-
-        local buttonParam = {click_function = 'setdbOpt1', label = "Offline Scoreboard", font_color = stringColorToRGB('Black'), function_owner = self,
-            position = {0,0.1,-0.5}, rotation = {0,0,0}, width = 1000, height = 200, font_size = 60}
-        if dbOption == 1 then
-            buttonParam.color = stringColorToRGB('Yellow')
-        else
-            buttonParam.color = stringColorToRGB('White')
-        end
-        self.createButton(buttonParam)
-
-
-        local buttonParam = {click_function = 'setdbOpt2', label = "Online Scoreboard - All Hosts", font_color = stringColorToRGB('Black'), function_owner = self,
-            position = {0,0.1,0}, rotation = {0,0,0}, width = 1000, height = 200, font_size = 60}
-        if dbOption == 2 then
-            buttonParam.color = stringColorToRGB('Yellow')
-        else
-            buttonParam.color = stringColorToRGB('White')
-        end
-        self.createButton(buttonParam)
-
-
-        local buttonParam = {click_function = 'setdbOpt3', label = "Online Scoreboard - Own Host Only", font_color = stringColorToRGB('Black'), function_owner = self,
-            position = {0,0.1,0.5}, rotation = {0,0,0}, width = 1000, height = 200, font_size = 60}
-        if dbOption == 3 then
-            buttonParam.color = stringColorToRGB('Yellow')
-        else
-            buttonParam.color = stringColorToRGB('White')
-        end
-        self.createButton(buttonParam)
-
-        local buttonParam = {click_function = 'adminMenu', label = "Cancel", color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
-            position = {0,0.1,1}, rotation = {0,0,0}, width = 1000, height = 200, font_size = 80}
-        self.createButton(buttonParam)
-    end
-end
-
-function setdbOpt(clickedButton,playerColor,index)
-    if Player[playerColor].admin then
-        dbOption = index
-        refreshStart()
-    end
-end
-
-for k = 1,3 do
-    _G['setdbOpt' .. k] = function(obj, col)
-        setdbOpt(obj, col, k)
+    else
+        broadcastToColor("Only promoted players can use the admin functions.", playerColor, {1,0,0})
     end
 end
 
@@ -1659,6 +1388,8 @@ function resMenu(clickedObject, playerColor)
         local buttonParam = {click_function = 'adminMenu', label = "Cancel", color = stringColorToRGB('White'), function_owner = self,
             position = {0,0.1,0.9}, rotation = {0,0,0}, width = 700, height = 300, font_size = 120}
         self.createButton(buttonParam)
+    else
+        broadcastToColor("Only promoted players can use the admin functions.", playerColor, {1,0,0})
     end
 end
 

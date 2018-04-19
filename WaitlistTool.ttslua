@@ -6,7 +6,6 @@ Version 1.1.5
 
 
 ------------------Constants
-MOVE_BOARD_ON_LOAD = false
 START_POS = {x = 100, y = 1.1, z = 42}
 COLOR_TABLE = {'White', 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple', 'Pink', 'Teal', 'Brown'}
 ROW_S = -1
@@ -81,7 +80,8 @@ function onDestroy()
 end
 
 function moveBoard()
-    if MOVE_BOARD_ON_LOAD then
+    local global_name = Global.getVar('mod_name')
+    if global_name == 'Secret Hitler: CE' then
         self.setPositionSmooth(START_POS)
         self.setLock(true)
     end

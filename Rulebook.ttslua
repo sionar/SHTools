@@ -90,7 +90,10 @@ last = #rulebook
 function onLoad()
     page = 1
     refreshText()
-    moveBoard()
+    local global_name = Global.getVar('mod_name')
+    if global_name == 'Secret Hitler: CE' then
+        moveBoard()
+    end
     addEditNotebookTab()
 end
 
