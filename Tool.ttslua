@@ -1,7 +1,7 @@
 --[[
 SH Expansion Tool
 Made by Sionar
-Version 1.5.2
+Version 1.5.3
 --]]
 
 
@@ -547,10 +547,10 @@ function giveEFCoroutine()
 
     if option == 0 then
         for i = 1,size do
-            if deckTable[i].nickname == '1 Poisoned Drink' then
+            if string.match(deckTable[i].nickname, '1 Poisoned Drink') then
                 found = 1
                 break
-            elseif deckTable[i].nickname == '2 Poisoned Drink' then
+            elseif string.match(deckTable[i].nickname, '2 Poisoned Drink') then
                 found = 2
                 break
             end
@@ -563,7 +563,7 @@ function giveEFCoroutine()
         end
 
         for i = size,1,-1 do
-            if deckTable[i].nickname == found .. ' Poisoned Drink' or deckTable[i].nickname == found .. ' Water' then
+            if string.match(deckTable[i].nickname, found .. ' Poisoned Drink') or string.match(deckTable[i].nickname, found .. ' Water') then
                 params = {index = i-1}
                 card = effectDeck.takeObject(params)
                 giveObjectToPlayer(card, player, {forward = 16.5, right = 0, up = 0}, {x = 0, y = 180, z = 180})
@@ -573,10 +573,10 @@ function giveEFCoroutine()
         broadcastToAll('The Poisoner effect cards have been dealt to ' .. player .. '.', {1,1,1})
     elseif option == 1 then
         for i = 1,size do
-            if deckTable[i].nickname == '1 Inspected' then
+            if string.match(deckTable[i].nickname, '1 Inspected') then
                 found = 1
                 break
-            elseif deckTable[i].nickname == '2 Inspected' then
+            elseif string.match(deckTable[i].nickname,'2 Inspected') then
                 found = 2
                 break
             end
@@ -588,7 +588,7 @@ function giveEFCoroutine()
             return 1
         end
         for i = size,1,-1 do
-            if deckTable[i].nickname == found .. ' Inspected' then
+            if string.match(deckTable[i].nickname, found .. ' Inspected') then
                 params = {index = i-1}
                 card = effectDeck.takeObject(params)
                 giveObjectToPlayer(card, player, {forward = 16.5, right = 0, up = 0}, {x = 0, y = 180, z = 0})
@@ -598,13 +598,13 @@ function giveEFCoroutine()
         broadcastToAll('The Super-Inspector effect cards have been dealt to ' .. player .. '.', {1,1,1})
     elseif option == 2 then
         for i = 1,size do
-            if deckTable[i].nickname == '1 Artifact: Cursed Crown' then
+            if string.match(deckTable[i].nickname, '1 Artifact: Cursed Crown') then
                 found = 1
                 break
-            elseif deckTable[i].nickname == '2 Artifact: Cursed Crown' then
+            elseif string.match(deckTable[i].nickname, '2 Artifact: Cursed Crown') then
                 found = 2
                 break
-            elseif deckTable[i].nickname == '3 Artifact: Cursed Crown' then
+            elseif string.match(deckTable[i].nickname, '3 Artifact: Cursed Crown') then
                 found = 3
                 break
             end
@@ -617,7 +617,7 @@ function giveEFCoroutine()
         end
 
         for i = size,1,-1 do
-            if string.sub(deckTable[i].nickname, 1, 10) == found .. ' Artifact' then
+            if string.match(deckTable[i].nickname, found .. ' Artifact') then
                 params = {index = i-1}
                 card = effectDeck.takeObject(params)
                 giveObjectToPlayer(card, player, {forward = 16.5, right = 0, up = 0}, {x = 0, y = 180, z = 180})
@@ -1090,8 +1090,11 @@ function giveEfMenu()
 end
 
 function efInputFunc(obj, color, input, stillEditing)
-    efName = input
-    option = 3
+    if not stillEditing then
+        efName = input
+        option = 3
+        refreshButtons()
+    end
 end
 
 function reshufMenu()

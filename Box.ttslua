@@ -34,7 +34,7 @@ function onLoad(saveString)
 	parameters.identifier = 'setupExpansionSP'
 	parameters.function_name = 'setupExpansion'
 	parameters.function_owner = self
-	parameters.delay = 0.1
+	parameters.delay = 0.3
 	Timer.create(parameters)
 end
 
