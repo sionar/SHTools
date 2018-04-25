@@ -1,33 +1,39 @@
 --[[
 --SH Expansion Rulebook
 --Made by Sionar
---Version 1.0.7
+--Version 1.1.0
 --]]
 
 
 ------------------Constants
 RULES = {
+'*Expansion Rules',
 '1. Setup: Deal three abilities to each player at the start of the game. Keep two and place one back in the deck.',
-'2. Liberals can only activate one ability per game.',
+'2. Liberals can only use one ability per game.',
 '3. Abilities are one time use only unless stated otherwise. Keep them concealed until you use them. Announce when you are using an ability. Text in brackets restricts when they can be used.',
-'4. Abilities that occur on the same turn resolve in the order that they are revealed. The exceptions to this are Saboteur and Hacker, which are played in response to other abilities.',
+'4. Abilities resolve in the order that they are revealed. All parts of the ability must resolve before the next ability happens. The exceptions to this are Saboteur, Hacker and Puppeteer, which are played in response to other abilities.',
 '5. Unless stated otherwise, abilities cannot be used while there are policy cards in play. During an active government, abilities can be played before the president draws cards and after a policy is placed on a tracker.',
-'6. A "turn" starts when the presidency placard moves and ends after the presidential power gets used or a play gets downvoted. If the government is interrupted without a vote going through, it does not count as a turn.',
-'7. Saboteur and hacker cannot be used once the player has already started performing the actions of the ability. When you announce an ability, wait at least five seconds to give other players a chance to respond before you play your ability.',
-'8. If a player wants you to wait before you use your ability, give them at least thirty seconds to decide whether or not they want to respond to your ability.',
-'9. Wait five seconds before you draw cards in case someone wants to play an ability.',
-'10. Reshuffle means place all of the discarded cards into the deck and shuffle the deck.',
-'11. If a player uses The Confirmed and another player uses an ability right afterwards, the player with Confirmed can play a card before the other player\'s ability goes off.',
-'12. If Magician and Super-President are both played, the Chancellor draws four cards and hands three to the president, who then hands two policy cards to the Super-President. The chancellor gains the presidential power',
-'13. When a player uses Martyr, the Election Tracker does not move back after the policy is placed on the tracker.',
-'14. If a player uses Big-Brother on another player and decides their vote, and then the target player plays Lobbyist, the targeted player gets to vote how they want. The once-per-game ability on Big-Brother is used up and cannot be used on a future vote.',
-'15. Abilities that can be Hacked: Martyr, Jester, Surgeon, Super-President, Gambler, Senator, Historian, Usurper, Fisherman, Decider, Insurgent, Scout and Spelunker.',
-'16. Abilities that can be Puppeteered: Assassin, Poisoner (one target), Spy (one target), Super-Detective (one target), Collector, Soulmate, Gravedigger, Guardian-Angel, Spiritualist (if there is a valid target to change to), Bandit, Silencer and Big-Brother.'
+'*Terminology',
+'6. Turn: A "turn" starts when the presidency placard moves and ends after the presidential power gets used or a play gets downvoted. If the government is interrupted without a vote going through, it does not count as a turn.',
+'7. Reshuffle: Place all of the discarded cards into the deck and shuffle the deck. If there are no cards in the discard pile, the deck still gets shuffled.',
+'8. Negate: Every part of the ability does not resolve.',
+'*Etiquette',
+'9. Saboteur and Hacker cannot be used once the player has already started performing the actions of the ability. When you announce an ability, wait at least five seconds to give other players a chance to respond before you play your ability.',
+'10. If a player wants you to wait before you use your ability, give them at least thirty seconds to decide whether or not they want to respond to your ability.',
+'11. After a government passes, wait at least five seconds before you draw cards in case someone wants to play an ability.',
+'*Clarifications',
+'12. If a player uses The Confirmed and another player uses an ability right afterwards, the player with Confirmed can play a card before the other player\'s ability goes off.',
+'13. If Magician and Super-President are both played, the Chancellor draws four cards and hands three to the president, who then hands two policy cards to the Super-President. The chancellor gains the presidential power',
+'14. When a player uses Martyr, the Election Tracker does not move back after the policy is placed on the tracker.',
+'15. If a player uses Big-Brother on another player and decides their vote, and then the target player plays Lobbyist, the targeted player gets to vote how they want. The once-per-game ability on Big-Brother is used up and cannot be used on a future vote.',
+'16. A player with Aegis cannot be targeted by any abilities. Their abilities also cannot be interacted with in any manner.',
+'17. Abilities that can be Hacked: Martyr, Jester, Surgeon, Super-President, Gambler, Senator, Historian, Usurper, Fisherman, Decider, Insurgent, Scout and Spelunker.',
+'18. Abilities that can be Puppeteered: Assassin, Poisoner (one target), Spy (one target), Super-Detective (one target), Collector, Soulmate, Gravedigger, Guardian-Angel, Spiritualist (if there is a valid target to change to), Bandit, Silencer and Big-Brother.'
 }
 CREDITS = 'Made by: \nPiggy\nSionar\n\nSpecial thanks to the entire\nSecret Hitler community!\n\nCome join us on Discord at:\ncFuFmmm'
 NOTEBOOK_TITLE = 'Expansion'
 LINE_WIDTH = 58
-LINES_PER_PAGE = 22
+LINES_PER_PAGE = 25
 START_POS = {x = 100, y = 1.1, z = -22}
 START_ROT = {x = 0, y = 180, z = 0}
 COLOR_TABLE = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
@@ -35,23 +41,39 @@ COLOR_TABLE = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Bl
 
 ------------------Variables
 rulebook = {}
+title = {}
 page = 1
 
 
 function format()
     local lineLen, pNumLines, rNumLines = 0,0,0
     local pageText = ''
+    local currentTitle
     local ruleText = ''
-    local i = 1
     for n, rule in pairs(RULES) do
-        rNumLines = 0
+        rNumLines = 2
+        ruleText = ''
+        lineLen = 0
         for word in string.gmatch(rule, '%g+') do
-            if string.match(word, '%d') then
-                ruleText = '\n\n' .. word .. ' '
-                lineLen = string.len(word) + 1
-                rNumLines = 2
+            if string.match(word, '*') then
+                if pageText ~= '' then
+                    while pNumLines < LINES_PER_PAGE do
+                        pageText = pageText .. '\n'
+                        pNumLines = pNumLines + 1
+                    end
+                    table.insert(rulebook, pageText)
+                    table.insert(title, currentTitle)
+                    pNumLines = 0
+                    pageText = ''
+                end
+                currentTitle = string.sub(rule,2,-1)
+                break
             else
                 if lineLen + string.len(word) > LINE_WIDTH then
+                    while lineLen < LINE_WIDTH do
+                        ruleText = ruleText .. ' '
+                        lineLen = lineLen + 1
+                    end
                     ruleText = ruleText .. '\n' .. word .. ' '
                     lineLen = string.len(word) + 1
                     rNumLines = rNumLines + 1
@@ -61,6 +83,7 @@ function format()
                 end
             end
         end
+        ruleText = ruleText .. '\n\n'
         if pNumLines + rNumLines < LINES_PER_PAGE then
             pageText = pageText .. ruleText
             pNumLines = pNumLines + rNumLines
@@ -69,17 +92,18 @@ function format()
                 pageText = pageText .. '\n'
                 pNumLines = pNumLines + 1
             end
-            rulebook[i] = pageText
-            i = i+1
+            table.insert(rulebook, pageText)
+            table.insert(title, currentTitle)
             pNumLines = rNumLines
             pageText = ruleText
         end
     end
-    while pNumLines < LINES_PER_PAGE do
+    while pNumLines < LINES_PER_PAGE -4 do
         pageText = pageText .. '\n'
         pNumLines = pNumLines + 1
     end
-    rulebook[i] = pageText
+    table.insert(rulebook, pageText)
+    table.insert(title, currentTitle)
 end
 
 format()
@@ -129,12 +153,12 @@ function refreshText()
     self.clearButtons()
     self.clearInputs()
 
-    local buttonParam = {click_function = 'nullFunc', function_owner = self, label = 'Expansion Rules', color = {0,0,0,1}, font_color = stringColorToRGB('Red'),
+    local buttonParam = {click_function = 'nullFunc', function_owner = self, label = title[page], color = {0,0,0,1}, font_color = stringColorToRGB('Red'),
         position = {0,0.1,-1.3}, width = 0, height = 0, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', function_owner = self, label = rulebook[page], color = {0,0,0,1}, font_color = stringColorToRGB('White'),
-        position = {0,0.1,-0.15}, width = 0, height = 0, font_size = 50, alignment = 2}
+        position = {0,0.1,0}, width = 0, height = 0, font_size = 50, alignment = 2}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'firstPage', function_owner = self, label = '[b]⇤[/b]', color = {0,0,0,0.8}, font_color = stringColorToRGB('Red'),

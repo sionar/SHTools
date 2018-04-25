@@ -47,17 +47,17 @@ function refreshButtons()
 
     local buttonParam = {click_function = 'nullFunc', label = 'Fas', color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
         position = {-1.7,0.1,-1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 100}
-    self.createButton(buttonParam)  --Num Fascist button
+    self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = 'Lib', color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
         position = {-0.5,0.1,-1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 100}
-    self.createButton(buttonParam) --Num Liberal button
+    self.createButton(buttonParam)
 
-    local inputParam = {input_function = 'nullFunc', color = stringColorToRGB('Red'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
+    local inputParam = {input_function = 'fasInput', color = stringColorToRGB('Red'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
         position = {-1.7,0.1,-0.7}, rotation = {0,0,0}, width = 500, height = 174, font_size = 150, value = fas, alignment = 3, validation = 2, tab = 2}
     self.createInput(inputParam)
 
-    local inputParam = {input_function = 'nullFunc', color = stringColorToRGB('Blue'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
+    local inputParam = {input_function = 'libInput', color = stringColorToRGB('Blue'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
         position = {-0.5,0.1,-0.7}, rotation = {0,0,0}, width = 500, height = 174, font_size = 150, value = lib, alignment = 3, validation = 2, tab = 2}
     self.createInput(inputParam)
 
@@ -81,7 +81,7 @@ function refreshButtons()
         position = {-1.9,0.1,0.25}, rotation = {0,0,0}, width = 0, height = 0, font_size = 100}
     self.createButton(buttonParam)
 
-    local inputParam = {input_function = 'nullFunc', color = stringColorToRGB('Purple'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
+    local inputParam = {input_function = 'drawInput', color = stringColorToRGB('Purple'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
         position = {-1.4,0.1,0.25}, rotation = {0,0,0}, width = 150, height = 123, font_size = 100, value = draw, alignment = 3, validation = 2, tab = 2}
     self.createInput(inputParam)
 
@@ -173,6 +173,39 @@ function incLib()
         lib = lib + 1
     end
     refreshButtons()
+end
+
+function fasInput(obj, playerColor, input_value, stillEditing)
+    if not stillEditing then
+        if tonumber(input_value) < 0 then
+            input_value = 0
+        end
+        fas = input_value
+        refreshButtons()
+    end
+end
+
+function libInput(obj, playerColor, input_value, stillEditing)
+    if not stillEditing then
+        if tonumber(input_value) < 0 then
+            input_value = 0
+        end
+        lib = input_value
+        refreshButtons()
+    end
+end
+
+function drawInput(obj, playerColor, input_value, stillEditing)
+    if not stillEditing then
+        if tonumber(input_value) < 1 then
+            input_value = 1
+        elseif tonumber(input_value) > 10 then
+            input_value = 10
+        end
+        draw = input_value
+        refreshLabels()
+        refreshButtons()
+    end
 end
 
 function refreshLabels()

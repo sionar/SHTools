@@ -22,7 +22,7 @@ ABILITIES =
     {name = '[FF00FF]Soulmate[FFFFFF]',         desc = '[FFFF00][Right after you die], [00FFFF]choose another player. [800000]They also die.'},
     {name = '[FF00FF]Surgeon[FFFFFF]',          desc = '[FFFF00][After a reshuffle, if there are seven or more cards in the deck], [FFFFFF]look at the top six cards of the deck. Discard two cards then shuffle the deck.'},
     {name = '[FF00FF]Gravedigger[FFFFFF]',      desc = 'Investigate each dead player\'s party membership card.\n[00FF00]-OR-\n[FFFFFF]Copy a dead player\'s ability.'},
-    {name = '[FF00FF]Trader[FFFFFF]',           desc = 'On this turn, each player (including dead players) may give their own unused abilities to other players. You may play one ability that is given to you.'},
+    {name = '[FF00FF]Avenger[FFFFFF]',          desc = '[FFFF00][Right after your presidency is downvoted], [00FFFF]choose two players who downvoted you. [FFFFFF]They each give you an ability.'},
     {name = '[FF00FF]Guardian-Angel[FFFFFF]',   desc = '[00FFFF]Choose another player. [FFFFFF]Remove all effects from that player. That player cannot be affected by other players\' abilities unless they allow it.'},
     {name = '[FF00FF]Bandit[FFFFFF]',           desc = '[FFFF00][Right after a topdeck], [FFFFFF]take the unused power.\n[00FF00]-OR-\n[00FFFF]Choose another player. [FFFFFF]Look at their abilities and take one from them.'},
     {name = '[FF00FF]Super-President[FFFFFF]',  desc = '[FFFF00][Reveal this ability before voting]. [FFFFFF]On the next government that passes, draw four policy cards. Discard one and give the rest to the president.'},
@@ -30,7 +30,7 @@ ABILITIES =
     {name = '[FF00FF]Puppeteer[FFFFFF]',        desc = '[FFFF00][Right after a player is [00FFFF]chosen [FFFF00]by an ability], [00FFFF]choose a player. [FFFFFF]That player becomes the new target. The new target must be a valid target.'},
     {name = '[00BFFF]Spiritualist[FFFFFF]',     desc = '[00FFFF]Choose a dead player. [FFFFFF]That player votes for the rest of the game but cannot speak, be in government, or use abilities. You may play to the resurrected player.'},
     {name = '[00BFFF]Senator[FFFFFF]',          desc = 'Move the election tracker left or right by one step.'},
-    {name = '[00BFFF]Historian[FFFFFF]',        desc = 'Move the previously elected president and chancellor placards.'},
+    {name = '[00BFFF]Trader[FFFFFF]',           desc = 'On this turn, each player (including dead players) may give their own unused abilities to other players. You may play one ability that is given to you.'},
     {name = '[00BFFF]Usurper[FFFFFF]',          desc = 'Force a special election where you are the president.'},
     {name = '[00BFFF]Lobbyist[FFFFFF]',         desc = '[FFFF00][Reveal this ability before voting]. [FFFFFF]Your next vote cannot be affected and counts for three votes. [FF0000]This ability cannot be copied on the same turn.'},
     {name = '[00BFFF]Fisherman[FFFFFF]',        desc = '[FFFF00][When there are four or more cards in the discard pile], [FFFFFF]shuffle and draw three from the discard pile. You may place two cards in the draw pile, then shuffle the draw pile.'},
@@ -43,6 +43,7 @@ ABILITIES =
     {name = '[708090]Spelunker[FFFFFF]',        desc = '[FFFF00][When there are eight or less cards in the policy deck], [FFFFFF]look at the deck then shuffle it.\n[00FF00]-OR-\n[FFFFFF]Look at either the first or second card at the top of the discard pile.'},
     {name = '[708090]Big-Brother[FFFFFF]',      desc = '[00FFFF]Choose another player. [FFFFFF]You may look at their abilities and their vote every turn.\nOnce per game, you decide how they vote.'},
     {name = '[708090]Magician[FFFFFF]',         desc = '[FFFF00][After a government is elected], [FFFFFF]the chancellor draws three cards and hands two to the president. The chancellor gains the presidential power'},
+    {name = '[708090]Historian[FFFFFF]',        desc = 'Move the previously elected president and chancellor placards.'},
 }
 
 EFFECTS =
