@@ -17,18 +17,19 @@ RULES = {
 '6. Turn: A "turn" starts when the presidency placard moves and ends after the presidential power gets used or a play gets downvoted. If the government is interrupted without a vote going through, it does not count as a turn.',
 '7. Reshuffle: Place all of the discarded cards into the deck and shuffle the deck. If there are no cards in the discard pile, the deck still gets shuffled.',
 '8. Negate: Every part of the ability does not resolve.',
-'*Etiquette',
+'*Etiquette and Timing',
 '9. Saboteur and Hacker cannot be used once the player has already started performing the actions of the ability. When you announce an ability, wait at least five seconds to give other players a chance to respond before you play your ability.',
 '10. If a player wants you to wait before you use your ability, give them at least thirty seconds to decide whether or not they want to respond to your ability.',
 '11. After a government passes, wait at least five seconds before you draw cards in case someone wants to play an ability.',
+'12. After a player dies, wait five seconds before asking if they are Hitler in case someone decides to save them with an ability.',
 '*Clarifications',
-'12. If a player uses The Confirmed and another player uses an ability right afterwards, the player with Confirmed can play a card before the other player\'s ability goes off.',
-'13. If Magician and Super-President are both played, the Chancellor draws four cards and hands three to the president, who then hands two policy cards to the Super-President. The chancellor gains the presidential power',
-'14. When a player uses Martyr, the Election Tracker does not move back after the policy is placed on the tracker.',
-'15. If a player uses Big-Brother on another player and decides their vote, and then the target player plays Lobbyist, the targeted player gets to vote how they want. The once-per-game ability on Big-Brother is used up and cannot be used on a future vote.',
-'16. A player with Aegis cannot be targeted by any abilities. Their abilities also cannot be interacted with in any manner.',
-'17. Abilities that can be Hacked: Martyr, Jester, Surgeon, Super-President, Gambler, Senator, Historian, Usurper, Fisherman, Decider, Insurgent, Scout and Spelunker.',
-'18. Abilities that can be Puppeteered: Assassin, Poisoner (one target), Spy (one target), Super-Detective (one target), Collector, Soulmate, Gravedigger, Guardian-Angel, Spiritualist (if there is a valid target to change to), Bandit, Silencer and Big-Brother.'
+'13. If a player uses The Confirmed and another player uses an ability right afterwards, the player with Confirmed can play a card before the other player\'s ability goes off.',
+'14. If Magician and Super-President are both played, the Chancellor draws four cards and hands three to the president, who then hands two policy cards to the Super-President. The chancellor gains the presidential power',
+'15. When a player uses Martyr, the Election Tracker does not move back after the policy is placed on the tracker.',
+'16. If a player uses Big-Brother on another player and decides their vote, and then the target player plays Lobbyist, the targeted player gets to vote how they want. The once-per-game ability on Big-Brother is used up and cannot be used on a future vote.',
+'17. A player with Aegis cannot be targeted by any abilities. Their abilities also cannot be interacted with in any manner.',
+'18. Abilities that can be Hacked: Martyr, Jester, Surgeon, Super-President, Gambler, Senator, Historian, Usurper, Fisherman, Decider, Insurgent, Scout and Spelunker.',
+'19. Abilities that can be Puppeteered: Assassin, Poisoner (one target), Spy (one target), Super-Detective (one target), Collector, Soulmate, Gravedigger, Guardian-Angel, Spiritualist (if there is a valid target to change to), Bandit, Silencer and Big-Brother.'
 }
 CREDITS = 'Made by: \nPiggy\nSionar\n\nSpecial thanks to the entire\nSecret Hitler community!\n\nCome join us on Discord at:\ncFuFmmm'
 NOTEBOOK_TITLE = 'Expansion'
