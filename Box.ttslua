@@ -1,12 +1,12 @@
 --[[
 SH Expansion Box
 Made by Lost Savage, Modified by Sionar
-Version 1.0.2
+Version 1.0.3
 --]]
 
 
 ------------------Constants
-UPDATE_VERSION = 94
+UPDATE_VERSION = 96
 ADD_ON_VERSION = 5
 BOX_OBJECTS_NUM = 9
 ADD_ON_NAME = 'Expansion Deck'
@@ -80,9 +80,10 @@ function setupExpansion()
 						options.shufflePlayers = true
 						options.shuffleHost = false
 						options.voteHistory = true
-						options.zoneType = 3
+						options.zoneType = 5
 						Global.setTable('options', options)
 						Global.call('refreshExpansionButtons')
+						Global.call('refreshHiddenZones')
 						startLuaCoroutine(self, 'setupExpansionCoroutine')
 					end
 				end
