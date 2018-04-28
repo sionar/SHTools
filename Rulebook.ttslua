@@ -1,7 +1,7 @@
 --[[
 --SH Expansion Rulebook
 --Made by Sionar
---Version 1.1.0
+--Version 1.1.1
 --]]
 
 
@@ -126,9 +126,13 @@ end
 function addEditNotebookTab()
     local params = {}
     params.title = NOTEBOOK_TITLE
-    params.body = '[u][b]' .. NOTEBOOK_TITLE .. '[/b][/u]\n\n'
+    params.body = ''
     for _, rule in pairs(RULES) do
-        params.body = params.body .. rule .. '\n\n'
+        if string.match(rule, '^*') then
+           params.body = params.body .. string.gsub(rule, '^*', '[u][b]') .. '[/b][/u]\n\n'
+        else
+           params.body = params.body .. rule .. '\n\n'
+        end
     end
     params.body = params.body .. CREDITS
     for _, tab in ipairs(getNotebookTabs()) do
@@ -305,7 +309,7 @@ function giveObjectToPlayer(object, playerColor, posAdd, rotAdd, ...)
 		end
 		if posAdd['forceHeight'] then
 			object.setPositionSmooth({ph['pos_x'] + ph['trigger_forward_x'] * posAdd['forward'] + ph['trigger_right_x'] * posAdd['right'] + ph['trigger_up_x'] * posAdd['up'],
-											  posAdd['forceHeight'] + tableHeightAdd,
+											  posAdd['forceHeight'],
 											  ph['pos_z'] + ph['trigger_forward_z'] * posAdd['forward'] + ph['trigger_right_z'] * posAdd['right'] + ph['trigger_up_z'] * posAdd['up']}, ...)
 		else
 			object.setPositionSmooth({ph['pos_x'] + ph['trigger_forward_x'] * posAdd['forward'] + ph['trigger_right_x'] * posAdd['right'] + ph['trigger_up_x'] * posAdd['up'],
