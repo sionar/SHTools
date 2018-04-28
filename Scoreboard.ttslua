@@ -91,7 +91,10 @@ function onChat(message, player)
     for i in string.gmatch(message, "%S+") do
             args[#args + 1] = i
     end
-    command = string.lower(args[1])
+
+    if args[1] ~= nil then
+        command = string.lower(args[1])
+    end
 
     if command == '!lu' then
         if args[2] == nil then

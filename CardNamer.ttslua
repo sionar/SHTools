@@ -32,9 +32,9 @@ ABILITIES =
     {name = '[00BFFF]Senator[FFFFFF]',          desc = 'Move the election tracker left or right by one step.'},
     {name = '[00BFFF]Trader[FFFFFF]',           desc = 'On this turn, each player (including dead players) may give their own unused abilities to other players. You may play one ability that is given to you.'},
     {name = '[00BFFF]Usurper[FFFFFF]',          desc = 'Force a special election where you are the president.'},
-    {name = '[00BFFF]Lobbyist[FFFFFF]',         desc = '[FFFF00][Reveal this ability before voting]. [FFFFFF]Your next vote cannot be affected and counts for three votes. [FF0000]This ability cannot be copied on the same turn.'},
+    {name = '[00BFFF]Lobbyist[FFFFFF]',         desc = '[FF0000][Reveal this ability before voting]. [FFFFFF]Your next vote cannot be affected and counts for three votes. [FF0000]This ability cannot be copied on the same turn.'},
     {name = '[00BFFF]Fisherman[FFFFFF]',        desc = '[FFFF00][When there are four or more cards in the discard pile], [FFFFFF]shuffle and draw three from the discard pile. You may place two cards in the draw pile, then shuffle the draw pile.'},
-    {name = '[00BFFF]Super-President[FFFFFF]',  desc = '[FFFF00][Reveal this ability before voting]. [FFFFFF]On the next government that passes, draw four policy cards. Discard one and give the rest to the president.'},
+    {name = '[00BFFF]Super-President[FFFFFF]',  desc = '[FF0000][Reveal this ability before voting]. [FFFFFF]On the next government that passes, draw four policy cards. Discard one and give the rest to the president.'},
     {name = '[00BFFF]Decider[FFFFFF]',          desc = 'Force a govt. with tied votes to pass.\n[00FF00]-OR-\n[FFFF00][Right before topdeck], [FFFFFF]look at the top two cards in the deck and discard one.'},
     {name = '[00BFFF]Insurgent[FFFFFF]',        desc = '[FFFF00][Reveal this ability before voting]. [FFFFFF]Take the chancellor placard. Ignore the previously elected president and chancellor placards.'},
     {name = '[00BFFF]Silencer[FFFFFF]',         desc = '[00FFFF]Choose another player. [FFFFFF]That player cannot vote, speak, or use abilities until the turn after the next policy is placed on a track.'},
@@ -46,6 +46,8 @@ ABILITIES =
     {name = '[7CFC00]Magician[FFFFFF]',         desc = '[FFFF00][After a government is elected], [FFFFFF]the chancellor draws three cards and hands two to the president. The chancellor gains the presidential power'},
     {name = '[7CFC00]Historian[FFFFFF]',        desc = 'Move the previously elected president and chancellor placards.'},
     {name = '[7CFC00]Denouncer[FFFFFF]',        desc = '[00FFFF]Choose a player. [FFFFFF]That player is ineligible for government until the turn after the next policy is placed on a track.'},
+    {name = '[7CFC00]Visionary[FFFFFF]',        desc = 'Look at the ability deck. Look at every concealed effect on the table. Each player (including dead players) shows you an unused ability.'},
+    {name = '[7CFC00]Trickster[FFFFFF]',        desc = '[FF0000][Reveal this ability before voting].\n[FFFFFF]Move an unused presidential power to an unoccupied non game-ending tile.\n[00FF00]-OR-\n[FFFFFF]Swap the position of two unused presidential powers.'}
 }
 
 EFFECTS =
