@@ -1,6 +1,6 @@
 --[[
 Secret Hitler Probability Calculator
-v 1.2.0
+v 1.3.0
 Made by Sionar
 --]]
 
@@ -40,6 +40,33 @@ function onSave()
     return saveString
 end
 
+function onChat(message, player)
+    local args = {} -- The arguments following a command
+    local command
+
+    for i in string.gmatch(message, "%S+") do
+            args[#args + 1] = i
+    end
+
+    if args[1] ~= nil then
+        command = string.lower(args[1])
+    end
+
+    if command == '!calc' then
+        if args[2] == nil or args[3] == nil or args[4] == nil then
+            player.broadcast('ERROR: Invalid entry. Please enter three numbers after !calc: The number of fascist cards, lib cards, and how many cards to draw.', {1,0,0})
+        elseif tonumber(args[2]) == nil or tonumber(args[3]) == nil or tonumber(args[4]) == nil then
+            player.broadcast('ERROR: Invalid entry. All three arguments must be numbers', {1,0,0})
+        else
+            fas = args[2]
+            lib = args[3]
+            draw = args[4]
+            refreshButtons()
+            calcValues()
+        end
+        return false
+    end
+end
 
 function refreshButtons()
     self.clearButtons()
@@ -90,7 +117,7 @@ function refreshButtons()
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'calcValues', label = 'Calc', color = stringColorToRGB('Green'), function_owner = self,
-        position = {-1.1,0.1,0.9}, rotation = {0,0,0}, width = 1100, height = 300, font_size = 150}
+        position = {-1.1,0.1,0.9}, rotation = {0,0,0}, width = 1100, height = 300, font_size = 150, tooltip = 'Type !calc [0000FF]Lib [FF0000]Fas [FF00FF]Draw [FFFFFF]in chat to calculate stats.'}
     self.createButton(buttonParam)
 
     for i = 1,6 do
@@ -292,7 +319,7 @@ function calcValues(objectButton, playerColor)
         end
     end
 
-    broadcastToAll(fas .. ' F, ' .. lib .. ' L, draw ' .. draw .. ':', {1,1,1})
+    broadcastToAll(fas .. 'F, ' .. lib .. 'L, draw ' .. draw .. ':', {1,1,1})
     for i = 1, draw+2 do
         if i == 1 then
             broadcastColor = {0,0,1}

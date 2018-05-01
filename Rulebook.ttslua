@@ -1,36 +1,37 @@
 --[[
 --SH Expansion Rulebook
 --Made by Sionar
---Version 1.1.1
+--Version 1.1.2
 --]]
 
 
 ------------------Constants
 RULES = {
 '*Expansion Rules',
-'1. Setup: Deal three abilities to each player at the start of the game. Keep two and place one back in the deck.',
-'2. Liberals can only use one ability per game.',
-'3. Abilities are one time use only unless stated otherwise. Keep them concealed until you use them. Announce when you are using an ability. Text in brackets restricts when they can be used.',
-'4. Abilities resolve in the order that they are revealed. All parts of the ability must resolve before the next ability happens. The exceptions to this are Saboteur, Hacker and Puppeteer, which are played in response to other abilities.',
-'5. Unless stated otherwise, abilities cannot be used while there are policy cards in play. During an active government, abilities can be played before the president draws cards and after a policy is placed on a tracker.',
+'R1. Setup: Deal three abilities to each player at the start of the game. Keep two and place one back in the deck.',
+'R2. Liberals can only use one ability per game.',
+'R3. Abilities are one time use only unless stated otherwise. Keep them concealed until you use them. Announce when you are using an ability. Text in brackets restricts when they can be used.',
+'R4. Abilities resolve in the order that they are revealed. All parts of the ability must resolve before the next ability can begin to resolve. The exceptions to this are Saboteur, Hacker and Puppeteer, which are played in response to other abilities.',
+'R5. Unless stated otherwise, abilities cannot be used while there are policy cards in play. During an active government, abilities can be played before the president draws cards and after a policy is placed on a tracker.',
 '*Terminology',
-'6. Turn: A "turn" starts when the presidency placard moves and ends after the presidential power gets used or a play gets downvoted. If the government is interrupted without a vote going through, it does not count as a turn.',
-'7. Reshuffle: Place all of the discarded cards into the deck and shuffle the deck. If there are no cards in the discard pile, the deck still gets shuffled.',
-'8. Negate: Every part of the ability does not resolve.',
+'T1. Turn: A "turn" starts when the presidency placard moves and ends after the presidential power gets used or a play gets downvoted. If the government is interrupted without a vote going through, it does not count as a turn.',
+'T2. Reshuffle: Place all of the discarded cards into the deck and shuffle the deck. If there are no cards in the discard pile, the deck still gets shuffled.',
+'T3. Negate: Every part of the ability does not resolve.',
+'T4. Right after: This window of opportunity refers to the time before anything else happens. This includes a player using an ability or a presidential power, or a president choosing a chancellor.',
 '*Etiquette and Timing',
-'9. Saboteur and Hacker cannot be used once the player has already started performing the actions of the ability. When you announce an ability, wait at least five seconds to give other players a chance to respond before you play your ability.',
-'10. If a player wants you to wait before you use your ability, give them at least thirty seconds to decide whether or not they want to respond to your ability.',
-'11. After a government passes, wait at least five seconds before you draw cards in case someone wants to play an ability.',
-'12. After a player dies, wait five seconds before asking if they are Hitler in case someone decides to save them with an ability.',
+'E1. Saboteur and Hacker cannot be used once the player has already started performing the actions of the ability. When you announce an ability, wait at least five seconds to give other players a chance to respond before you play your ability.',
+'E2. If a player wants you to wait before you use your ability, give them at least thirty seconds to decide whether or not they want to respond to your ability.',
+'E3. After a government passes, wait at least five seconds before you draw cards in case someone wants to play an ability.',
+'E4. After a player dies, wait five seconds before asking if they are Hitler in case someone decides to save them with an ability.',
 '*Clarifications',
-'13. Dead players cannot use abilities. They also cannot flip over artifacts',
-'14. If a player uses The Confirmed and another player uses an ability right afterwards, the player with Confirmed can play a card before the other player\'s ability goes off.',
-'15. If Magician and Super-President are both played, the Chancellor draws four cards and hands three to the president, who then hands two policy cards to the Super-President. The chancellor gains the presidential power',
-'16. When a player uses Martyr, the Election Tracker does not move back after the policy is placed on the tracker.',
-'17. If a player uses Big-Brother on another player and decides their vote, and then the target player plays Lobbyist, the targeted player gets to vote how they want. The once-per-game ability on Big-Brother is used up and cannot be used on a future vote.',
-'18. A player with Aegis cannot be targeted by any abilities. Their abilities also cannot be interacted with in any manner.',
-'19. Abilities that can be Hacked: Martyr, Jester, Surgeon, Gambler, Senator, Usurper, Fisherman, Super-President, Decider, Insurgent, Scout, Spelunker and Historian.',
-'20. Abilities that can be Puppeteered: Assassin, Poisoner (one target), Spy (one target), Super-Detective (one target), Collector, Soulmate, Avenger, Guardian-Angel, Bandit, Necromancer, Spiritualist (if there is a valid target to change to), Silencer, Big-Brother and Denouncer.'
+'C1. Dead players cannot use abilities or flip over artifacts.',
+'C2. If a fascist plays The Confirmed, they have priority in playing an ability after they are done searching the deck. If they are asked if they want to play an ability and they decline, they lose that priority.',
+'C3. If Magician and Super-President are both played, the Chancellor draws four cards and hands three to the president, who then hands two policy cards to the Super-President. The chancellor gains the presidential power',
+'C4. When a player uses Martyr, the Election Tracker does not move back after the policy is placed on the tracker.',
+'C5. If a player uses Big-Brother on another player and decides their vote, and then the target player plays Lobbyist, the targeted player gets to vote how they want. The once-per-game ability on Big-Brother is used up and cannot be used on a future vote.',
+'C6. A player with Aegis cannot be targeted by any abilities. Their abilities also cannot be interacted with in any manner.',
+'C7. Abilities that can be Hacked: Martyr, Jester, Surgeon, Gambler, Senator, Usurper, Fisherman, Super-President, Decider, Insurgent, Scout, Spelunker, Historian and Trickster.',
+'C8. Abilities that can be Puppeteered: Assassin, Poisoner (one target), Spy (one target), Super-Detective (one target), Collector, Soulmate, Avenger, Guardian-Angel, Bandit, Necromancer, Spiritualist (if there is a valid target to change to), Silencer, Big-Brother and Denouncer.'
 }
 CREDITS = 'Made by: \nPiggy\nSionar\n\nSpecial thanks to the entire\nSecret Hitler community!\n\nCome join us on Discord at:\ncFuFmmm'
 NOTEBOOK_TITLE = 'Expansion'

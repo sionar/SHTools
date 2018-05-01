@@ -1,7 +1,7 @@
 --[[
 SH Scoreboard
 Made by Sionar
-Version 1.6.0
+Version 1.7.0
 --]]
 
 
@@ -108,6 +108,21 @@ function onChat(message, player)
             lookupMenu()
             displayPlayerStats(key)
         end
+        return false
+    elseif command == '!s1' then
+        refreshStart()
+        return false
+    elseif command == '!s2' then
+        miscMenu()
+        return false
+    elseif command == '!s3' then
+        overStart()
+        return false
+    elseif command == '!s4' then
+        libStart()
+        return false
+    elseif command == '!s5' then
+        fasStart()
         return false
     end
 end
@@ -854,7 +869,7 @@ function mainMenu()
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'refreshMisc', label = "Misc\nStats", color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
-        position = {-0.96,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50}
+        position = {-0.96,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = 'Type !s2 in chat to open up this page'}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'recLFunc', label = "Record\nLib Win", color = {0,0,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
@@ -986,27 +1001,27 @@ end
 
 function createMiscButtons()
     local buttonParam = {click_function = 'refreshStart', label = "Main\nStats", color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
-        position = {-1.6,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50}
+        position = {-1.6,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = 'Type !s1 in chat to open up this page'}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'refreshMisc', label = "Misc\nStats", color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
-        position = {-0.96,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50}
+        position = {-0.96,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = 'Type !s2 in chat to open up this page'}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'overStart', label = "Overall\nLeader\nBoard", color = stringColorToRGB('Purple'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-0.32,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50}
+        position = {-0.32,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = 'Type !s3 in chat to open up this page'}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'libStart', label = "Liberal\nLeader\nBoard", color = {0,0,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0.32,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50}
+        position = {0.32,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = 'Type !s4 in chat to open up this page'}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'fasStart', label = "Fascist\nLeader\nBoard", color = {1,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0.96,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50}
+        position = {0.96,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = 'Type !s5 in chat to open up this page'}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'lookupMenu', label = "Lookup\nPlayer", color = stringColorToRGB('Green'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {1.6,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = 'Use !lu player in chat to\nlook up stats as a spectator.'}
+        position = {1.6,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = 'Type !lu [FF0000]player [FFFFFF]in chat to\nlook up stats as a spectator.'}
     self.createButton(buttonParam)
 end
 

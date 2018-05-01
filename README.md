@@ -15,3 +15,15 @@ For example, if you have this repository saved in 'D:\Documents\My Games\Tableto
 
 
 If you want to edit the scripts directly from the temp folder, uncheck the 'Insert other files specified in source code' box and reload the scripts in Atom.
+
+
+Link to workshop mods:
+
+
+Secret Hitler Expansion Deck: https://steamcommunity.com/sharedfiles/filedetails/?id=1272393246
+
+
+Secret Hitler Probability Tools: https://steamcommunity.com/sharedfiles/filedetails/?id=1296277647
+
+
+Waitlist Tool: https://steamcommunity.com/sharedfiles/filedetails/?id=1351709749
