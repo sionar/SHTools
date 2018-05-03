@@ -1,7 +1,7 @@
 --[[
 SH Expansion Tool
 Made by Sionar
-Version 1.5.3
+Version 1.5.5
 --]]
 
 
@@ -598,16 +598,11 @@ function giveEFCoroutine()
         broadcastToAll('The Super-Inspector effect cards have been dealt to ' .. player .. '.', {1,1,1})
     elseif option == 2 then
         for i = 1,size do
-            if string.match(deckTable[i].nickname, '1 Artifact: Cursed Crown') then
+            if string.match(deckTable[i].nickname, 'Artifact') then
                 found = 1
                 break
-            elseif string.match(deckTable[i].nickname, '2 Artifact: Cursed Crown') then
-                found = 2
-                break
-            elseif string.match(deckTable[i].nickname, '3 Artifact: Cursed Crown') then
-                found = 3
-                break
             end
+
         end
         if found == 0 then
             broadcastToAll('ERROR: Artifact effect cards not found in effects deck.', {1,0,0})
@@ -617,14 +612,14 @@ function giveEFCoroutine()
         end
 
         for i = size,1,-1 do
-            if string.match(deckTable[i].nickname, found .. ' Artifact') then
+            if string.match(deckTable[i].nickname, 'Artifact') then
                 params = {index = i-1}
                 card = effectDeck.takeObject(params)
                 giveObjectToPlayer(card, player, {forward = 16.5, right = 0, up = 0}, {x = 0, y = 180, z = 180})
                 sleep(0.1)
             end
         end
-        broadcastToAll('The Collector effect cards have been dealt to ' .. player .. '.', {1,1,1})
+        broadcastToAll('The Artifact effect cards have been dealt to ' .. player .. '.', {1,1,1})
     else
         for i = size,1,-1 do
             if string.match(string.lower(deckTable[i].nickname), string.lower(input)) then
@@ -1072,7 +1067,7 @@ function giveEfMenu()
     end
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'opt2', label = "Collector", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
+    local buttonParam = {click_function = 'opt2', label = "Artifacts", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
         position = {0,0.1,0.3}, rotation = {0,0,0}, width = 800, height = 200, font_size = 80}
     if option == 2 then
         buttonParam.font_color = stringColorToRGB('Red')
