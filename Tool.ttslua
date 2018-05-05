@@ -1,7 +1,7 @@
 --[[
 SH Expansion Tool
 Made by Sionar
-Version 1.5.6
+Version 1.5.7
 --]]
 
 
@@ -472,6 +472,7 @@ function givePCoroutine()
     local roles = Global.getTable('roles')
     local broadcastString
     local card, cardClone
+    local params = {}
 
     for i = 1,10 do
         if targSelected[i] == 1 then
@@ -484,11 +485,11 @@ function givePCoroutine()
                 broadcastToAll(broadcastString, {1,0,0})
                 card = getObjectFromGUID(FASCISTPARTY_CARD_GUID)
             end
-            cardClone = card.clone()
+            params.position = {0, 100, 0}
+            cardClone = card.clone(params)
             cardClone.setLock(false)
             cardClone.interactable = true
             giveObjectToPlayer(cardClone, COLOR_TABLE[i], {forward = 16.5, right = 0, up = 0}, {x = 0, y = 180, z = 0})
-
             sleep(0.1)
         end
 
@@ -514,7 +515,6 @@ end
 
 function giveEFCoroutine()
     local tab = self.getInputs()
-    local input = tab[1].value
     local effectDeck = getDeckFromZoneByGUID(EFFECT_ZONE_GUID)
     local deckTable = effectDeck.getObjects()
     local size = effectDeck.getQuantity()
@@ -524,10 +524,10 @@ function giveEFCoroutine()
 
     if option == 0 then
         for i = 1,size do
-            if string.match(deckTable[i].nickname, '1 Poisoned Drink') then
+            if string.match(deckTable[i].nickname, 'Poisoned Drink 1') then
                 found = 1
                 break
-            elseif string.match(deckTable[i].nickname, '2 Poisoned Drink') then
+            elseif string.match(deckTable[i].nickname, 'Poisoned Drink 2') then
                 found = 2
                 break
             end
@@ -540,7 +540,7 @@ function giveEFCoroutine()
         end
 
         for i = size,1,-1 do
-            if string.match(deckTable[i].nickname, found .. ' Poisoned Drink') or string.match(deckTable[i].nickname, found .. ' Water') then
+            if string.match(deckTable[i].nickname, 'Poisoned Drink ' .. found) or string.match(deckTable[i].nickname, 'Water ' .. found) then
                 params = {index = i-1}
                 card = effectDeck.takeObject(params)
                 giveObjectToPlayer(card, player, {forward = 16.5, right = 0, up = 0}, {x = 0, y = 180, z = 180})
@@ -550,10 +550,10 @@ function giveEFCoroutine()
         broadcastToAll('The Poisoner effect cards have been dealt to ' .. player .. '.', {1,1,1})
     elseif option == 1 then
         for i = 1,size do
-            if string.match(deckTable[i].nickname, '1 Inspected') then
+            if string.match(deckTable[i].nickname, 'Inspected 1') then
                 found = 1
                 break
-            elseif string.match(deckTable[i].nickname,'2 Inspected') then
+            elseif string.match(deckTable[i].nickname,'Inspected 2') then
                 found = 2
                 break
             end
@@ -565,7 +565,7 @@ function giveEFCoroutine()
             return 1
         end
         for i = size,1,-1 do
-            if string.match(deckTable[i].nickname, found .. ' Inspected') then
+            if string.match(deckTable[i].nickname, 'Inspected ' .. found) then
                 params = {index = i-1}
                 card = effectDeck.takeObject(params)
                 giveObjectToPlayer(card, player, {forward = 16.5, right = 0, up = 0}, {x = 0, y = 180, z = 0})
@@ -599,17 +599,17 @@ function giveEFCoroutine()
         broadcastToAll('The Artifact effect cards have been dealt to ' .. player .. '.', {1,1,1})
     else
         for i = size,1,-1 do
-            if string.match(string.lower(deckTable[i].nickname), string.lower(input)) then
+            if deckTable[i].nickname == efName then
                 found = i
                 params = {index = i-1, flip = true}
                 card = effectDeck.takeObject(params)
                 giveObjectToPlayer(card, player, {forward = 16.5, right = 0, up = 0}, {x = 0, y = 180, z = 0})
-                broadcastToAll('The ' .. deckTable[i].nickname .. ' effect card has been dealt to ' .. player .. '.', {1,1,1})
+                broadcastToAll('The ' .. deckTable[i].nickname .. ' [FFFFFF]effect card has been dealt to ' .. player .. '.', {1,1,1})
                 break
             end
         end
         if found == 0 then
-            broadcastToAll('ERROR: Effect card with name ' .. input .. ' not found in effects deck.', {1,0,0})
+            broadcastToAll('ERROR: Effect card with name ' .. efName .. ' not found in effects deck.', {1,0,0})
         end
     end
     efName = ''
@@ -702,6 +702,7 @@ end
 
 function lock()
     local abilityDeck = getDeckFromZoneByGUID(ABILITY_ZONE_GUID)
+    local effectDeck = getDeckFromZoneByGUID(EFFECT_ZONE_GUID)
     if abilityDeck == nil then
         broadcastToColor("ERROR: Ability deck not found", playerColor, {1,0,0})
         return
@@ -713,6 +714,7 @@ function lock()
         broadcastToAll("The ability deck has been locked", {1,1,1})
     end
     abilityDeck.interactable = not abilityDeck.interactable
+    effectDeck.interactable = not effectDeck.interactable
     mainMenu()
 end
 
@@ -869,7 +871,7 @@ function mainMenu()
     end
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'lockStart', label = "Toggle Lock\nAbility Deck", color = {1,1,1}, function_owner = self,
+    local buttonParam = {click_function = 'lockStart', label = "Toggle Lock\nDecks", color = {1,1,1}, function_owner = self,
         position = {1.7,0.1,0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 70}
     self.createButton(buttonParam)
 
@@ -1063,6 +1065,17 @@ end
 
 function efInputFunc(obj, color, input, stillEditing)
     if not stillEditing then
+        local effectDeck = getDeckFromZoneByGUID(EFFECT_ZONE_GUID)
+        if effectDeck ~= nil then
+            local deckTable = effectDeck.getObjects()
+            local size = effectDeck.getQuantity()
+            for i = 1,size do
+                if string.match(string.lower(deckTable[i].nickname), string.lower(input)) and input ~= '' then
+                    input = deckTable[i].nickname
+                    break
+                end
+            end
+        end
         efName = input
         option = 3
         refreshButtons()

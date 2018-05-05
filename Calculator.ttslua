@@ -1,6 +1,6 @@
 --[[
 Secret Hitler Probability Calculator
-v 1.3.0
+v 1.3.1
 Made by Sionar
 --]]
 
@@ -8,6 +8,8 @@ Made by Sionar
 ------------------Constants
 COL = {0.5, 1, 1.5, 2}
 ROW = {-1, -0.6, -0.2, 0.2, 0.6, 1}
+START_POS = {125, 1.1, -29}
+SELF_SCALE = {4,1,4}
 
 
 ------------------Variables
@@ -27,6 +29,7 @@ function onLoad(saveString)
         valLabels = save['vL']
     end
     refreshButtons()
+    moveBoard()
 end
 
 function onSave()
@@ -38,6 +41,15 @@ function onSave()
     save['vL'] = valLabels
     local saveString = JSON.encode(save)
     return saveString
+end
+
+function moveBoard()
+    local global_name = Global.getVar('mod_name')
+    if global_name == 'Secret Hitler: CE' then
+        self.setPositionSmooth(START_POS)
+        self.setScale(SELF_SCALE)
+        self.setLock(true)
+    end
 end
 
 function onChat(message, player)

@@ -1,7 +1,7 @@
 --[[
 --SH Expansion Rulebook
 --Made by Sionar
---Version 1.1.2
+--Version 1.1.3
 --]]
 
 
@@ -18,11 +18,13 @@ RULES = {
 'T2. Reshuffle: Place all of the discarded cards into the deck and shuffle the deck. If there are no cards in the discard pile, the deck still gets shuffled.',
 'T3. Negate: Every part of the ability does not resolve.',
 'T4. Right after: This window of opportunity refers to the time before anything else happens. This includes a player using an ability or a presidential power, or a president choosing a chancellor.',
+'T5. Concealed: Played face down on the table.',
 '*Etiquette and Timing',
 'E1. Saboteur and Hacker cannot be used once the player has already started performing the actions of the ability. When you announce an ability, wait at least five seconds to give other players a chance to respond before you play your ability.',
 'E2. If a player wants you to wait before you use your ability, give them at least thirty seconds to decide whether or not they want to respond to your ability.',
 'E3. After a government passes, wait at least five seconds before you draw cards in case someone wants to play an ability.',
 'E4. After a player dies, wait five seconds before asking if they are Hitler in case someone decides to save them with an ability.',
+'E5. If a government fails and a topdeck occurs, the topdeck happens at the end of the turn.',
 '*Clarifications',
 'C1. Dead players cannot use abilities or flip over artifacts.',
 'C2. If a fascist plays The Confirmed, they have priority in playing an ability after they are done searching the deck. If they are asked if they want to play an ability and they decline, they lose that priority.',
@@ -117,10 +119,7 @@ last = #rulebook
 function onLoad()
     page = 1
     refreshText()
-    local global_name = Global.getVar('mod_name')
-    if global_name == 'Secret Hitler: CE' then
-        moveBoard()
-    end
+    moveBoard()
     addEditNotebookTab()
 end
 
@@ -150,9 +149,12 @@ function addEditNotebookTab()
 end
 
 function moveBoard()
-    self.setPositionSmooth(START_POS)
-    self.setRotationSmooth(START_ROT)
-    self.setLock(true)
+    local global_name = Global.getVar('mod_name')
+    if global_name == 'Secret Hitler: CE' then
+        self.setPositionSmooth(START_POS)
+        self.setRotationSmooth(START_ROT)
+        self.setLock(true)
+    end
     refreshText()
 end
 
