@@ -1,7 +1,7 @@
 --[[
 SH Expansion Tool
 Made by Sionar
-Version 1.5.5
+Version 1.5.6
 --]]
 
 
@@ -11,6 +11,8 @@ DRAW_ZONE_GUID = '6463d3'
 DISCARD_ZONE_GUID = 'b9bd6e'
 EFFECT_ZONE_GUID = '374a16'
 ABILITY_ZONE_GUID = 'eea120'
+LIBERALPARTY_CARD_GUID = 'a73564'
+FASCISTPARTY_CARD_GUID = 'e4d489'
 
 
 ------------------Variables
@@ -456,26 +458,9 @@ end
 
 function givepStart(clickedButton, playerColor)
     if Player[playerColor].admin or not promOnly then
-        local effectDeck = getDeckFromZoneByGUID(EFFECT_ZONE_GUID)
-        local size = effectDeck.getQuantity()
-        local deckTable = effectDeck.getObjects()
-        local foundLib = getIndex(0, size, deckTable, "Fake Liberal Party Card", "Fake Fascist Party Card")
-        local foundFas = getIndex(1, size, deckTable, "Fake Liberal Party Card", "Fake Fascist Party Card")
 
         if numSelected == 0 then
             broadcastToColor("ERROR: Target not selected", playerColor, {1,0,0})
-            return
-        end
-        if effectDeck == nil then
-            broadcastToColor("ERROR: Effect deck not found.", playerColor, {1,0,0})
-            return
-        end
-        if foundLib == -1 then
-            broadcastToColor("ERROR: Liberal party membership card not found.", playerColor, {1,0,0})
-            return
-        end
-        if foundFas == -1 then
-            broadcastToColor("ERROR: Fascist party membership card not found.", playerColor, {1,0,0})
             return
         end
 
@@ -484,33 +469,25 @@ function givepStart(clickedButton, playerColor)
 end
 
 function givePCoroutine()
-    local effectDeck = getDeckFromZoneByGUID(EFFECT_ZONE_GUID)
     local roles = Global.getTable('roles')
     local broadcastString
-    local deckTable = effectDeck.getObjects()
-    local size = effectDeck.getQuantity()
-    local found
-    local params = {}
     local card, cardClone
-    local pos = effectDeck.getPosition()
 
     for i = 1,10 do
         if targSelected[i] == 1 then
-            deckTable = effectDeck.getObjects()
             if roles[COLOR_TABLE[i]] == "liberal" then
                 broadcastString = COLOR_TABLE[i] .. " is a Liberal!"
                 broadcastToAll(broadcastString, {0,0,1})
-                found = getIndex(0, size, deckTable, "Fake Liberal Party Card", "Fake Fascist Party Card")
+                card = getObjectFromGUID(LIBERALPARTY_CARD_GUID)
             else
                 broadcastString = COLOR_TABLE[i] .. " is a Fascist!"
                 broadcastToAll(broadcastString, {1,0,0})
-                found = getIndex(1, size, deckTable, "Fake Liberal Party Card", "Fake Fascist Party Card")
+                card = getObjectFromGUID(FASCISTPARTY_CARD_GUID)
             end
-            params = {index = found - 1}
-            card = effectDeck.takeObject(params)
             cardClone = card.clone()
+            cardClone.setLock(false)
+            cardClone.interactable = true
             giveObjectToPlayer(cardClone, COLOR_TABLE[i], {forward = 16.5, right = 0, up = 0}, {x = 0, y = 180, z = 0})
-            card.setPosition({pos['x'], pos['y'], pos['z']})
 
             sleep(0.1)
         end
