@@ -1,7 +1,7 @@
 --[[
 Waitlist Tool
 Made by Sionar
-Version 1.1.5
+Version 1.1.6
 --]]
 
 
@@ -42,10 +42,11 @@ function onLoad(saveString)
         delay          = 1,
         repetitions    = 0,
     })
-    broadcastToAll(LOGIN_MSG, stringColorToRGB('White'))
+--    broadcastToAll(LOGIN_MSG, stringColorToRGB('White'))
     for k,v in pairs(Player.getPlayers()) do
+        v.print(LOGIN_MSG)
         if v.admin then
-            v.broadcast(ADMIN_MSG)
+            v.print(ADMIN_MSG)
         end
     end
     broadcastToAll(annouMsg, stringColorToRGB('Green'))
