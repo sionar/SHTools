@@ -1,7 +1,7 @@
 --[[
 SH Scoreboard
 Made by Sionar
-Version 1.7.0
+Version 1.7.1
 --]]
 
 
@@ -124,6 +124,19 @@ function onChat(message, player)
     elseif command == '!s5' then
         fasStart()
         return false
+    elseif command == '!rl' then
+        if player.admin then
+            recLFunc()
+        end
+        return false
+    elseif command == '!rf' then
+        if player.admin then
+            recFFunc()
+        end
+        return false
+    elseif command == '!up' then
+        updateFunc()
+        return false
     end
 end
 
@@ -217,7 +230,6 @@ end
 function updateStart(clickedObject, playerColor)
     if Player[playerColor].admin then
         updateFunc()
-        broadcastToColor("Seated players updated.", playerColor, {0,0,1})
     else
         broadcastToColor("Only promoted players can update the seated players.", playerColor, {1,0,0})
     end
@@ -234,10 +246,12 @@ function updateFunc()
             table.insert(sessionPlayers,entry)
         end
     end
+    broadcastToAll("Seated players updated.", {0,0,1})
     refreshStart()
 end
 
 function refreshMisc()
+    refreshStart()
     for i = 1,10 do
         if Player[COLOR_TABLE[i]].seated == false then
             gnum[i] = ""
@@ -258,53 +272,61 @@ function refreshMisc()
     miscMenu()
 end
 
-function recLFunc(clickedObject, playerColor)
+function recLButtonFunc(clickedObject, playerColor)
     if Player[playerColor].admin then
-        if checkValid(clickedObject, playerColor) then
-            for k,v in pairs(sessionPlayers) do
-                if v.role == 'liberal' then
-                    db[v.id].lw = db[v.id].lw + 1
-                    db[v.id].lg = db[v.id].lg + 1
-                elseif v.role == 'fascist' then
-                    db[v.id].fg = db[v.id].fg + 1
-                else
-                    db[v.id].hg = db[v.id].hg + 1
-                end
-            end
-
-            lWins = lWins + 1
-            broadcastToAll("Liberal victory recorded.", {0,0,1})
-            updateRatings('lib')
-            onSave()
-            refreshStart()
-        end
+        recLFunc()
     else
         broadcastToColor("Only promoted players can record the game.", playerColor, {1,0,0})
     end
 end
 
-function recFFunc(clickedObject, playerColor)
-    if Player[playerColor].admin then
-        if checkValid(clickedObject, playerColor) then
-            for k,v in pairs(sessionPlayers) do
-                if v.role == 'liberal' then
-                    db[v.id].lg = db[v.id].lg + 1
-                elseif v.role == 'fascist' then
-                    db[v.id].fw = db[v.id].fw + 1
-                    db[v.id].fg = db[v.id].fg + 1
-                else
-                    db[v.id].hw = db[v.id].hw + 1
-                    db[v.id].hg = db[v.id].hg + 1
-                end
+function recLFunc()
+    if checkValid() then
+        for k,v in pairs(sessionPlayers) do
+            if v.role == 'liberal' then
+                db[v.id].lw = db[v.id].lw + 1
+                db[v.id].lg = db[v.id].lg + 1
+            elseif v.role == 'fascist' then
+                db[v.id].fg = db[v.id].fg + 1
+            else
+                db[v.id].hg = db[v.id].hg + 1
             end
-            fWins = fWins + 1
-            broadcastToAll("Fascist victory recorded.", {1,0,0})
-            updateRatings('fas')
-            onSave()
-            refreshStart()
         end
+
+        lWins = lWins + 1
+        broadcastToAll("Liberal victory recorded.", {0,0,1})
+        updateRatings('lib')
+        onSave()
+        refreshStart()
+    end
+end
+
+function recFButtonFunc(clickedObject, playerColor)
+    if Player[playerColor].admin then
+        recFFunc()
     else
         broadcastToColor("Only promoted players can record the game.", playerColor, {1,0,0})
+    end
+end
+
+function recFFunc()
+    if checkValid() then
+        for k,v in pairs(sessionPlayers) do
+            if v.role == 'liberal' then
+                db[v.id].lg = db[v.id].lg + 1
+            elseif v.role == 'fascist' then
+                db[v.id].fw = db[v.id].fw + 1
+                db[v.id].fg = db[v.id].fg + 1
+            else
+                db[v.id].hw = db[v.id].hw + 1
+                db[v.id].hg = db[v.id].hg + 1
+            end
+        end
+        fWins = fWins + 1
+        broadcastToAll("Fascist victory recorded.", {1,0,0})
+        updateRatings('fas')
+        onSave()
+        refreshStart()
     end
 end
 
@@ -357,22 +379,22 @@ function updateRatings(winner)
     end
 end
 
-function checkValid(clickedButton, playerColor)
+function checkValid()
     local started = Global.getVar('started')
     local players = getSeatedPlayers()
     local currTime = os.time()
 
     if not started then
-        broadcastToColor("Game not started.", playerColor, {1,0,0})
+        broadcastToAll("Error recording game: Game not started.", {1,0,0})
         return false
     elseif recordCheck then
-        broadcastToColor("Game already recorded for this session.", playerColor, {1,0,0})
+        broadcastToAll("Error recording game: Game already recorded for this session.", {1,0,0})
         return false
     elseif #sessionPlayers < 5 then
-        broadcastToColor("Not enough players seated", playerColor, {1,0,0})
+        broadcastToAll("Error recording game: Not enough players seated", {1,0,0})
         return false
     elseif currTime - startTime < 120 then
-        broadcastToColor("Please wait a couple of minutes before submitting.", playerColor, {1,0,0})
+        broadcastToAll("Error recording game: Please wait a couple of minutes before submitting.", {1,0,0})
         return false
     else
         recordCheck = true
@@ -527,20 +549,22 @@ function importFunc(clickedButton,playerColor)
             local dbCopy = oldBoard.getTable('db')
             db = {}
             for v in pairs(dbCopy) do
-                local entry = {}
-                entry.sn = dbCopy[v].name or dbCopy[v].sn
-                entry.fg = dbCopy[v].fgp or dbCopy[v].fg
-                entry.hg = dbCopy[v].hgp or dbCopy[v].hg
-                entry.lg = dbCopy[v].lgp or dbCopy[v].lg
-                entry.fw = dbCopy[v].fw
-                entry.hw = dbCopy[v].hw
-                entry.lw = dbCopy[v].lw
-                entry.gw = dbCopy[v].gw or dbCopy[v].gamw
-                entry.gn = dbCopy[v].gn or dbCopy[v].gamn
-                entry.fr = dbCopy[v].fr or 1000
-                entry.lr = dbCopy[v].lr or 1000
+                if dbCopy[v].fg + dbCopy[v].lg + dbCopy[v].hg > 4 then
+                    local entry = {}
+                    entry.sn = dbCopy[v].name or dbCopy[v].sn
+                    entry.fg = dbCopy[v].fgp or dbCopy[v].fg
+                    entry.hg = dbCopy[v].hgp or dbCopy[v].hg
+                    entry.lg = dbCopy[v].lgp or dbCopy[v].lg
+                    entry.fw = dbCopy[v].fw
+                    entry.hw = dbCopy[v].hw
+                    entry.lw = dbCopy[v].lw
+                    entry.gw = dbCopy[v].gw or dbCopy[v].gamw
+                    entry.gn = dbCopy[v].gn or dbCopy[v].gamn
+                    entry.fr = dbCopy[v].fr or 1000
+                    entry.lr = dbCopy[v].lr or 1000
 
-                db[v] = entry
+                    db[v] = entry
+                end
             end
 
             fWins = oldBoard.getVar('fWins')
@@ -865,19 +889,19 @@ function mainMenu()
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'updateStart', label = "Update\nPlayers", color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
-        position = {-1.6,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50}
+        position = {-1.6,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = '!up'}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'refreshMisc', label = "Misc\nStats", color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
         position = {-0.96,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = 'Type !s2 in chat to open up this page'}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'recLFunc', label = "Record\nLib Win", color = {0,0,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0.32,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50}
+    local buttonParam = {click_function = 'recLButtonFunc', label = "Record\nLib Win", color = {0,0,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {0.32,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = '!rl'}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'recFFunc', label = "Record\nFas Win", color = {1,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0.96,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50}
+    local buttonParam = {click_function = 'recFButtonFunc', label = "Record\nFas Win", color = {1,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {0.96,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = '!rf'}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'adminMenu', label = "Admin", color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,

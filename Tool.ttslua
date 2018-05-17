@@ -1,7 +1,7 @@
 --[[
 SH Expansion Tool
 Made by Sionar
-Version 1.5.7
+Version 1.5.8
 --]]
 
 
@@ -26,7 +26,6 @@ drawNum = 1
 option = 0
 promOnly = true
 last_gambled = "none"
-shufFlag = false
 policyDeckNum = 17
 efName = ''
 
@@ -51,38 +50,6 @@ function onSave()
     save['l'] = last_gambled
     local saveString = JSON.encode(save)
     return saveString
-end
-
-
-------------------Events
-function onObjectDrop(playerColor, dropped_object)
-    if shufFlag then
-        startLuaCoroutine(self, 'deckShufCoroutine')
-    end
-end
-
-function deckShufCoroutine()
-    shufFlag = false
-    wait()
-    sleep(1)
-    local drawDeck = getDeckFromZoneByGUID('6463d3')
-    drawDeck.shuffle()
-
-    return 1
-end
-
-function wait()
-    local drawDeck = getDeckFromZoneByGUID('6463d3')
-    if drawDeck == nil then
-        while drawDeck == nil do
-            drawDeck = getDeckFromZoneByGUID('6463d3')
-            coroutine.yield(0)
-        end
-    else
-        while policyDeckNum >= drawDeck.getQuantity() do
-            coroutine.yield(0)
-        end
-    end
 end
 
 
@@ -114,7 +81,7 @@ function drawStart(clickedButton, playerColor)
         local broadcastString = player .. " draws " .. drawNum .. " cards"
         broadcastToAll(broadcastString, {1,1,1})
         if drawNum >= 6 or drawNum >= drawDeck.getQuantity() then
-            shufFlag = true
+            startShufTimer()
             policyDeckNum = drawDeck.getQuantity() - drawNum
         end
         returnFunc()
@@ -386,7 +353,7 @@ function fisherStart(clickedButton, playerColor)
         discDeck.dealToColor(3, player)
         local broadcastString = player .. " draws 3 cards from the discard pile."
         broadcastToAll(broadcastString, {1,1,1})
-        shufFlag = true
+        startShufTimer()
         policyDeckNum = drawDeck.getQuantity()
 
         returnFunc()
@@ -430,6 +397,31 @@ function martyrStart(clickedButton, playerColor)
 
         returnFunc()
     end
+end
+
+function startShufTimer()
+    Timer.destroy('shufTimer')
+    Timer.create({
+        identifier     = 'shufTimer',
+        function_name  = 'shufCheck',
+        delay          = 1,
+        repetitions    = 1,
+    })
+end
+
+function shufCheck()
+    if Global.call('allPolicyCardsKnown') then
+        startLuaCoroutine(self, 'shufDelayed')
+    else
+        startShufTimer()
+    end
+end
+
+function shufDelayed()
+    sleep(0.3)
+    shufStart()
+
+    return 1
 end
 
 function shufStart()
