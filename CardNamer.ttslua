@@ -1,7 +1,7 @@
 --[[
 Card Namer
 Made by Sionar
-Version 1.3.1
+Version 1.3.2
 --]]
 
 
@@ -21,20 +21,20 @@ ABILITIES =
     {name = '[FF00FF]Jester',           desc = '[FFFFFF]Reshuffle the deck.\n[00FF00]-OR-\n[FFFF00][Right after a player tries to obtain or look at your abilities,] [FFFFFF]you take one of their abilities instead. You may use that ability.'},
     {name = '[FF00FF]Soulmate',         desc = '[FFFF00][Right after you die,] [EE82EE]choose another player. [FFFFFF]They also die.'},
     {name = '[FF00FF]Surgeon',          desc = '[FFFF00][After a reshuffle, if there are seven or more cards in the deck,] [FFFFFF]look at the top six cards of the deck. Discard two cards then shuffle the deck.'},
-    {name = '[FF00FF]Gravedigger',      desc = '[FFFFFF]Investigate each dead player\'s party membership card.\n[00FF00]-OR-\n[FFFFFF]Copy a dead player\'s ability.'},
+    {name = '[FF00FF]Gravekeeper',      desc = '[FFFFFF]Investigate each dead player\'s party membership card.\n[00FF00]-OR-\n[FFFFFF]Copy a dead player\'s ability.'},
     {name = '[FF00FF]Avenger',          desc = '[FFFF00][Right after your presidency is downvoted,] [EE82EE]choose two players who downvoted you. [FFFFFF]They each give you an unused ability.'},
     {name = '[FF00FF]Guardian-Angel',   desc = '[EE82EE]Choose another player. [FFFFFF]That player gains the [00FFFF]Aegis [FFFFFF]effect.'},
     {name = '[FF00FF]Bandit',           desc = '[EE82EE]Choose another player. [FFFFFF]Look at their unused abilities and take one.\n[00FF00]-OR-\n[FFFF00][Right after a topdeck,] [FFFFFF]take the unused presidential power.'},
     {name = '[FF00FF]Librarian',        desc = '[FFFF00][After Hitler Territory,] [FFFFFF]draw four random abilities from the ability deck. Choose two abilities and give them to [EE82EE]two other players of your choice. [FFFFFF]They may play those abilities.'},
-    {name = '[FF00FF]Gambler',          desc = '[FFFFFF]Name the top card of the policy deck. Reveal the policy then shuffle the deck. If you are right, take the top card of the ability deck. You may either use the ability or shuffle it into the ability deck and reuse Gambler on a future turn. [FF0000]You may keep using Gambler until you fail twice.'},
+    {name = '[FF00FF]Gambler',          desc = '[FFFFFF]Name the top card of the policy deck. Reveal the policy then shuffle the deck. If you are right, reveal and take the top card of the ability deck. You may either use the ability or shuffle it into the ability deck and reuse Gambler on a future turn. [FF0000]You may keep using Gambler until you fail twice.'},
     {name = '[FF00FF]Puppeteer',        desc = '[FFFF00][Right after a player is [EE82EE]chosen [FFFF00]by an ability,] [EE82EE]choose a player. [FFFFFF]That player becomes the new target. [FF0000]The new target must be a valid target.'},
     {name = '[00BFFF]Spiritualist',     desc = '[EE82EE]Choose a dead player. [FFFFFF]That player gains the [00FFFF]Resurrected [FFFFFF]effect.'},
     {name = '[00BFFF]Senator',          desc = '[FFFFFF]Move the election tracker left or right by one step.\n[00FF00]-OR-\n[FFFFFF]Move the previously elected president and chancellor placards.'},
     {name = '[00BFFF]Trickster',        desc = '[FF0000][Reveal this ability before voting.] [FFFFFF]Move an unused presidential power to an unoccupied non game-ending tile.\n[00FF00]-OR-\n[FFFFFF]Swap the position of two unused presidential powers.'},
     {name = '[00BFFF]Usurper',          desc = '[FF0000][Reveal this ability before voting.] [FFFFFF]Force a special election where you are the president.'},
-    {name = '[00BFFF]Insurgent',        desc = '[FFFF00][Reveal this ability before voting.] [FFFFFF]Take the chancellor placard. Ignore the previously elected president and chancellor placards.'},
+    {name = '[00BFFF]Rebel',            desc = '[FFFF00][Reveal this ability before voting.] [FFFFFF]Take the chancellor placard. Ignore the previously elected president and chancellor placards.'},
     {name = '[00BFFF]Fisherman',        desc = '[FFFF00][When there are four or more cards in the discard pile,] [FFFFFF]shuffle and draw three from the discard pile. You may place exactly two cards into the draw pile, then shuffle the draw pile.'},
-    {name = '[00BFFF]Super-President',  desc = '[FF0000][Reveal this ability before voting.] [FFFFFF]On the next government that passes, draw four policy cards. Discard one and give the rest to the president.'},
+    {name = '[00BFFF]Dictator',         desc = '[FF0000][Reveal this ability before voting.] [FFFFFF]On the next government that passes, draw four policy cards. Discard one and give the rest to the president.'},
     {name = '[00BFFF]Decider',          desc = '[FFFFFF]Force a govt. with tied votes to pass.\n[00FF00]-OR-\n[FFFF00][Right before topdeck,] [FFFFFF]look at the top two cards in the deck and discard one.'},
     {name = '[00BFFF]Lobbyist',         desc = '[FF0000][Reveal this ability before voting.] [FFFFFF]Your next vote cannot be affected and counts for three votes. [FF0000]This ability cannot be copied on the same turn.'},
     {name = '[00BFFF]Silencer',         desc = '[EE82EE]Choose another player. [FFFFFF]That player gains the [00FFFF]Silenced [FFFFFF]effect.'},
@@ -46,32 +46,32 @@ ABILITIES =
     {name = '[7CFC00]Scout',            desc = '[FFFF00][When a player looks at policy, ability or vote cards,] [FFFFFF]you also look at them and anything they discard.\n[00FF00]-OR-\n[FFFFFF]Look at the top card of the deck, and choose whether or not to discard it.'},
     {name = '[7CFC00]Big-Brother',      desc = '[EE82EE]Choose another player. [FFFFFF]That player gains the [00FFFF]Tracked [FFFFFF]effect.'},
     {name = '[7CFC00]Spelunker',        desc = '[FFFFFF]Look at the policy deck then shuffle it.\n[00FF00]-OR-\n[FFFFFF]Look at either the first or second card at the top of the discard pile.'},
-    {name = '[7CFC00]Super-Detective',  desc = '[FFFF00][Entering Hitler Territory,] [EE82EE]choose half of the other players, rounded up. [FFFFFF]Shuffle their party membership cards, discard one, and look at them.\n[FF0000]You are ineligible for government for the next two turns.'},
+    {name = '[7CFC00]Detective',        desc = '[FFFF00][Entering Hitler Territory,] [EE82EE]choose half of the other players, rounded up. [FFFFFF]Shuffle their party membership cards, discard one, and look at them.\n[FF0000]You are ineligible for government for the next two turns.'},
     {name = '[7CFC00]Visionary',        desc = '[FFFF00][Entering Hitler Territory,] [FFFFFF]look at the ability deck. Look at every concealed effect on the table. Each player (including dead players) shows you an unused ability.'}
 }
 
 EFFECTS =
 {
-    {name = '[8B4513]Mark of Shame',                    desc = '[FFFFFF]You didn\'t read the card. Reading the card explains the card.'},
-    {name = '[00FFFF]Death Sentence',                   desc = '[FFFFFF]At the start of the third turn after this turn, you die if the Assassin is not dead.'},
-    {name = '[00FFFF]Aegis',                            desc = '[FFFFFF]Remove all effects on you. You cannot be affected by other players\' abilities unless you allow it.'},
-    {name = '[00FFFF]Resurrected',                      desc = '[FFFFFF]You vote, but cannot be in government, speak or use abilities. The Spiritualist may nominate you to be chancellor.'},
-    {name = '[00FFFF]Silenced',                         desc = '[FFFFFF]You cannot vote, speak, or use abilities until the turn after a policy is placed on a track.'},
-    {name = '[00FFFF]Unpopular',                        desc = '[FFFFFF]You are ineligible for government until the turn after the next policy is placed on a track. This effect has priority over Usurper or Insurgent.'},
-    {name = '[00FFFF]Tracked',                          desc = '[FFFFFF]You are being watched by Big-Brother. They may look at your vote and abilities every turn. Once per game they decide how you vote.'},
-    {name = '[DAA520]Inspected 1',                      desc = '[FFFFFF]You have been inspected by the Super-Detective.'},
-    {name = '[C71585]Inspected 2 ',                     desc = '[FFFFFF]You have been inspected by the Super-Detective.'},
-    {name = '[008000]Poisoned Drink 1',                 desc = '[FFFFFF]You have been poisoned. You die.'},
-    {name = '[008000]Water 1',                          desc = '[FFFFFF]Just ordinary water. No effect.'},
-    {name = '[008000]Poisoned Drink 2',                 desc = '[FFFFFF]You have been poisoned. You die.'},
-    {name = '[008000]Water 2',                          desc = '[FFFFFF]Just ordinary water. No effect.'},
+    {name = '[8B4513]Mark of Shame',                            desc = '[FFFFFF]You didn\'t read the card. Reading the card explains the card.'},
+    {name = '[00FFFF]Death Sentence',                           desc = '[FFFFFF]At the start of the third turn after this turn, you die if the Assassin is not dead.'},
+    {name = '[00FFFF]Aegis',                                    desc = '[FFFFFF]Destroy all effects on you. You cannot be affected by other players\' abilities unless you allow it.'},
+    {name = '[00FFFF]Resurrected',                              desc = '[FFFFFF]You vote, but cannot be in government, speak or use abilities. The Spiritualist may nominate you to be chancellor.'},
+    {name = '[00FFFF]Silenced',                                 desc = '[FFFFFF]You cannot vote, speak, or use abilities until the turn after a policy is placed on a track.'},
+    {name = '[00FFFF]Unpopular',                                desc = '[FFFFFF]You are ineligible for government until the turn after the next policy is placed on a track. This effect has priority over Usurper or Insurgent.'},
+    {name = '[00FFFF]Tracked',                                  desc = '[FFFFFF]You are being watched by Big-Brother. They may look at your vote and abilities every turn. Once per game they decide how you vote.'},
+    {name = '[DAA520]Inspected 1',                              desc = '[FFFFFF]You have been inspected by the Super-Detective.'},
+    {name = '[C71585]Inspected 2 ',                             desc = '[FFFFFF]You have been inspected by the Super-Detective.'},
+    {name = '[008000]Poisoned Drink 1',                         desc = '[FFFFFF]You have been poisoned. You die.'},
+    {name = '[008000]Water 1',                                  desc = '[FFFFFF]Just ordinary water. No effect.'},
+    {name = '[008000]Poisoned Drink 2',                         desc = '[FFFFFF]You have been poisoned. You die.'},
+    {name = '[008000]Water 2',                                  desc = '[FFFFFF]Just ordinary water. No effect.'},
     {name = '[6A5ACD]Artifact: Cursed Crown',                   desc = '[FFFF00][Reveal right after the player is elected as president.] [FFFFFF]You die. The government is cancelled and the election tracker does not move.'},
     {name = '[6A5ACD]Artifact: Ring of Power',                  desc = '[FFFF00][Reveal right after the player is elected as president and Super-President is not active.] [FFFFFF]You draw four policy cards instead of three and discard two of them.'},
     {name = '[6A5ACD]Artifact: Amulet of Warding',              desc = '[FFFF00][Reveal anytime.] You gain the Aegis effect for three turns.'},
     {name = '[6A5ACD]Artifact: Nullification Collar',           desc = '[FFFF00][Reveal right after the player plays an ability.] [FFFFFF]Your ability is negated.'},
     {name = '[6A5ACD]Artifact: Last Horcrux',                   desc = '[FFFF00][Reveal right before the player dies.] [FFFFFF]You do not die.'},
     {name = '[6A5ACD]Artifact: Mirror of Kalandra',             desc = '[FFFF00][Reveal anytime. Cannot be played on yourself.] [FFFFFF]The owner of the artifact plays a copy of your ability.'},
-    {name = '[6A5ACD]Artifact: Staff of Necromancy',            desc = '[FFFF00][Reveal anytime the player is dead.] [FFFFFF]The owner of the artifact chooses:\nYou vote this turn. The owner of the artifact decides how you vote.\n[00FF00]-OR-\n[FFFFFF]You give the owner of the artifact an unused ability. They may play it.'},
+    {name = '[6A5ACD]Artifact: Staff of Necromancy',            desc = '[FFFF00][Reveal anytime the player is dead.] [FFFFFF]You vote this turn. The owner of the artifact decides how you vote. You give the owner of the artifact an unused ability. They may play it.'},
     {name = '[6A5ACD]Artifact: Sword of Accolades',             desc = '[FFFF00][Reveal before voting.] [FFFFFF]Force a special election where you are the president.'},
     {name = '[6A5ACD]Artifact: Forbidden Grimoire',             desc = '[FFFF00][Reveal anytime.] [FFFFFF]Draw three random abilities from the ability deck. Choose one ability. You may play it.'},
     {name = '[6A5ACD]Artifact: Dagger of Compulsion',           desc = '[FFFF00][Reveal anytime.] [FFFFFF]The owner of the artifact becomes the president instead of you. You keep the presidential power unless Magician was played.'}
@@ -84,9 +84,9 @@ CARD_POS = {x = 37, y = 1, z = -20.5}
 MARGIN_OF_ERROR = 1
 ABILITY_DECK_NAME = 'Abilities'
 ABILITY_DECK_DESC = 'Made by Piggy and Sionar'
-ABILITY_DECK_SCALE = {1.51, 1, 1.51}
+ABILITY_DECK_SCALE = {1.5, 1, 1.5}
 EFFECT_DECK_NAME = 'Effects'
-EFFECT_DECK_SCALE = {1.51, 1, 1.51}
+EFFECT_DECK_SCALE = {1.5, 1, 1.5}
 
 
 ------------------Main Functions

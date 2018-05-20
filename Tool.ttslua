@@ -1,7 +1,7 @@
 --[[
 SH Expansion Tool
 Made by Sionar
-Version 1.5.8
+Version 1.5.9
 --]]
 
 
@@ -564,7 +564,7 @@ function giveEFCoroutine()
                 sleep(0.1)
             end
         end
-        broadcastToAll('The Super-Inspector effect cards have been dealt to ' .. player .. '.', {1,1,1})
+        broadcastToAll('The Detective effect cards have been dealt to ' .. player .. '.', {1,1,1})
     elseif option == 2 then
         for i = 1,size do
             if string.match(deckTable[i].nickname, 'Artifact') then
@@ -1031,7 +1031,7 @@ function giveEfMenu()
     end
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'opt1', label = "Super-Inspector", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
+    local buttonParam = {click_function = 'opt1', label = "Detective", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
         position = {0,0.1,-0.1}, rotation = {0,0,0}, width = 800, height = 200, font_size = 80}
     if option == 1 then
         buttonParam.font_color = stringColorToRGB('Red')
