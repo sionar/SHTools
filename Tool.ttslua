@@ -808,7 +808,7 @@ function mainMenu()
         position = {-1.7,0.1,-0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'sdMenu', label = "Super\nInspector", color = {1,1,1}, function_owner = self,
+    local buttonParam = {click_function = 'sdMenu', label = "Detective", color = {1,1,1}, function_owner = self,
         position = {-1.7,0.1,-0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
     self.createButton(buttonParam)
 
@@ -1261,7 +1261,7 @@ function createLabelButton()
     local buttonParam = {click_function = 'nulFunc', color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
             position = {-1.7,0.1,-1}, rotation = {0,0,0}, width = 1, height = 1, font_size = 150}
     if      state == 1 then         buttonParam.label = "Player"
-    elseif  state == 2 then         buttonParam.label = "Super\nInspector"
+    elseif  state == 2 then         buttonParam.label = "Detective"
     elseif  state == 3 then         buttonParam.label = "Spy"
     elseif  state == 4 then         buttonParam.label = "Inspector"
     elseif  state == 5 then         buttonParam.label = "Spelunker"

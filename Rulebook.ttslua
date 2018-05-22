@@ -27,13 +27,9 @@ RULES = {
 'E5. If a government fails and a topdeck occurs, the topdeck happens at the end of the turn.',
 '*Clarifications',
 'C1. Dead players cannot use abilities or flip over artifacts.',
-'C2. If a fascist plays The Confirmed, they have priority in playing an ability after they are done searching the deck. If they are asked if they want to play an ability and they decline, they lose that priority.',
-'C3. If Magician and Super-President are both played, the Chancellor draws four cards and hands three to the president, who then hands two policy cards to the Super-President. The chancellor gains the presidential power',
-'C4. When a player uses Martyr, the Election Tracker does not move back after the policy is placed on the tracker.',
-'C5. If a player uses Big-Brother on another player and decides their vote, and then the target player plays Lobbyist, the targeted player gets to vote how they want. The once-per-game ability on Big-Brother is used up and cannot be used on a future vote.',
-'C6. A player with Aegis cannot be targeted by any abilities. Their abilities also cannot be interacted with in any manner.',
-'C7. Abilities that can be Hacked: Martyr, Jester, Surgeon, Gambler, Senator, Usurper, Fisherman, Super-President, Decider, Insurgent, Scout, Spelunker, Historian and Trickster.',
-'C8. Abilities that can be Puppeteered: Assassin, Poisoner (one target), Spy (one target), Super-Detective (one target), Collector, Soulmate, Avenger, Guardian-Angel, Bandit, Necromancer, Spiritualist (if there is a valid target to change to), Silencer, Big-Brother and Denouncer.'
+'C2. A player with Aegis cannot be targeted by any abilities. Their abilities also cannot be interacted with in any manner.',
+'C3. Abilities that can be Hacked: Martyr, Jester, Surgeon, Gambler, Senator, Trickster, Usurper, Rebel, Fisherman, Dictator, Decider, Scout, Spelunker.',
+'C4. Abilities that can be Puppeteered: Assassin, Poisoner (one target), Spy (one target), Collector, Soulmate, Avenger, Guardian-Angel, Bandit, Librarian, Spiritualist, Silencer, Denouncer and Big-Brother .'
 }
 CREDITS = 'Made by: \nPiggy\nSionar\n\nSpecial thanks to the entire\nSecret Hitler community!\n\nCome join us on Discord at:\ncFuFmmm'
 NOTEBOOK_TITLE = 'Expansion'
