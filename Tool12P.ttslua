@@ -8,3 +8,14 @@ function broadcastToColor12P(message, playerColor, messageColor)
 	local player = Global.call('callFunction', {fcn = 'getPlayerObj', params = {playerColor}})
 	player.broadcast(message, messageColor)
 end
+
+function deal12P(deck, amount, playerColor)
+	if playerColor == 'Maroon' then
+
+	elseif playerColor == 'Tan' then
+
+	else
+		deck.deal(amount, playerColor)
+	end
+
+end

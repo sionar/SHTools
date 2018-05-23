@@ -1,7 +1,7 @@
 --[[
 SH Expansion Tool
 Made by Sionar
-Version 1.5.9
+Version 2.0.0
 --]]
 
 
@@ -13,6 +13,8 @@ EFFECT_ZONE_GUID = '374a16'
 ABILITY_ZONE_GUID = 'eea120'
 LIBERALPARTY_CARD_GUID = 'a73564'
 FASCISTPARTY_CARD_GUID = 'e4d489'
+MAROON_DRAW_POS = {-9, 1.5, -49}
+TAN_DRAW_POS = {20.30, 1.5, -49}
 
 
 ------------------Variables
@@ -94,8 +96,7 @@ function sdStart(clickedButton, playerColor)
         local inspectedRoles = {}
         local players = Global.getTable('players')
         local roles = Global.getTable('roles')
-        local numPlayers = #players
-        numPlayers = (numPlayers + numPlayers%2)/2
+        local numPlayers = (#players - #players%2)/2
 
         if numSelected < numPlayers then
             broadcastToColor("ERROR: Not enough players selected", playerColor, {1,0,0})
@@ -130,7 +131,7 @@ function sdStart(clickedButton, playerColor)
             end
         end
         broadcastToAll(broadcastString, {1,1,1})
-        broadcastToColor("You found " .. lib .. " liberals and " .. fas .. " fascists.", player, {1,1,1})
+        broadcastToColor12P("You found " .. lib .. " liberals and " .. fas .. " fascists.", player, {1,1,1})
 
         returnFunc()
     end
@@ -204,7 +205,7 @@ function inspectStart(clickedButton, playerColor)
                 broadcastString = broadcastString .. COLOR_TABLE[i] .. " "
                 if roles[COLOR_TABLE[i]] == "liberal" then
                     inspectMessage = COLOR_TABLE[i] .. " is a Liberal!"
-                    broadcastToColor(inspectMessage, player, {0,0,1})
+                    broadcastToColor12P(inspectMessage, player, {0,0,1})
                 else
                     inspectMessage = COLOR_TABLE[i] .. " is a Fascist!"
                     broadcastToColor(inspectMessage, player, {1,0,0})
@@ -231,7 +232,7 @@ function spelunStart(clickedButton, playerColor)
 
         local params = {index = option}
         local card = tmpDeck.takeObject(params)
-        card.deal(1, player)
+        card.deal12P(1, player)
         local broadcastString
         if option == 0 then
             broadcastString = player .. " looks at the top card of the discard pile"
@@ -350,7 +351,7 @@ function fisherStart(clickedButton, playerColor)
             return
         end
         discDeck.shuffle()
-        discDeck.dealToColor(3, player)
+        discDeck.deal12P(3, player)
         local broadcastString = player .. " draws 3 cards from the discard pile."
         broadcastToAll(broadcastString, {1,1,1})
         startShufTimer()
@@ -386,7 +387,7 @@ function martyrStart(clickedButton, playerColor)
         broadcastToAll(broadcastString, {1,1,1})
         local params = {index = found-1}
         local card = drawDeck.takeObject(params)
-        card.deal(1, player)
+        card.deal12P(1, player)
         reshuffle()
         Global.setVar('lastPres', player)
         Global.setVar('lastChan', player)
