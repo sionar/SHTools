@@ -1,0 +1,10 @@
+--[[
+SH Expansion Tool 12P Extension
+Made by Sionar
+
+--]]
+
+function broadcastToColor12P(message, playerColor, messageColor)
+	local player = Global.call('callFunction', {fcn = 'getPlayerObj', params = {playerColor}})
+	player.broadcast(message, messageColor)
+end
