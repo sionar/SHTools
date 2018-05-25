@@ -1,34 +1,34 @@
+#include \Tool12P.ttslua
 --[[
 SH Expansion Tool
 Made by Sionar
-Version 2.0.0
+Version 1.6.0
 --]]
 
 
 ------------------Constants
-COLOR_TABLE = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
+COLOR_TABLE = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Tan', 'Maroon'}
 DRAW_ZONE_GUID = '6463d3'
 DISCARD_ZONE_GUID = 'b9bd6e'
 EFFECT_ZONE_GUID = '374a16'
 ABILITY_ZONE_GUID = 'eea120'
 LIBERALPARTY_CARD_GUID = 'a73564'
 FASCISTPARTY_CARD_GUID = 'e4d489'
-MAROON_DRAW_POS = {-9, 1.5, -49}
-TAN_DRAW_POS = {20.30, 1.5, -49}
-
+PLAYER_BUTTON_POS_10P = {{-1.4,0.1,0.7}, {-1.4,0.1,1.1}, {-2.0,0.1,1.1}, {-2.0,0.1,0.7}, {-2,0.1,0.3}, {-2,0.1,-0.1}, {-2,0.1,-0.5}, {-1.4,0.1,-0.5}, {-1.4,0.1,-0.1}, {-1.4,0.1,0.3}}
+TARGET_BUTTON_POS_10P = {{0.3,0.1,0.7}, {0.3,0.1,1.1}, {-0.3,0.1,1.1}, {-0.3,0.1,0.7}, {-0.3,0.1,0.3}, {-0.3,0.1,-0.1}, {-0.3,0.1,-0.5}, {0.3,0.1,-0.5}, {0.3,0.1,-0.1}, {0.3,0.1,0.3}}
+PLAYER_BUTTON_POS_12P = {{-2.12,0.1,0.6},{-2.26,0.1,0.3},{-2.26,0.1,0},{-2.26,0.1,-0.3},{-2.12,0.1,-0.6},{-1.7,0.1,-0.6},{-1.28,0.1,-0.6},{-1.14,0.1,-0.3},{-1.14,0.1,0},{-1.14,0.1,0.3},{-1.28,0.1,0.6},{-1.7,0.1,0.6}}
+TARGET_BUTTON_POS_12P = {{-0.42,0.1,0.6},{-0.56,0.1,0.3},{-0.56,0.1,0},{-0.56,0.1,-0.3},{-0.42,0.1,-0.6},{0,0.1,-0.6},{0.42,0.1,-0.6},{0.56,0.1,-0.3},{0.56,0.1,0},{0.56,0.1,0.3},{0.42,0.1,0.6},{0,0.1,0.6}}
+GIVE_TOOL_BUTTON_POS = {{1,0.1,0.9}, {0,0.1,0.9}, {-1,0.1,0.9}, {-1.7,0.1,0.3}, {-1.7,0.1,-0.3}, {-1,0.1,-0.9}, {0,0.1,-0.9}, {1,0.1,-0.9}, {1.7,0.1,-0.3}, {1.7,0.1,0.3}}
 
 ------------------Variables
 state = 0
 player = ""
-pButtonColor = {{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1}}
-sdButtonColor = {{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1}}
-targSelected = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+targSelected = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 numSelected = 0
 drawNum = 1
 option = 0
 promOnly = true
 last_gambled = "none"
-policyDeckNum = 17
 efName = ''
 
 
@@ -84,7 +84,6 @@ function drawStart(clickedButton, playerColor)
         broadcastToAll(broadcastString, {1,1,1})
         if drawNum >= 6 or drawNum >= drawDeck.getQuantity() then
             startShufTimer()
-            policyDeckNum = drawDeck.getQuantity() - drawNum
         end
         returnFunc()
     end
@@ -96,7 +95,8 @@ function sdStart(clickedButton, playerColor)
         local inspectedRoles = {}
         local players = Global.getTable('players')
         local roles = Global.getTable('roles')
-        local numPlayers = (#players - #players%2)/2
+        local numPlayers = #players
+        numPlayers = (numPlayers + numPlayers%2)/2
 
         if numSelected < numPlayers then
             broadcastToColor("ERROR: Not enough players selected", playerColor, {1,0,0})
@@ -131,7 +131,7 @@ function sdStart(clickedButton, playerColor)
             end
         end
         broadcastToAll(broadcastString, {1,1,1})
-        broadcastToColor12P("You found " .. lib .. " liberals and " .. fas .. " fascists.", player, {1,1,1})
+        broadcastToColor("You found " .. lib .. " liberals and " .. fas .. " fascists.", player, {1,1,1})
 
         returnFunc()
     end
@@ -205,7 +205,7 @@ function inspectStart(clickedButton, playerColor)
                 broadcastString = broadcastString .. COLOR_TABLE[i] .. " "
                 if roles[COLOR_TABLE[i]] == "liberal" then
                     inspectMessage = COLOR_TABLE[i] .. " is a Liberal!"
-                    broadcastToColor12P(inspectMessage, player, {0,0,1})
+                    broadcastToColor(inspectMessage, player, {0,0,1})
                 else
                     inspectMessage = COLOR_TABLE[i] .. " is a Fascist!"
                     broadcastToColor(inspectMessage, player, {1,0,0})
@@ -232,7 +232,7 @@ function spelunStart(clickedButton, playerColor)
 
         local params = {index = option}
         local card = tmpDeck.takeObject(params)
-        card.deal12P(1, player)
+        card.deal(1, player)
         local broadcastString
         if option == 0 then
             broadcastString = player .. " looks at the top card of the discard pile"
@@ -351,11 +351,10 @@ function fisherStart(clickedButton, playerColor)
             return
         end
         discDeck.shuffle()
-        discDeck.deal12P(3, player)
+        discDeck.dealToColor(3, player)
         local broadcastString = player .. " draws 3 cards from the discard pile."
         broadcastToAll(broadcastString, {1,1,1})
         startShufTimer()
-        policyDeckNum = drawDeck.getQuantity()
 
         returnFunc()
     end
@@ -387,7 +386,7 @@ function martyrStart(clickedButton, playerColor)
         broadcastToAll(broadcastString, {1,1,1})
         local params = {index = found-1}
         local card = drawDeck.takeObject(params)
-        card.deal12P(1, player)
+        card.deal(1, player)
         reshuffle()
         Global.setVar('lastPres', player)
         Global.setVar('lastChan', player)
@@ -914,7 +913,7 @@ function sdMenu()
     self.clearButtons()
     state = 2
 
-    createInspectedButtons()
+    createTargetButtons()
     createLabelButton()
     createPlayerButtons()
     createStartButton()
@@ -935,7 +934,7 @@ function inspMenu()
     self.clearButtons()
     state = 4
 
-    createInspectedButtons()
+    createTargetButtons()
     createLabelButton()
     createPlayerButtons()
     createStartButton()
@@ -1015,7 +1014,7 @@ function givepMenu()
     state = 8
 
     createLabelButton()
-    createInspectedButtons()
+    createTargetButtons()
     createStartButton()
     createReturnButton()
 end
@@ -1088,45 +1087,11 @@ function givetMenu()
     self.clearButtons()
     state = 11
 
-    local buttonParam = {click_function = 'giveTool6', label = "Green", color = stringColorToRGB('Green'), function_owner = self,
-        position = {-1,0.1,-0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'giveTool7', label = "Teal", color = stringColorToRGB('Teal'), function_owner = self,
-        position = {0,0.1,-0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'giveTool8', label = "Blue", color = stringColorToRGB('Blue'), function_owner = self,
-        position = {1,0.1,-0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'giveTool3', label = "Red", color = stringColorToRGB('Red'), function_owner = self,
-        position = {-1,0.1,0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'giveTool2', label = "Brown", color = stringColorToRGB('Brown'), function_owner = self,
-        position = {0,0.1,0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'giveTool1', label = "White", color = stringColorToRGB('White'), function_owner = self,
-        position = {1,0.1,0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'giveTool5', label = "Yellow", color = stringColorToRGB('Yellow'), function_owner = self,
-        position = {-1.7,0.1,-0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'giveTool4', label = "Orange", color = stringColorToRGB('Orange'), function_owner = self,
-        position = {-1.7,0.1,0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'giveTool9', label = "Purple", color = stringColorToRGB('Purple'), function_owner = self,
-        position = {1.7,0.1,-0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'giveTool10', label = "Pink", color = stringColorToRGB('Pink'), function_owner = self,
-        position = {1.7,0.1,0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
-    self.createButton(buttonParam)
+    for i = 1,10 do
+        local buttonParam = {click_function = 'giveTool' .. i, label = COLOR_TABLE[i], color = RGB(COLOR_TABLE[i]), function_owner = self,
+            position = GIVE_TOOL_BUTTON_POS[i], rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+        self.createButton(buttonParam)
+    end
 
     local buttonParam = {click_function = 'returnFunc', label = "Cancel", color = {1,1,1,0.8}, function_owner = self,
         position = {0,0.1,0}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
@@ -1169,93 +1134,73 @@ function createReturnButton()
 end
 
 function createPlayerButtons()
-    local buttonParam = {click_function = 'setPButtonColor1', label = "White", color = pButtonColor[1], font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-1.4,0.1,0.7}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
-    self.createButton(buttonParam)
+    local options = Global.getTable('options')
+    local iLimit, posTable
+    local buttonParam = {}
+    if options.zoneType == 6 then
+        iLimit = 12
+        posTable = PLAYER_BUTTON_POS_12P
+        buttonParam.width = 200
+    else
+        iLimit = 10
+        posTable = PLAYER_BUTTON_POS_10P
+        buttonParam.width = 300
+    end
 
-    local buttonParam = {click_function = 'setPButtonColor2', label = "Brown", color = pButtonColor[2], font_color = stringColorToRGB('Brown'), function_owner = self,
-        position = {-1.4,0.1,1.1}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
-    self.createButton(buttonParam)
+    for i = 1,iLimit do
+        buttonParam.click_function = 'setPlayer' .. i
+        buttonParam.label = COLOR_TABLE[i]
+        buttonParam.function_owner = self
+        buttonParam.position = posTable[i]
+        buttonParam.font_color = RGB(COLOR_TABLE[i])
+        buttonParam.font_size = 50
 
-    local buttonParam = {click_function = 'setPButtonColor3', label = "Red", color = pButtonColor[3], font_color = stringColorToRGB('Red'), function_owner = self,
-        position = {-2.0,0.1,1.1}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'setPButtonColor4', label = "Orange", color = pButtonColor[4], font_color = stringColorToRGB('Orange'), function_owner = self,
-        position = {-2.0,0.1,0.7}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'setPButtonColor5', label = "Yellow", color = pButtonColor[5], font_color = stringColorToRGB('Yellow'), function_owner = self,
-        position = {-2,0.1,0.3}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'setPButtonColor6', label = "Green", color = pButtonColor[6], font_color = stringColorToRGB('Green'), function_owner = self,
-        position = {-2,0.1,-0.1}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'setPButtonColor7', label = "Teal", color = pButtonColor[7], font_color = stringColorToRGB('Teal'), function_owner = self,
-        position = {-2,0.1,-0.5}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'setPButtonColor8', label = "Blue", color = pButtonColor[8], font_color = stringColorToRGB('Blue'), function_owner = self,
-        position = {-1.4,0.1,-0.5}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'setPButtonColor9', label = "Purple", color = pButtonColor[9], font_color = stringColorToRGB('Purple'), function_owner = self,
-        position = {-1.4,0.1,-0.1}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'setPButtonColor10', label = "Pink", color = pButtonColor[10], font_color = stringColorToRGB('Pink'), function_owner = self,
-        position = {-1.4,0.1,0.3}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
-    self.createButton(buttonParam)
+        if player == COLOR_TABLE[i] then
+            buttonParam.color = RGB(COLOR_TABLE[i])
+        else
+            buttonParam.color = {0,0,0,1}
+        end
+        self.createButton(buttonParam)
+    end
 end
 
-function createInspectedButtons()
+
+function createTargetButtons()
+    local options = Global.getTable('options')
+    local iLimit, posTable
+    local buttonParam = {}
+
     if state ~= 8 then
         local buttonParam = {click_function = 'nulFunc', label = "Inspected", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
             position = {0,0.1,-1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 150}
         self.createButton(buttonParam)
     end
 
-    local buttonParam = {click_function = 'setSDButtonColor1', label = "White", color = sdButtonColor[1], font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0.3,0.1,0.7}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
-    self.createButton(buttonParam)
+    if options.zoneType == 6 then
+        iLimit = 12
+        posTable = TARGET_BUTTON_POS_12P
+        buttonParam.width = 200
+    else
+        iLimit = 10
+        posTable = TARGET_BUTTON_POS_10P
+        buttonParam.width = 300
+    end
 
-    local buttonParam = {click_function = 'setSDButtonColor2', label = "Brown", color = sdButtonColor[2], font_color = stringColorToRGB('Brown'), function_owner = self,
-        position = {0.3,0.1,1.1}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
-    self.createButton(buttonParam)
+    for i = 1,iLimit do
+        buttonParam.click_function = 'setTargets' .. i
+        buttonParam.label = COLOR_TABLE[i]
+        buttonParam.function_owner = self
+        buttonParam.position = posTable[i]
+        buttonParam.font_color = RGB(COLOR_TABLE[i])
+        buttonParam.font_size = 50
 
-    local buttonParam = {click_function = 'setSDButtonColor3', label = "Red", color = sdButtonColor[3], font_color = stringColorToRGB('Red'), function_owner = self,
-        position = {-0.3,0.1,1.1}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'setSDButtonColor4', label = "Orange", color = sdButtonColor[4], font_color = stringColorToRGB('Orange'), function_owner = self,
-        position = {-0.3,0.1,0.7}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'setSDButtonColor5', label = "Yellow", color = sdButtonColor[5], font_color = stringColorToRGB('Yellow'), function_owner = self,
-        position = {-0.3,0.1,0.3}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'setSDButtonColor6', label = "Green", color = sdButtonColor[6], font_color = stringColorToRGB('Green'), function_owner = self,
-        position = {-0.3,0.1,-0.1}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'setSDButtonColor7', label = "Teal", color = sdButtonColor[7], font_color = stringColorToRGB('Teal'), function_owner = self,
-        position = {-0.3,0.1,-0.5}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'setSDButtonColor8', label = "Blue", color = sdButtonColor[8], font_color = stringColorToRGB('Blue'), function_owner = self,
-        position = {0.3,0.1,-0.5}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'setSDButtonColor9', label = "Purple", color = sdButtonColor[9], font_color = stringColorToRGB('Purple'), function_owner = self,
-        position = {0.3,0.1,-0.1}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'setSDButtonColor10', label = "Pink", color = sdButtonColor[10], font_color = stringColorToRGB('Pink'), function_owner = self,
-        position = {0.3,0.1,0.3}, rotation = {0,0,0}, width = 300, height = 100, font_size = 50}
-    self.createButton(buttonParam)
+        if targSelected[i] == 1 then
+            buttonParam.color = RGB(COLOR_TABLE[i])
+        else
+            buttonParam.color = {0,0,0,1}
+        end
+        self.createButton(buttonParam)
+    end
 end
 
 function createLabelButton()
@@ -1296,31 +1241,25 @@ function createLibFasButtons()
     self.createButton(buttonParam)
 end
 
-function setPButtonColor(clickedButton, playerColor, index)
+function setPlayer(clickedButton, playerColor, index)
     if Player[playerColor].admin or not promOnly then
-        for i = 1,10 do
-            pButtonColor[i] = {0,0,0,1}
-        end
-        pButtonColor[index] = stringColorToRGB(COLOR_TABLE[index])
         player = COLOR_TABLE[index]
         refreshButtons()
     end
 end
 
-for k = 1,10 do
-    _G['setPButtonColor' .. k] = function(obj, col)
-        setPButtonColor(obj, col, k)
+for k = 1,12 do
+    _G['setPlayer' .. k] = function(obj, col)
+        setPlayer(obj, col, k)
     end
 end
 
-function setSDButtonColor(clickedButton, playerColor, index)
+function setTargets(clickedButton, playerColor, index)
     if Player[playerColor].admin or not promOnly then
         if targSelected[index] == 0 then
-            sdButtonColor[index] = stringColorToRGB(COLOR_TABLE[index])
             targSelected[index] = 1
             numSelected = numSelected + 1
         else
-            sdButtonColor[index] = {0,0,0,1}
             targSelected[index] = 0
             numSelected = numSelected -1
         end
@@ -1328,9 +1267,9 @@ function setSDButtonColor(clickedButton, playerColor, index)
     end
 end
 
-for k = 1,10 do
-    _G['setSDButtonColor' .. k] = function(obj, col)
-        setSDButtonColor(obj, col, k)
+for k = 1,12 do
+    _G['setTargets' .. k] = function(obj, col)
+        setTargets(obj, col, k)
     end
 end
 
@@ -1367,8 +1306,6 @@ end
 function clearValues()
     self.clearInputs()
     player = ""
-    pButtonColor = {{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1}}
-    sdButtonColor = {{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1},{0,0,0,1}}
     targSelected = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
     numSelected = 0
     drawNum = 1
