@@ -19,6 +19,9 @@ TARGET_BUTTON_POS_10P = {{0.3,0.1,0.7}, {0.3,0.1,1.1}, {-0.3,0.1,1.1}, {-0.3,0.1
 PLAYER_BUTTON_POS_12P = {{-2.12,0.1,0.6},{-2.26,0.1,0.3},{-2.26,0.1,0},{-2.26,0.1,-0.3},{-2.12,0.1,-0.6},{-1.7,0.1,-0.6},{-1.28,0.1,-0.6},{-1.14,0.1,-0.3},{-1.14,0.1,0},{-1.14,0.1,0.3},{-1.28,0.1,0.6},{-1.7,0.1,0.6}}
 TARGET_BUTTON_POS_12P = {{-0.42,0.1,0.6},{-0.56,0.1,0.3},{-0.56,0.1,0},{-0.56,0.1,-0.3},{-0.42,0.1,-0.6},{0,0.1,-0.6},{0.42,0.1,-0.6},{0.56,0.1,-0.3},{0.56,0.1,0},{0.56,0.1,0.3},{0.42,0.1,0.6},{0,0.1,0.6}}
 GIVE_TOOL_BUTTON_POS = {{1,0.1,0.9}, {0,0.1,0.9}, {-1,0.1,0.9}, {-1.7,0.1,0.3}, {-1.7,0.1,-0.3}, {-1,0.1,-0.9}, {0,0.1,-0.9}, {1,0.1,-0.9}, {1.7,0.1,-0.3}, {1.7,0.1,0.3}}
+MAROON_DRAW_POS = {-9, 1.5, -49}
+TAN_DRAW_POS = {20.30, 1.5, -49}
+GREY_PLAYABLE_COLORS = {'Tan', 'Maroon'}
 
 ------------------Variables
 state = 0
@@ -96,7 +99,7 @@ function sdStart(clickedButton, playerColor)
         local players = Global.getTable('players')
         local roles = Global.getTable('roles')
         local numPlayers = #players
-        numPlayers = (numPlayers + numPlayers%2)/2
+        numPlayers = (numPlayers - numPlayers%2)/2
 
         if numSelected < numPlayers then
             broadcastToColor("ERROR: Not enough players selected", playerColor, {1,0,0})
@@ -111,7 +114,7 @@ function sdStart(clickedButton, playerColor)
         end
 
         local broadcastString = player .. " inspects "
-        for i = 1,10 do
+        for i = 1,12 do
             if targSelected[i] == 1 then
                 broadcastString = broadcastString .. COLOR_TABLE[i] .. " "
                 if roles[COLOR_TABLE[i]] == "liberal" then
@@ -131,7 +134,7 @@ function sdStart(clickedButton, playerColor)
             end
         end
         broadcastToAll(broadcastString, {1,1,1})
-        broadcastToColor("You found " .. lib .. " liberals and " .. fas .. " fascists.", player, {1,1,1})
+        broadcastToColor12P("You found " .. lib .. " liberals and " .. fas .. " fascists.", player, {1,1,1})
 
         returnFunc()
     end
@@ -157,18 +160,23 @@ function spyStart(clickedButton, playerColor)
             card = membershipCard.clone(params)
             card.setDescription('Fake Party Card')
             card.setLuaScript(
-                'playerColor = \'' .. pres .. '\'\r\n\r\n' ..
+                'playerColor = \'' .. playerColor .. '\'\r\n\r\n' ..
                 'function onCollisionEnter(collision_info)\r\n' ..
-                '	local ph = Player[playerColor].getPlayerHand()\r\n' ..
-                '	if ph then\r\n' ..
-                '		self.setRotation({0, ph[\'rot_y\']+180, 180})\r\n' ..
-                '		self.setLock(true)\r\n' ..
+                '	if Global.call(\'greyPlayer\', {playerColor}) then\r\n' ..
+                '		--hard coded\r\n' ..
+                '		self.setRotation({0, 180, 180})\r\n' ..
+                '	else\r\n' ..
+                '		local ph = Player[playerColor].getPlayerHand()\r\n' ..
+                '		if ph then\r\n' ..
+                '			self.setRotation({0, ph[\'rot_y\']+180, 180})\r\n' ..
+                '		end\r\n' ..
                 '	end\r\n' ..
+                '	self.setLock(true)\r\n' ..
                 'end\r\n\r\n' ..
                 'function onLoad(saveString)\r\n' ..
                 '	local button = {}\r\n' ..
-                '	button.click_function = \'' .. pres .. 'Inspected\'\r\n' ..
-                '	button.label = \'Inspect\\n' .. pres .. '\'\r\n' ..
+                '	button.click_function = \'' .. playerColor .. 'Inspected\'\r\n' ..
+                '	button.label = \'Inspect\\n' .. playerColor .. '\'\r\n' ..
                 '	button.function_owner = Global\r\n' ..
                 '	button.position = {0, 3, 0}\r\n' ..
                 '	button.rotation = {0, 0, 180}\r\n' ..
@@ -200,15 +208,15 @@ function inspectStart(clickedButton, playerColor)
         local roles = Global.getTable('roles')
         local broadcastString = player .. " inspects "
         local inspectMessage
-        for i = 1,10 do
+        for i = 1,12 do
             if targSelected[i] == 1 then
                 broadcastString = broadcastString .. COLOR_TABLE[i] .. " "
                 if roles[COLOR_TABLE[i]] == "liberal" then
                     inspectMessage = COLOR_TABLE[i] .. " is a Liberal!"
-                    broadcastToColor(inspectMessage, player, {0,0,1})
+                    broadcastToColor12P(inspectMessage, player, {0,0,1})
                 else
                     inspectMessage = COLOR_TABLE[i] .. " is a Fascist!"
-                    broadcastToColor(inspectMessage, player, {1,0,0})
+                    broadcastToColor12P(inspectMessage, player, {1,0,0})
                 end
             end
         end
@@ -232,7 +240,11 @@ function spelunStart(clickedButton, playerColor)
 
         local params = {index = option}
         local card = tmpDeck.takeObject(params)
-        card.deal(1, player)
+        local delta = {forward = 0, right = 0, up = 0}
+        if player == 'Tan' or player == 'Maroon' then
+            delta = {forward = 2.66, right = -9, up = 0}
+        end
+        giveObjectToPlayer(card, player, delta, {x = 0, y = 180, z = 180})
         local broadcastString
         if option == 0 then
             broadcastString = player .. " looks at the top card of the discard pile"
@@ -342,6 +354,7 @@ function fisherStart(clickedButton, playerColor)
         end
         local discDeck = getDeckFromZoneByGUID(DISCARD_ZONE_GUID)
         local drawDeck = getDeckFromZoneByGUID(DRAW_ZONE_GUID)
+        local ph
         if discDeck == nil then
             broadcastToColor("ERROR: Discard pile not found.", playerColor, {1,0,0})
             return
@@ -351,7 +364,29 @@ function fisherStart(clickedButton, playerColor)
             return
         end
         discDeck.shuffle()
-        discDeck.dealToColor(3, player)
+
+    	if player ~= 'Maroon' and player ~= 'Tan' then
+            discDeck.dealToColor(3, player)
+        else
+            if player == 'Maroon' then
+                ph = MAROON_DRAW_POS
+            else
+                ph = TAN_DRAW_POS
+            end
+            function fishCoroutine()
+                sleep(0.5)
+                local takeParam = {}
+                takeParam.position = ph
+                for i = 1, 3 do
+                    discDeck.takeObject(takeParam)
+                    takeParam.position[2] = takeParam.position[2] + 0.01
+                    sleep(0.1)
+                end
+                return 1
+            end
+            startLuaCoroutine(self, 'fishCoroutine')
+        end
+
         local broadcastString = player .. " draws 3 cards from the discard pile."
         broadcastToAll(broadcastString, {1,1,1})
         startShufTimer()
@@ -385,8 +420,13 @@ function martyrStart(clickedButton, playerColor)
         end
         broadcastToAll(broadcastString, {1,1,1})
         local params = {index = found-1}
+
         local card = drawDeck.takeObject(params)
-        card.deal(1, player)
+        local delta = {forward = 0, right = 0, up = 0}
+        if player == 'Tan' or player == 'Maroon' then
+            delta = {forward = 2.66, right = -9, up = 0}
+        end
+        giveObjectToPlayer(card, player, delta, {x = 0, y = 180, z = 180})
         reshuffle()
         Global.setVar('lastPres', player)
         Global.setVar('lastChan', player)
@@ -466,7 +506,7 @@ function givePCoroutine()
     local card, cardClone
     local params = {}
 
-    for i = 1,10 do
+    for i = 1,12 do
         if targSelected[i] == 1 then
             if roles[COLOR_TABLE[i]] == "liberal" then
                 broadcastString = COLOR_TABLE[i] .. " is a Liberal!"
@@ -619,10 +659,13 @@ function giveTool(clickedButton, playerColor, index)
         self.scale(6.1)
         local pos = {forward = -13, right = 0, up = 1}
         local rot = {x = 0, y = 180, z = 0}
-        if COLOR_TABLE[index] == 'Purple' or COLOR_TABLE[index] == 'Orange' then
-            pos['right'] = 5
-        elseif COLOR_TABLE[index] == 'Pink' or COLOR_TABLE[index] == 'Yellow' then
-            pos['right'] = -5
+        local options = Global.getTable('options')
+        if options.zoneType ~= 6 then
+            if COLOR_TABLE[index] == 'Purple' or COLOR_TABLE[index] == 'Orange' then
+                pos['right'] = 5
+            elseif COLOR_TABLE[index] == 'Pink' or COLOR_TABLE[index] == 'Yellow' then
+                pos['right'] = -5
+            end
         end
         giveObjectToPlayer(self, COLOR_TABLE[index], pos, rot)
         returnFunc()
@@ -737,22 +780,51 @@ function sleep(numSeconds)
 end
 
 function giveObjectToPlayer(object, playerColor, posAdd, rotAdd, ...)
-	local ph = Player[playerColor].getPlayerHand()
+	local pos
+	local rot
+	local vForward
+	local vRight
+	local vUp
 
-	if ph then
+
+	if playerColor == 'Maroon' or playerColor == 'Tan' then
+        print('huh')
+        local greyPlayerHandGuids = Global.getTable('greyPlayerHandGuids')
+		local ph = getObjectFromGUID(greyPlayerHandGuids[playerColor])
+		if ph then
+			pos = ph.getPosition()
+			pos = {x = pos['x'], y = pos['y'], z = pos['z'] - 2.26}
+			rot = ph.getRotation()
+			vForward = ph.getTransformForward()
+			vRight = ph.getTransformRight()
+			vUp = ph.getTransformUp()
+		end
+	else
+        print('testing')
+		local ph = Player[playerColor].getPlayerHand();
+		if ph then
+			pos = {x = ph['pos_x'], y = ph['pos_y'], z = ph['pos_z']}
+			rot = {x = ph['rot_x'], y = ph['rot_y'], z = ph['rot_z']}
+			vForward = {x = ph['trigger_forward_x'], y = ph['trigger_forward_y'], z = ph['trigger_forward_z']}
+			vRight = {x = ph['trigger_right_x'], y = ph['trigger_right_y'], z = ph['trigger_right_z']}
+			vUp = {x = ph['trigger_up_x'], y = ph['trigger_up_y'], z = ph['trigger_up_z']}
+		end
+	end
+
+	if pos then
 		if rotAdd['exactRot'] then
 			object.setRotationSmooth({rotAdd['x'], rotAdd['y'], rotAdd['z']}, ...)
 		else
-			object.setRotationSmooth({ph['rot_x'] + rotAdd['x'], ph['rot_y'] + rotAdd['y'], ph['rot_z'] + rotAdd['z']}, ...)
+			object.setRotationSmooth({rot['x'] + rotAdd['x'], rot['y'] + rotAdd['y'], rot['z'] + rotAdd['z']}, ...)
 		end
 		if posAdd['forceHeight'] then
-			object.setPositionSmooth({ph['pos_x'] + ph['trigger_forward_x'] * posAdd['forward'] + ph['trigger_right_x'] * posAdd['right'] + ph['trigger_up_x'] * posAdd['up'],
-											  posAdd['forceHeight'] + tableHeightAdd,
-											  ph['pos_z'] + ph['trigger_forward_z'] * posAdd['forward'] + ph['trigger_right_z'] * posAdd['right'] + ph['trigger_up_z'] * posAdd['up']}, ...)
+			object.setPositionSmooth({pos['x'] + vForward['x'] * posAdd['forward'] + vRight['x'] * posAdd['right'] + vUp['x'] * posAdd['up'],
+											  posAdd['forceHeight'],
+											  pos['z'] + vForward['z'] * posAdd['forward'] + vRight['z'] * posAdd['right'] + vUp['z'] * posAdd['up']}, ...)
 		else
-			object.setPositionSmooth({ph['pos_x'] + ph['trigger_forward_x'] * posAdd['forward'] + ph['trigger_right_x'] * posAdd['right'] + ph['trigger_up_x'] * posAdd['up'],
-											  ph['pos_y'] + ph['trigger_forward_y'] * posAdd['forward'] + ph['trigger_right_y'] * posAdd['right'] + ph['trigger_up_y'] * posAdd['up'],
-											  ph['pos_z'] + ph['trigger_forward_z'] * posAdd['forward'] + ph['trigger_right_z'] * posAdd['right'] + ph['trigger_up_z'] * posAdd['up']}, ...)
+			object.setPositionSmooth({pos['x'] + vForward['x'] * posAdd['forward'] + vRight['x'] * posAdd['right'] + vUp['x'] * posAdd['up'],
+											  pos['y'] + vForward['y'] * posAdd['forward'] + vRight['y'] * posAdd['right'] + vUp['y'] * posAdd['up'],
+											  pos['z'] + vForward['z'] * posAdd['forward'] + vRight['z'] * posAdd['right'] + vUp['z'] * posAdd['up']}, ...)
 		end
 	end
 end
@@ -793,6 +865,48 @@ function getDeckFromZoneByGUID(guidIn)
 		return deck
 	end
 	return nil
+end
+
+function RGB(color)
+	if color == 'Tan' then
+		return {r = 210/255, g = 180/255, b = 140/255}
+	elseif color == 'Maroon' then
+		return {r = 128/255, g = 0/255, b = 0/255}
+	else
+		return stringColorToRGB(color)
+	end
+end
+
+function greyPlayer(color)
+	if type(color) == 'table' then
+		color = color[1]
+	end
+	if inTable(GREY_PLAYABLE_COLORS, color) then
+		return true
+	else
+		return false
+	end
+end
+
+function getPlayerObj(color)
+	if greyPlayer(color) then
+		local playerFound = nil
+		steamId = greyPlayerSteamIds[color]
+		for _, player in ipairs(Player.getSpectators()) do
+			if steamId == player.steam_id then
+				playerFound = player
+				break
+			end
+		end
+		return playerFound
+	else
+		return Player[color]
+	end
+end
+
+function broadcastToColor12P(message, playerColor, messageColor)
+	local player = getPlayerObj(playerColor)
+	player.broadcast(message, messageColor)
 end
 
 
@@ -1306,7 +1420,7 @@ end
 function clearValues()
     self.clearInputs()
     player = ""
-    targSelected = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+    targSelected = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
     numSelected = 0
     drawNum = 1
     option = 0
