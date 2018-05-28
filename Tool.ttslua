@@ -1,8 +1,7 @@
-#include \Tool12P.ttslua
 --[[
 SH Expansion Tool
 Made by Sionar
-Version 1.6.0
+Version 1.6.1
 --]]
 
 
@@ -631,7 +630,7 @@ function giveEFCoroutine()
         broadcastToAll('The Artifact effect cards have been dealt to ' .. player .. '.', {1,1,1})
     else
         for i = size,1,-1 do
-            if deckTable[i].nickname == efName then
+            if deckTable[i].nickname == efName or string.match(string.lower(deckTable[i].nickname), string.lower(tab[1].value)) then
                 found = i
                 params = {index = i-1, flip = true}
                 card = effectDeck.takeObject(params)
@@ -786,9 +785,7 @@ function giveObjectToPlayer(object, playerColor, posAdd, rotAdd, ...)
 	local vRight
 	local vUp
 
-
 	if playerColor == 'Maroon' or playerColor == 'Tan' then
-        print('huh')
         local greyPlayerHandGuids = Global.getTable('greyPlayerHandGuids')
 		local ph = getObjectFromGUID(greyPlayerHandGuids[playerColor])
 		if ph then
@@ -800,7 +797,6 @@ function giveObjectToPlayer(object, playerColor, posAdd, rotAdd, ...)
 			vUp = ph.getTransformUp()
 		end
 	else
-        print('testing')
 		local ph = Player[playerColor].getPlayerHand();
 		if ph then
 			pos = {x = ph['pos_x'], y = ph['pos_y'], z = ph['pos_z']}
@@ -1160,7 +1156,7 @@ function giveEfMenu()
     self.createButton(buttonParam)
 
     local inputParam = {input_function = 'efInputFunc', function_owner = self, color = stringColorToRGB('White'), function_owner = self, font_color = stringColorToRGB('Black'), function_owner = self,
-        position = {0,0.1,0.7}, rotation = {0,0,0}, width = 800, height = 103, font_size = 80, alignment = 3, validation = 1, tab = 1, value = efName}
+        position = {0,0.1,0.7}, rotation = {0,0,0}, width = 800, height = 103, font_size = 80, alignment = 3, validation = 1, tab = 1, label = 'Enter effect name', value = efName}
     self.createInput(inputParam)
 
     createLabelButton()
@@ -1177,14 +1173,13 @@ function efInputFunc(obj, color, input, stillEditing)
             local size = effectDeck.getQuantity()
             for i = 1,size do
                 if string.match(string.lower(deckTable[i].nickname), string.lower(input)) and input ~= '' then
-                    input = deckTable[i].nickname
+                    efName = deckTable[i].nickname
                     break
                 end
             end
         end
-        efName = input
         option = 3
-        refreshButtons()
+        return efName
     end
 end
 
@@ -1424,4 +1419,5 @@ function clearValues()
     numSelected = 0
     drawNum = 1
     option = 0
+    efName = ''
 end
