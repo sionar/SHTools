@@ -29,7 +29,7 @@ RULES = {
 'C1. Dead players cannot use abilities or flip over artifacts.',
 'C2. A player with Aegis cannot be targeted by any abilities. Their abilities also cannot be interacted with in any manner.',
 'C3. Abilities that can be Hacked: Martyr, Jester, Surgeon, Gambler, Senator, Trickster, Usurper, Rebel, Fisherman, Dictator, Decider, Scout, Spelunker.',
-'C4. Abilities that can be Puppeteered: Assassin, Poisoner (one target), Spy (one target), Collector, Soulmate, Avenger, Guardian-Angel, Bandit, Librarian, Spiritualist, Silencer, Denouncer and Big-Brother .'
+'C4. Abilities that can be Puppeteered: Spy (one target), Assassin, Poisoner (one target), Collector, Soulmate, Avenger, Guardian-Angel, Bandit, Librarian, Spiritualist, Silencer, Denouncer and Big-Brother .'
 }
 CREDITS = 'Made by: \nPiggy\nSionar\n\nSpecial thanks to the entire\nSecret Hitler community!\n\nCome join us on Discord at:\ncFuFmmm'
 NOTEBOOK_TITLE = 'Expansion'
