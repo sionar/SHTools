@@ -12,24 +12,24 @@ RULES = {
 'R2. Liberals can only use one ability per game.',
 'R3. Abilities are one time use only unless stated otherwise. Keep them concealed until you use them. Announce when you are using an ability. Text in brackets restricts when they can be used.',
 'R4. Abilities resolve in the order that they are revealed. All parts of the ability must resolve before the next ability can begin to resolve. The exceptions to this are Saboteur, Hacker and Puppeteer, which are played in response to other abilities.',
-'R5. Unless stated otherwise, abilities cannot be used while there are policy cards in play. During an active government, abilities can be played before the president draws cards and after a policy is placed on a tracker.',
+'R5. Unless stated otherwise, abilities cannot be used while there are policy tiles in play. After a government passes, abilities can be played before a player draws policy tiles and after a policy is placed on a tracker.',
 '*Terminology',
-'T1. Turn: A "turn" starts when the presidency placard moves and ends after the presidential power gets used or a play gets downvoted. If the government is interrupted without a vote going through, it does not count as a turn.',
-'T2. Reshuffle: Place all of the discarded cards into the deck and shuffle the deck. If there are no cards in the discard pile, the deck still gets shuffled.',
+'T1. Round: A "round" starts when the presidency placard moves and ends after the presidential power gets used or a play gets downvoted. If the government is interrupted without a vote going through, it does not count as a round.',
+'T2. Reshuffle: Place the policy tiles from the discard pile into the policy deck and shuffle the deck. Reshuffling when the discard pile is empty results in a deck shuffle.',
 'T3. Negate: Every part of the ability does not resolve.',
-'T4. Right after: This window of opportunity refers to the time before anything else happens. This includes a player using an ability or a presidential power, or a president choosing a chancellor.',
+'T4. Right after: This timing window refers to the time before anything else occurs. This includes a player using an ability or a presidential power, or a president choosing a chancellor.',
 'T5. Concealed: Played face down on the table.',
 '*Etiquette and Timing',
 'E1. Saboteur and Hacker cannot be used once the player has already started performing the actions of the ability. When you announce an ability, wait at least five seconds to give other players a chance to respond before you play your ability.',
 'E2. If a player wants you to wait before you use your ability, give them at least thirty seconds to decide whether or not they want to respond to your ability.',
 'E3. After a government passes, wait at least five seconds before you draw cards in case someone wants to play an ability.',
 'E4. After a player dies, wait five seconds before asking if they are Hitler in case someone decides to save them with an ability.',
-'E5. If a government fails and a topdeck occurs, the topdeck happens at the end of the turn.',
 '*Clarifications',
-'C1. Dead players cannot use abilities or flip over artifacts.',
+'C1. Dead players cannot use abilities or reveal artifacts.',
 'C2. A player with Aegis cannot be targeted by any abilities. Their abilities also cannot be interacted with in any manner.',
-'C3. Abilities that can be Hacked: Martyr, Jester, Surgeon, Gambler, Senator, Trickster, Usurper, Rebel, Fisherman, Dictator, Decider, Scout, Spelunker.',
-'C4. Abilities that can be Puppeteered: Spy (one target), Assassin, Poisoner (one target), Collector, Soulmate, Avenger, Guardian-Angel, Bandit, Librarian, Spiritualist, Silencer, Denouncer and Big-Brother .'
+'C3. Players with the Silenced effect may reveal artifacts.',
+'C4. Abilities that can be Hacked: Martyr, Jester, Surgeon, Gambler, Senator, Trickster, Usurper, Rebel, Fisherman, Dictator, Decider, Scout, Spelunker.',
+'C5. Abilities that can be Puppeteered: Spy (one target), Assassin, Poisoner (one target), Collector, Soulmate, Avenger, Guardian-Angel, Bandit, Librarian, Spiritualist, Silencer, Denouncer and Big-Brother.'
 }
 CREDITS = 'Made by: \nPiggy\nSionar\n\nSpecial thanks to the entire\nSecret Hitler community!\n\nCome join us on Discord at:\ncFuFmmm'
 NOTEBOOK_TITLE = 'Expansion'
