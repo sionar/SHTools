@@ -7,13 +7,20 @@ Ability Reference
 
 ------------------Constants
 START_POS = {x = 89, y = 1.1, z = -55}
+START_POS_12P = {x = 89, y = 1.1, z = -72}
 
 
 ------------------Functions
 function onLoad()
-	local global_name = Global.getVar('mod_name')
+	local global_name = Global.getVar('MOD_NAME')
     if global_name == 'Secret Hitler: CE' then
-        self.setPositionSmooth(START_POS)
+        local options = Global.getTable('options')
+		  if options.zoneType == 6 then
+			  self.setPositionSmooth(START_POS_12P)
+		  else
+			  self.setPositionSmooth(START_POS)
+		  end
         self.setLock(true)
     end
+	 self.setDescription('v ' .. VERSION)
 end

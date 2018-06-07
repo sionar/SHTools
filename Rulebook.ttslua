@@ -1,7 +1,6 @@
 --[[
 --SH Expansion Rulebook
 --Made by Sionar
---Version 1.1.3
 --]]
 
 
@@ -117,6 +116,7 @@ function onLoad()
     refreshText()
     moveBoard()
     addEditNotebookTab()
+    self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
 end
 
 function addEditNotebookTab()
@@ -145,7 +145,7 @@ function addEditNotebookTab()
 end
 
 function moveBoard()
-    local global_name = Global.getVar('mod_name')
+    local global_name = Global.getVar('MOD_NAME')
     if global_name == 'Secret Hitler: CE' then
         self.setPositionSmooth(START_POS)
         self.setRotationSmooth(START_ROT)

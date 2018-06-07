@@ -1,11 +1,11 @@
 --[[
 SH Scoreboard
 Made by Sionar
-Version 1.7.1
 --]]
 
 
 ------------------Constants
+VERSION = '1.7.2'
 DEBUG = false
 COLOR_TABLE = {'White', 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple', 'Pink', 'Teal', 'Brown'}
 BUTT_W = 1
@@ -69,6 +69,7 @@ function onLoad(saveString)
     refreshStart()
     moveBoard()
     startLuaCoroutine(self, 'checkStarted')
+    self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
 end
 
 function onSave()
@@ -167,7 +168,7 @@ function onDestroy()
 end
 
 function moveBoard()
-    local global_name = Global.getVar('mod_name')
+    local global_name = Global.getVar('MOD_NAME')
     if global_name == 'Secret Hitler: CE' then
         local tab = getAllObjects()
         local foundTab = {}

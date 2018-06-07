@@ -1,7 +1,6 @@
 --[[
 SH Expansion Tool
 Made by Sionar
-Version 1.6.1
 --]]
 
 
@@ -45,6 +44,7 @@ function onLoad(saveString)
         last_gambled = save['l']
     end
     refreshButtons()
+    self.setDescription('v ' .. VERSION .. '\nMade by Sionar\nUse with SH Consolidator Edition workshop mod.')
 end
 
 function onSave()
