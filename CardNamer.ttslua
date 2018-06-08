@@ -1,7 +1,6 @@
 --[[
 Card Namer
 Made by Sionar
-Version 1.3.2
 --]]
 
 
@@ -237,3 +236,5 @@ self.createButton(buttonParam)
 local buttonParam = {click_function = 'nameEffects', label = 'Set Effect\nName and Description', color = {1,1,1}, function_owner = self,
     position = {0,0.1,0.7}, rotation = {0,0,0}, width = 1000, height = 500, font_size = 100}
 self.createButton(buttonParam)
+
+self.setDescription('v ' .. VERSION .. '\nPlace the deck in the white zone above and click the button to give each card in the deck a name and description. The deck must be placed face down and in the right order.')

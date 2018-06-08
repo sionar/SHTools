@@ -1,11 +1,11 @@
 --[[
 Waitlist Tool
 Made by Sionar
-Version 1.1.6
 --]]
 
 
 ------------------Constants
+VERSION = '1.1.7'
 START_POS = {x = 100, y = 1.1, z = 42}
 COLOR_TABLE = {'White', 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple', 'Pink', 'Teal', 'Brown'}
 ROW_S = -1
@@ -50,6 +50,7 @@ function onLoad(saveString)
         end
     end
     broadcastToAll(annouMsg, stringColorToRGB('Green'))
+    self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
 end
 
 function TimerRefresh()
@@ -81,7 +82,7 @@ function onDestroy()
 end
 
 function moveBoard()
-    local global_name = Global.getVar('mod_name')
+    local global_name = Global.getVar('MOD_NAME')
     if global_name == 'Secret Hitler: CE' then
         self.setPositionSmooth(START_POS)
         self.setLock(true)

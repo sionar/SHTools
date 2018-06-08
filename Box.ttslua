@@ -1,13 +1,12 @@
 --[[
 SH Expansion Box
-Made by Lost Savage, Modified by Sionar
-Version 1.0.3
+Made by Sionar, Lost Savage and Hmmmpf
 --]]
 
 
 ------------------Constants
-UPDATE_VERSION = 96
-ADD_ON_VERSION = 5
+UPDATE_VERSION = 102
+ADD_ON_VERSION = 6
 BOX_OBJECTS_NUM = 9
 ADD_ON_NAME = 'Expansion Deck'
 ABILITY_DECK_NAME = 'Abilities'
@@ -36,12 +35,13 @@ function onLoad(saveString)
 	parameters.function_owner = self
 	parameters.delay = 0.3
 	Timer.create(parameters)
+	self.setDescription('v ' .. VERSION .. '\nMade by Piggy and Sionar')
 end
 
 function setupExpansion()
-	local global_name = Global.getVar('mod_name')
-	local global_version = Global.getVar('update_version')
-	local global_add_on = Global.getVar('add_on_version')
+	local global_name = Global.getVar('MOD_NAME')
+	local global_version = Global.getVar('UPDATE_VERSION')
+	local global_add_on = Global.getVar('ADD_ON_VERSION')
 	local started = Global.getVar('started')
 	if not global_add_on then global_add_on = 1 end
 
@@ -80,10 +80,14 @@ function setupExpansion()
 						options.shufflePlayers = true
 						options.shuffleHost = false
 						options.voteHistory = true
-						options.zoneType = 5
+						if options.zoneType ~= 6 then
+							options.zoneType = 5
+						end
 						Global.setTable('options', options)
 						Global.call('refreshExpansionButtons')
-						Global.call('refreshHiddenZones')
+						if options.zoneType ~= 6 then
+							Global.call('refreshHiddenZones')
+						end
 						startLuaCoroutine(self, 'setupExpansionCoroutine')
 					end
 				end
@@ -98,48 +102,41 @@ function setupExpansionCoroutine()
 	self.setName(SELF_NAME)
 	self.setLock(true)
 
-	local tempTable = self.getObjects()
-	local tempDeck = ABILITY_DECK_NAME
-	local tempEffects = EFFECT_DECK_NAME
-	local tempAbilityReference = ABILITY_REFERENCE_NAME
-	local tempEffectsReference = EFFECT_REFERENCE_NAME
-	local tempTool = TOOL_NAME
-	local tempRules = RULEBOOK_NAME
+	local objList = self.getObjects()
 	local params = {}
-	local tempObject
 
-	for _, v in ipairs(tempTable) do
-		if v.name == tempDeck then
+	for _, v in ipairs(objList) do
+		if v.name == ABILITY_DECK_NAME then
 			params.rotation = HIDDEN_ROT
 			params.guid = v.guid
 			params.position = ABILITY_DECK_POS
 			self.takeObject(params)
 		end
-		if v.name == tempEffects then
+		if v.name == EFFECT_DECK_NAME then
 			params.rotation = HIDDEN_ROT
 			params.guid = v.guid
 			params.position = EFFECT_DECK_POS
 			self.takeObject(params)
 		end
-		if v.name == tempAbilityReference then
+		if v.name == ABILITY_REFERENCE_NAME then
 			params.rotation = SHOWN_ROT
 			params.guid = v.guid
 			params.position = DEFAULT_POS
 			self.takeObject(params)
 		end
-		if v.name == tempEffectsReference then
+		if v.name == EFFECT_REFERENCE_NAME then
 			params.rotation = SHOWN_ROT
 			params.guid = v.guid
 			params.position = DEFAULT_POS
 			self.takeObject(params)
 		end
-		if v.name == tempTool then
+		if v.name == TOOL_NAME then
 			params.rotation = SHOWN_ROT
 			params.guid = v.guid
 			params.position = TOOL_POS
 			self.takeObject(params)
 		end
-		if v.name == tempRules then
+		if v.name == RULEBOOK_NAME then
 			params.rotation = SHOWN_ROT
 			params.guid = v.guid
 			params.position = RULEBOOK_POS

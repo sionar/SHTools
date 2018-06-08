@@ -1,0 +1,89 @@
+--[[
+Update Box
+Made by Lost Savage
+--]]
+
+
+------------------Constants
+BOX_NAME = 'SH Expansion Box'
+PACKING_LIST = {
+   'Abilities',
+   'Effects',
+   'SH Expansion Tool',
+   'SH Expansion Rulebook',
+   'Ability Reference',
+   'Effect Reference',
+   'Rounds Until Poisoning',
+   'Rounds Until Death',
+   'Rounds until Aegis expires'
+}
+
+function onLoad()
+   local buttonParam = {
+      click_function = 'updateBox',
+      label = 'Update Box',
+      function_owner = self,
+      position = {0, 0.2, 0},
+      rotation = {0, 0, 0},
+      width = 3400,
+      height = 1500,
+      font_size = 600
+   }
+   self.createButton(buttonParam)
+   self.setDescription('v ' .. VERSION)
+end
+
+function updateBox()
+   function updateBoxCoroutine()
+      local allObjs = getAllObjects()
+      local boxObj
+
+      --Find and empty box
+      for _, tmpObj in ipairs(allObjs) do
+         if tmpObj.getName() == BOX_NAME then
+            boxObj = tmpObj
+            local inBox = boxObj.getObjects()
+            for _, j in ipairs(inBox) do
+               local deleteObj = boxObj.takeObject({})
+               deleteObj.destruct()
+            end
+            break
+         end
+      end
+
+      --Clone objects and put them in the box
+      allObjs = getAllObjects()
+      if boxObj then
+         for _, tmpObj in ipairs(allObjs) do
+            if inTable(PACKING_LIST, tmpObj.getName()) then
+               local newObj = tmpObj.clone({position = boxObj.getPosition()})
+               newObj.setLock(false)
+               sleep(0.5)
+            end
+         end
+      else
+         broadcastToAll("ERROR: " .. BOX_NAME .. " not found.", {1, 0, 0})
+      end
+
+      return true
+   end
+
+   startLuaCoroutine(self, "updateBoxCoroutine")
+end
+
+function inTable(tableIn, valueIn)
+	local value
+	if tableIn then
+		for _, value in pairs(tableIn) do
+			if value == valueIn then
+				return true
+			end
+		end
+	end
+	return false
+end
+
+function sleep(numSeconds)
+	local t0 = os.clock()
+	while os.clock() - t0 <= numSeconds do coroutine.yield(0) end
+end
