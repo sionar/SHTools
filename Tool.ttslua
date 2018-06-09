@@ -82,8 +82,6 @@ function drawStart(clickedButton, playerColor)
             return
         end
         Global.call('callFunction', {fcn = 'drawCards', params = {drawNum, player}})
-        local broadcastString = player .. " draws " .. drawNum .. " cards"
-        broadcastToAll(broadcastString, {1,1,1})
         if drawNum >= 6 or drawNum >= drawDeck.getQuantity() then
             startShufTimer()
         end
@@ -145,50 +143,12 @@ function spyStart(clickedButton, playerColor)
             broadcastToColor("ERROR: Player not selected.", playerColor, {1,0,0})
             return
         end
-
-        local inspected = Global.getTable('inspected')
-        local broadcastString = player .. " gains the inspect power"
-        local pres = Global.getVar('lastPres')
-        Global.setVar('lastPres',player)
-        broadcastToAll(broadcastString, {1,1,1})
-        local membershipCard = getObjectFromGUID('55d1c3')
-
-        if not inTable(inspected, pres) then
-            local params = {}
-            params.rotation = {0, 0, 180}
-            card = membershipCard.clone(params)
-            card.setDescription('Fake Party Card')
-            card.setLuaScript(
-                'playerColor = \'' .. playerColor .. '\'\r\n\r\n' ..
-                'function onCollisionEnter(collision_info)\r\n' ..
-                '	if Global.call(\'greyPlayer\', {playerColor}) then\r\n' ..
-                '		--hard coded\r\n' ..
-                '		self.setRotation({0, 180, 180})\r\n' ..
-                '	else\r\n' ..
-                '		local ph = Player[playerColor].getPlayerHand()\r\n' ..
-                '		if ph then\r\n' ..
-                '			self.setRotation({0, ph[\'rot_y\']+180, 180})\r\n' ..
-                '		end\r\n' ..
-                '	end\r\n' ..
-                '	self.setLock(true)\r\n' ..
-                'end\r\n\r\n' ..
-                'function onLoad(saveString)\r\n' ..
-                '	local button = {}\r\n' ..
-                '	button.click_function = \'' .. playerColor .. 'Inspected\'\r\n' ..
-                '	button.label = \'Inspect\\n' .. playerColor .. '\'\r\n' ..
-                '	button.function_owner = Global\r\n' ..
-                '	button.position = {0, 3, 0}\r\n' ..
-                '	button.rotation = {0, 0, 180}\r\n' ..
-                '	button.width = 1000\r\n' ..
-                '	button.height = 1500\r\n' ..
-                '	button.font_size = 150\r\n' ..
-                '	self.createButton(button)\r\n' ..
-                'end')
-            card.setPosition({0, 5, 0})
-            card.setLock(false)
-            giveObjectToPlayer(card, pres, {forward = 16.5, right = 0, up = 0}, {x = 0, y = 180, z = 180})
+        Global.call('removeInspect')
+        Global.call('callFunction', {fcn = 'createInspectButtons', params = {player}})
+        local options = Global.getTable('options')
+        if options.autoNotate then
+            Global.call('callFunction', {fcn = 'notateInfo', params = {player, 'inspects', '', '', true}})
         end
-
         returnFunc()
     end
 end
