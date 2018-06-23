@@ -81,6 +81,7 @@ function onDestroy()
     Timer.destroy(self.getGUID() .. ' Refresh')
 end
 
+
 function moveBoard()
     local global_name = Global.getVar('MOD_NAME')
     if global_name == 'Secret Hitler: CE' then

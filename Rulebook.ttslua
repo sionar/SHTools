@@ -121,6 +121,7 @@ end
 
 function addEditNotebookTab()
     local params = {}
+    local index = nil
     params.title = NOTEBOOK_TITLE
     params.body = ''
     for _, rule in pairs(RULES) do
@@ -133,12 +134,13 @@ function addEditNotebookTab()
     params.body = params.body .. CREDITS
     for _, tab in ipairs(getNotebookTabs()) do
         if tab.title == NOTEBOOK_TITLE then
-           params.index = tab.index
+           index = tab.index
            break
         end
     end
-    if params.index then
-        editNotebookTab(params)
+    if index then
+        removeNotebookTab(index)
+        addNotebookTab(params)
     else
         addNotebookTab(params)
     end

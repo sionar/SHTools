@@ -89,6 +89,7 @@ function setupExpansion()
 							Global.call('refreshHiddenZones')
 						end
 						startLuaCoroutine(self, 'setupExpansionCoroutine')
+						createSnapPoints()
 					end
 				end
 			end
@@ -145,4 +146,211 @@ function setupExpansionCoroutine()
 	end
 
 	return true
+end
+
+function createSnapPoints()
+	Global.setSnapPoints(
+	{
+	    {
+	        position = {9.67,0.96,-18.9},
+	        rotation = {0,180,0},
+	        rotation_snap = true
+	    },
+		{
+	        position = {13,0.96,-18.9},
+	        rotation = {0,180,0},
+	        rotation_snap = true
+	    },
+		{
+			position = {13,0.96,-23.6},
+			rotation = {0,180,0},
+			rotation_snap = true
+		},
+		{
+			position = {9.67,0.96,-23.6},
+			rotation = {0,180,0},
+			rotation_snap = true
+		},
+		{
+			position = {-19.63,0.96,-18.9},
+			rotation = {0,180,0},
+			rotation_snap = true
+		},
+		{
+			position = {-19.63,0.96,-23.6},
+			rotation = {0,180,0},
+			rotation_snap = true
+		},
+		{
+			position = {-16.3,0.96,-18.9},
+			rotation = {0,180,0},
+			rotation_snap = true
+		},
+		{
+			position = {-16.3,0.96,-23.6},
+			rotation = {0,180,0},
+			rotation_snap = true
+		},
+		{
+			position = {33.97,0.96,-18.9},
+			rotation = {0,180,0},
+			rotation_snap = true
+		},
+		{
+			position = {37.3,0.96,-18.9},
+			rotation = {0,180,0},
+			rotation_snap = true
+		},
+		{
+			position = {33.97,0.96,-23.6},
+			rotation = {0,180,0},
+			rotation_snap = true
+		},
+		{
+			position = {37.3,0.96,-23.6},
+			rotation = {0,180,0},
+			rotation_snap = true
+		},
+		{
+			position = {36.9,0.96,-4.98},
+			rotation = {0,90,0},
+			rotation_snap = true
+		},
+		{
+			position = {36.9,0.96,-1.65},
+			rotation = {0,90,0},
+			rotation_snap = true
+		},
+		{
+			position = {41.6,0.96,-4.98},
+			rotation = {0,90,0},
+			rotation_snap = true
+		},
+		{
+			position = {41.6,0.96,-1.65},
+			rotation = {0,90,0},
+			rotation_snap = true
+		},
+		{
+			position = {36.9,0.96,16.87},
+			rotation = {0,90,0},
+			rotation_snap = true
+		},
+		{
+			position = {36.9,0.96,20.2},
+			rotation = {0,90,0},
+			rotation_snap = true
+		},
+		{
+			position = {41.6,0.96,16.87},
+			rotation = {0,90,0},
+			rotation_snap = true
+		},
+		{
+			position = {41.6,0.96,20.2},
+			rotation = {0,90,0},
+			rotation_snap = true
+		},
+		{
+			position = {19.63,0.96,18.9},
+			rotation = {0,0,0},
+			rotation_snap = true
+		},
+		{
+			position = {16.3,0.96,18.9},
+			rotation = {0,0,0},
+			rotation_snap = true
+		},
+		{
+			position = {19.63,0.96,23.6},
+			rotation = {0,0,0},
+			rotation_snap = true
+		},
+		{
+			position = {16.3,0.96,23.6},
+			rotation = {0,0,0},
+			rotation_snap = true
+		},
+		{
+			position = {-9.67,0.96,18.9},
+			rotation = {0,0,0},
+			rotation_snap = true
+		},
+		{
+			position = {-13,0.96,18.9},
+			rotation = {0,0,0},
+			rotation_snap = true
+		},
+		{
+			position = {-9.67,0.96,23.6},
+			rotation = {0,0,0},
+			rotation_snap = true
+		},
+		{
+			position = {-13.0,0.96,23.6},
+			rotation = {0,0,0},
+			rotation_snap = true
+		},
+		{
+			position = {-33.97,0.96,18.9},
+			rotation = {0,0,0},
+			rotation_snap = true
+		},
+		{
+			position = {-37.3,0.96,18.9},
+			rotation = {0,0,0},
+			rotation_snap = true
+		},
+		{
+			position = {-33.97,0.96,23.6},
+			rotation = {0,0,0},
+			rotation_snap = true
+		},
+		{
+			position = {-37.3,0.96,23.6},
+			rotation = {0,0,0},
+			rotation_snap = true
+		},
+		{
+			position = {-36.9,0.96,4.98},
+			rotation = {0,270,0},
+			rotation_snap = true
+		},
+		{
+			position = {-41.6,0.96,4.98},
+			rotation = {0,270,0},
+			rotation_snap = true
+		},
+		{
+			position = {-36.9,0.96,1.65},
+			rotation = {0,270,0},
+			rotation_snap = true
+		},
+		{
+			position = {-41.6,0.96,1.65},
+			rotation = {0,270,0},
+			rotation_snap = true
+		},
+		{
+			position = {-36.9,0.96,-16.87},
+			rotation = {0,270,0},
+			rotation_snap = true
+		},
+		{
+			position = {-36.9,0.96,-20.2},
+			rotation = {0,270,0},
+			rotation_snap = true
+		},
+		{
+			position = {-41.6,0.96,-16.87},
+			rotation = {0,270,0},
+			rotation_snap = true
+		},
+		{
+			position = {-41.6,0.96,-20.2},
+			rotation = {0,270,0},
+			rotation_snap = true
+		},
+	}
+	)
 end
