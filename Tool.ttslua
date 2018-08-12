@@ -270,7 +270,7 @@ function gambleCoroutine()
         local params = {index = 1}
         local card = abilityDeck.takeObject(params)
         card.setPositionSmooth({pos1['x'] - 5, pos1['y'], pos1['z']})
-        card.setRotationSmooth({rotUp['x'], rotUp['y'], rotUp['z']})
+        card.setRotationSmooth({rotDown['x'], rotDown['y'], rotDown['z']})
         last_gambled = card.getName()
         gambleResult = 'w'
     else
