@@ -35,7 +35,7 @@ RULES = {
 CREDITS = 'Made by: \nPiggy\nSionar\n\nSpecial thanks to the entire\nSecret Hitler community!\n\nCome join us on Discord at:\ncFuFmmm'
 NOTEBOOK_TITLE = 'Expansion'
 LINE_WIDTH = 58
-LINES_PER_PAGE = 25
+LINES_PER_PAGE = 27
 START_POS = {x = 100, y = 1.1, z = -22}
 START_ROT = {x = 0, y = 180, z = 0}
 COLOR_TABLE = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
@@ -100,7 +100,7 @@ function format()
             pageText = ruleText
         end
     end
-    while pNumLines < LINES_PER_PAGE -4 do
+    while pNumLines < LINES_PER_PAGE - 4 do
         pageText = pageText .. '\n'
         pNumLines = pNumLines + 1
     end

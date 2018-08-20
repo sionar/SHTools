@@ -5,9 +5,9 @@ Made by Sionar, Lost Savage and Hmmmpf
 
 
 ------------------Constants
-UPDATE_VERSION = 102
+UPDATE_VERSION = 105
 ADD_ON_VERSION = 6
-BOX_OBJECTS_NUM = 9
+BOX_OBJECTS_NUM = 11
 ADD_ON_NAME = 'Expansion Deck'
 ABILITY_DECK_NAME = 'Abilities'
 EFFECT_DECK_NAME = 'Effects'
@@ -15,6 +15,8 @@ ABILITY_REFERENCE_NAME = 'Ability Reference'
 EFFECT_REFERENCE_NAME = 'Effect Reference'
 TOOL_NAME = 'SH Expansion Tool'
 RULEBOOK_NAME = 'SH Expansion Rulebook'
+LINE_DRAWER_NAME = 'Line Drawer'
+CALC_NAME = 'Secret Hitler Probability Calc'
 SELF_NAME = 'Counters'
 SELF_POS = {20, 1.71, 11}
 SELF_SCALE = {2.5, 2.5, 2.5}
@@ -23,7 +25,8 @@ HIDDEN_ROT = {0,180,180}
 DEFAULT_POS = {0,1,0}
 ABILITY_DECK_POS = {-20, 2, 6.25}
 EFFECT_DECK_POS = {20, 2, 6.25}
-TOOL_POS = {0,2,-16}
+TOOL_POS = {-8,2,-16}
+LINE_DRAWER_POS = {8,2,-16}
 RULEBOOK_POS = {100, 1.1, -22}
 
 
@@ -141,6 +144,18 @@ function setupExpansionCoroutine()
 			params.rotation = SHOWN_ROT
 			params.guid = v.guid
 			params.position = RULEBOOK_POS
+			self.takeObject(params)
+		end
+		if v.name == LINE_DRAWER_NAME then
+			params.rotation = SHOWN_ROT
+			params.guid = v.guid
+			params.position = LINE_DRAWER_POS
+			self.takeObject(params)
+		end
+		if v.name == CALC_NAME then
+			params.rotation = SHOWN_ROT
+			params.guid = v.guid
+			params.position = DEFAULT_POS
 			self.takeObject(params)
 		end
 	end
