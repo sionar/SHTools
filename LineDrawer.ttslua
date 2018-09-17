@@ -5,14 +5,18 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.1.0'
+VERSION = '1.2.3'
 COLOR_TABLE = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
+LINE_HEIGHT = 1
+LINE_SPACING = 1
+HEIGHT_SPACING = 0.2
+
 X_OFF = 1.2
 PLAYER1_POS = {{-1.4+X_OFF*0,0.1,0.7}, {-1.4+X_OFF*0,0.1,1.1}, {-2.0+X_OFF*0,0.1,1.1}, {-2.0+X_OFF*0,0.1,0.7}, {-2.0+X_OFF*0,0.1,0.3}, {-2.0+X_OFF*0,0.1,-0.1}, {-2.0+X_OFF*0,0.1,-0.5}, {-1.4+X_OFF*0,0.1,-0.5}, {-1.4+X_OFF*0,0.1,-0.1}, {-1.4+X_OFF*0,0.1,0.3}}
 PLAYER2_POS = {{-1.4+X_OFF*1,0.1,0.7}, {-1.4+X_OFF*1,0.1,1.1}, {-2.0+X_OFF*1,0.1,1.1}, {-2.0+X_OFF*1,0.1,0.7}, {-2.0+X_OFF*1,0.1,0.3}, {-2.0+X_OFF*1,0.1,-0.1}, {-2.0+X_OFF*1,0.1,-0.5}, {-1.4+X_OFF*1,0.1,-0.5}, {-1.4+X_OFF*1,0.1,-0.1}, {-1.4+X_OFF*1,0.1,0.3}}
 COLOR_POS = {{-1.4+X_OFF*2,0.1,0.7}, {-1.4+X_OFF*2,0.1,1.1}, {-2.0+X_OFF*2,0.1,1.1}, {-2.0+X_OFF*2,0.1,0.7}, {-2.0+X_OFF*2,0.1,0.3}, {-2.0+X_OFF*2,0.1,-0.1}, {-2.0+X_OFF*2,0.1,-0.5}, {-1.4+X_OFF*2,0.1,-0.5}, {-1.4+X_OFF*2,0.1,-0.1}, {-1.4+X_OFF*2,0.1,0.3}}
 GIVE_TOOL_BUTTON_POS = {{1,0.1,0.9}, {0,0.1,0.9}, {-1,0.1,0.9}, {-1.7,0.1,0.3}, {-1.7,0.1,-0.3}, {-1,0.1,-0.9}, {0,0.1,-0.9}, {1,0.1,-0.9}, {1.7,0.1,-0.3}, {1.7,0.1,0.3}}
-LINE_HEIGHT = 1
+
 POINTS =
 {
     White = {29.3, LINE_HEIGHT, -26},
@@ -27,6 +31,34 @@ POINTS =
     Pink = {44, LINE_HEIGHT, -11.73},
 }
 
+VALUE =
+{
+    White = 0,
+    Brown = 1,
+    Red = 2,
+    Orange = 3,
+    Yellow = 4,
+    Green = 5,
+    Teal = 6,
+    Blue = 7,
+    Purple = 8,
+    Pink = 9
+}
+
+GROUP =
+{
+    White = 0,
+    Brown = 0,
+    Red = 0,
+    Orange = 1,
+    Yellow = 1,
+    Green = 2,
+    Teal = 2,
+    Blue = 2,
+    Purple = 3,
+    Pink = 3
+}
+
 
 ------------------Variables
 nameLabels = {}
@@ -36,28 +68,43 @@ player1 = ''
 player2 = ''
 lineColor = ''
 promOnly = false
+style = 'block'
 
 
 ------------------Functions
 function onLoad(saveString)
+    if not (saveString == '') then
+        local save = JSON.decode(saveString)
+        lineTable = save['lt']
+        style = save['s']
+        promOnly = save['p']
+    end
     refreshButtons()
-    self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
+    self.setDescription('v ' .. VERSION .. '\nMade by Sionar\nUse with SH Consolidator Edition workshop mod.')
 end
 
-function addLine(pColor1, pColor2, lColor)
+function onSave()
+    local save = {}
+    save['lt'] = lineTable
+    save['s'] = style
+    save['p'] = promOnly
+    local saveString = JSON.encode(save)
+    return saveString
+end
+
+function addLineStraight(pColor1, pColor2, lColor)
     for k,v in pairs(lineTable) do
         if v.player1 == pColor1 and v.player2 == pColor2 or v.player1 == pColor2 and v.player2 == pColor1 then
             return
         end
     end
 
-    if lColor == '' then
+    if pColor1 == '' or pColor2 == '' or lColor == '' then
         return
     end
 
-    local point1, point2
-    point1 = POINTS[pColor1]
-    point2 = POINTS[pColor2]
+    local point1 = POINTS[pColor1]
+    local point2 = POINTS[pColor2]
     if (pColor1 == 'White' and pColor2 == 'Red') or (pColor1 == 'Red' and pColor2 == 'White') then
         point1 = {point1[1],point1[2],point1[3]+0.5}
         point2 = {point2[1],point2[2],point2[3]+0.5}
@@ -66,12 +113,137 @@ function addLine(pColor1, pColor2, lColor)
         point1 = {point1[1],point1[2],point1[3]-0.5}
         point2 = {point2[1],point2[2],point2[3]-0.5}
     end
-    lineData =
+    addSegment(pColor1, pColor2, point1, point2, lColor)
+end
+
+function addLineBlock(pColor1, pColor2, lColor)
+    for k,v in pairs(lineTable) do
+        if v.player1 == pColor1 and v.player2 == pColor2 or v.player1 == pColor2 and v.player2 == pColor1 then
+            return
+        end
+    end
+
+    if pColor1 == '' or pColor2 == '' or lColor == '' then
+        return
+    end
+
+    local point1 = POINTS[pColor1]
+    local point2 = POINTS[pColor2]
+    local point3 = nil
+    local point4 = nil
+
+    local pColor1Offset = VALUE[pColor2] - VALUE[pColor1] - 5
+    if pColor1Offset <= -6 then
+        pColor1Offset = pColor1Offset + 10
+    end
+    pColor2Offset = -1 * pColor1Offset
+
+    if GROUP[pColor1] == 0 then
+        point1 = {point1[1] + pColor1Offset * LINE_SPACING,point1[2],point1[3]}
+    elseif GROUP[pColor1] == 1 then
+        point1 = {point1[1],point1[2],point1[3] - pColor1Offset * LINE_SPACING}
+    elseif GROUP[pColor1] == 2 then
+        point1 = {point1[1] - pColor1Offset * LINE_SPACING,point1[2],point1[3]}
+    elseif GROUP[pColor1] == 3 then
+        point1 = {point1[1],point1[2],point1[3] + pColor1Offset * LINE_SPACING}
+    end
+
+    if GROUP[pColor2] == 0 then
+        point2 = {point2[1] + pColor2Offset * LINE_SPACING,point2[2],point2[3]}
+    elseif GROUP[pColor2] == 1 then
+        point2 = {point2[1],point2[2],point2[3] - pColor2Offset * LINE_SPACING}
+    elseif GROUP[pColor2] == 2 then
+        point2 = {point2[1] - pColor2Offset * LINE_SPACING,point2[2],point2[3]}
+    elseif GROUP[pColor2] == 3 then
+        point2 = {point2[1],point2[2],point2[3] + pColor2Offset * LINE_SPACING}
+    end
+
+    if GROUP[pColor1] == GROUP[pColor2] then     --Same side of table
+        if GROUP[pColor1] == 0 then
+            if pColor1 == 'Brown' or pColor2 == 'Brown' then
+                point3 = {point1[1], LINE_HEIGHT, point1[3]+8}
+                point4 = {point2[1], LINE_HEIGHT, point2[3]+8}
+            else
+                point3 = {point1[1], LINE_HEIGHT, point1[3]+9}
+                point4 = {point2[1], LINE_HEIGHT, point2[3]+9}
+            end
+        elseif GROUP[pColor1] == 2 then
+            if pColor1 == 'Teal' or pColor2 == 'Teal' then
+                point3 = {point1[1], LINE_HEIGHT, point1[3]-8}
+                point4 = {point2[1], LINE_HEIGHT, point2[3]-8}
+            else
+                point3 = {point1[1], LINE_HEIGHT, point1[3]-9}
+                point4 = {point2[1], LINE_HEIGHT, point2[3]-9}
+            end
+        elseif GROUP[pColor1] == 1 then
+            point3 = {point1[1] + 8, LINE_HEIGHT, point1[3]}
+            point4 = {point2[1] + 8, LINE_HEIGHT, point2[3]}
+        else
+            point3 = {point1[1] - 8, LINE_HEIGHT, point1[3]}
+            point4 = {point2[1] - 8, LINE_HEIGHT, point2[3]}
+        end
+        addSegment(pColor1, pColor2, point1, point3, lColor)
+        addSegment(pColor1, pColor2, point3, point4, lColor)
+        addSegment(pColor1, pColor2, point4, point2, lColor)
+    elseif GROUP[pColor1] % 2 == GROUP[pColor2] % 2 then    --Opposite sides of table
+        if (pColor1 == 'White' and pColor2 == 'Blue') or    --Directly facing each other
+           (pColor1 == 'Blue' and pColor2 == 'White') or
+           (pColor1 == 'Brown' and pColor2 == 'Teal') or
+           (pColor1 == 'Teal' and pColor2 == 'Brown') or
+           (pColor1 == 'Red' and pColor2 == 'Green') or
+           (pColor1 == 'Green' and pColor2 == 'Red') or
+           (pColor1 == 'Yellow' and pColor2 == 'Purple') or
+           (pColor1 == 'Purple' and pColor2 == 'Yellow') or
+           (pColor1 == 'Orange' and pColor2 == 'Pink') or
+           (pColor1 == 'Pink' and pColor2 == 'Orange') then
+               addSegment(pColor1, pColor2, point1, point2, lColor)
+        else
+            if pColor1 == 'White' or pColor2 == 'White' then
+                point3 = {point1[1], LINE_HEIGHT + HEIGHT_SPACING * 0, 0}
+                point4 = {point2[1], LINE_HEIGHT + HEIGHT_SPACING * 0, 0}
+            elseif pColor1 == 'Brown' or pColor2 == 'Brown' then
+                point3 = {point1[1], LINE_HEIGHT + HEIGHT_SPACING * 1, 0}
+                point4 = {point2[1], LINE_HEIGHT + HEIGHT_SPACING * 1, 0}
+            elseif pColor1 == 'Red' or pColor2 == 'Red' then
+                point3 = {point1[1], LINE_HEIGHT + HEIGHT_SPACING * 2, 0}
+                point4 = {point2[1], LINE_HEIGHT + HEIGHT_SPACING * 2, 0}
+            elseif pColor1 == 'Orange' or pColor2 == 'Orange' then
+                point3 = {0, LINE_HEIGHT + HEIGHT_SPACING * 1, point1[3]}
+                point4 = {0, LINE_HEIGHT + HEIGHT_SPACING * 1, point2[3]}
+            elseif pColor1 == 'Yellow' or pColor2 == 'Yellow' then
+                point3 = {0, LINE_HEIGHT + HEIGHT_SPACING * 2, point1[3]}
+                point4 = {0, LINE_HEIGHT + HEIGHT_SPACING * 2, point2[3]}
+            end
+            addSegment(pColor1, pColor2, point1, point3, lColor)
+            addSegment(pColor1, pColor2, point3, point4, lColor)
+            addSegment(pColor1, pColor2, point4, point2, lColor)
+        end
+    else                                                       --Adjacent sides of table
+        if GROUP[pColor1] % 2 == 0 then
+            point3 = {point1[1], LINE_HEIGHT, point2[3]}
+        else
+            point3 = {point2[1], LINE_HEIGHT, point1[3]}
+        end
+        if pColor1 == 'White' or pColor2 == 'White' or pColor1 == 'Green' or pColor2 == 'Green' then
+            point3[2] = LINE_HEIGHT + HEIGHT_SPACING * 0
+        elseif pColor1 == 'Brown' or pColor2 == 'Brown' or pColor1 == 'Blue' or pColor2 == 'Blue' then
+            point3[2] = LINE_HEIGHT + HEIGHT_SPACING * 1
+        elseif pColor1 == 'Red' or pColor2 == 'Red' or pColor1 == 'Teal' or pColor2 == 'Teal' then
+            point3[2] = LINE_HEIGHT + HEIGHT_SPACING * 2
+        end
+
+        addSegment(pColor1, pColor2, point1, point3, lColor)
+        addSegment(pColor1, pColor2, point3, point2, lColor)
+    end
+end
+
+function addSegment(playerColor1, playerColor2, point1, point2, lineColor)
+    local lineData =
         {
-            player1   = pColor1,
-            player2   = pColor2,
+            player1   = playerColor1,
+            player2   = playerColor2,
             points    = {point1, point2},
-            color     = lColor,
+            color     = lineColor,
             thickness = 0.5,
             rotation  = {0,0,0}
         }
@@ -79,16 +251,20 @@ function addLine(pColor1, pColor2, lColor)
 end
 
 function removeLine(playerColor1, playerColor2)
-    for k,v in pairs(lineTable) do
-        if v.player1 == playerColor1 and v.player2 == playerColor2 or v.player1 == playerColor2 and v.player2 == playerColor1 then
-            table.remove(lineTable, k)
+    for i = #lineTable, 1, -1 do
+        if lineTable[i].player1 == playerColor1 and lineTable[i].player2 == playerColor2 or lineTable[i].player1 == playerColor2 and lineTable[i].player2 == playerColor1 then
+            table.remove(lineTable, i)
         end
     end
 end
 
 function drawLineFunc(clickedButton, playerColor)
     if Player[playerColor].admin or not promOnly then
-        addLine(player1, player2, lineColor)
+        if style == 'straight' then
+            addLineStraight(player1, player2, lineColor)
+        else
+            addLineBlock(player1, player2, lineColor)
+        end
         Global.setVectorLines(lineTable)
         clearUI()
     end
@@ -110,14 +286,58 @@ function clearLinesFunc(clickedButton, playerColor)
     end
 end
 
-function promStart(clickedButton, playerColor)
+function importFunc(clickedButton, playerColor)
     if Player[playerColor].admin or not promOnly then
+        local noteTakerNotes = Global.getTable('noteTakerNotes')
+        for i = 1, #noteTakerNotes do
+            if noteTakerNotes[i].conflict == '(Conflict)' or noteTakerNotes[i].conflict == '(Rev Con)' then
+                local p1, p2, lC
+                if noteTakerNotes[i].color1 ~= '' then
+                    p1 = noteTakerNotes[i].color1
+                    if noteTakerNotes[i].color2 == '' then
+                       p2 = p1
+                    else
+                       p2 = noteTakerNotes[i].color2
+                    end
+                    if lineColor == '' then
+                       lC = p1
+                    else
+                       lC = lineColor
+                    end
+                    if style == 'straight' then
+                        addLineStraight(p1, p2, lC)
+                    else
+                        addLineBlock(p1, p2, lC)
+                    end
+                end
+            end
+        end
+        Global.setVectorLines(lineTable)
+        clearUI()
+    end
+end
+
+function promStart(clickedButton, playerColor)
+    if Player[playerColor].admin then
         if promOnly == true then
             promOnly = false
             broadcastToAll("Line drawing tool access has been granted to all users", {1,1,1})
         else
             promOnly = true
             broadcastToAll("Line drawing tool access has been granted to promoted users only", {1,1,1})
+        end
+    end
+    refreshButtons()
+end
+
+function styleStart(clickedButton, playerColor)
+    if Player[playerColor].admin or not promOnly then
+        if style == 'block' then
+            style = 'straight'
+            broadcastToAll("Style has been changed to straight", {1,1,1})
+        else
+            style = 'block'
+            broadcastToAll("Style has been changed to block", {1,1,1})
         end
     end
     refreshButtons()
@@ -266,26 +486,37 @@ end
 
 function createActionButtons()
     local buttonParam = {click_function = 'drawLineFunc', label = "Draw\nLine", color = {1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
-        position = {1.9,0.1,-0.6}, rotation = {0,0,0}, width = 500, height = 300, font_size = 80}
+        position = {1.9,0.1,-0.5}, rotation = {0,0,0}, width = 500, height = 250, font_size = 80}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'remLineFunc', label = "Remove\nLine", color = {1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
-        position = {1.9,0.1,0}, rotation = {0,0,0}, width = 500, height = 300, font_size = 80}
+        position = {1.9,0.1,0}, rotation = {0,0,0}, width = 500, height = 250, font_size = 80}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'clearLinesFunc', label = "Clear\nAll Lines", color = {1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
-        position = {1.9,0.1,0.6}, rotation = {0,0,0}, width = 500, height = 300, font_size = 80}
+        position = {1.9,0.1,0.5}, rotation = {0,0,0}, width = 500, height = 250, font_size = 80}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'importFunc', label = 'Import from\nNotetaker', color = {1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
+        position = {1.9,0.1,1}, rotation = {0,0,0}, width = 500, height = 250, font_size = 80}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'styleStart', function_owner = self, label = '☆', color = {0,0,0,0.8}, font_color = stringColorToRGB('Blue'),
+        position = {1.6,0.1,-1.2}, width = 100, height = 100, font_size = 80, tooltip = 'Toggle Line Style'}
+    if style == 'block' then
+        buttonParam.label = '★'
+    end
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'promStart', function_owner = self, label = '☆', color = {0,0,0,0.8}, font_color = stringColorToRGB('Green'),
+        position = {1.9,0.1,-1.2}, width = 100, height = 100, font_size = 80, tooltip = 'Toggle Promoted Only'}
+    if promOnly == true then
+        buttonParam.label = '★'
+    end
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'givetMenu', function_owner = self, label = '☆', color = {0,0,0,0.8}, font_color = stringColorToRGB('Red'),
         position = {2.2,0.1,-1.2}, width = 100, height = 100, font_size = 80, tooltip = 'Give Line\nDrawer to:'}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'promStart', function_owner = self, label = '☆', color = {0,0,0,0.8}, font_color = stringColorToRGB('Blue'),
-        position = {1.8,0.1,-1.2}, width = 100, height = 100, font_size = 80, tooltip = 'Toggle Promoted Only'}
-    if promOnly == true then
-        buttonParam.label = '★'
-    end
     self.createButton(buttonParam)
 end
 
