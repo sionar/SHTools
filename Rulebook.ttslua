@@ -8,8 +8,8 @@
 RULES = {
 '*Expansion Rules',
 'R1. Setup: Deal three abilities to each player at the start of the game. Keep two and place one back in the deck.',
-'R2. Liberals can only use one ability per game.',
-'R3. Abilities are one time use only unless stated otherwise. Keep them concealed until you use them. Announce when you are using an ability. Text in brackets restricts when they can be used.',
+'R2. [0000FF]Liberals can only use one ability per game.',
+'[FFFFFF]R3. Abilities are one time use only unless stated otherwise. Keep them concealed until you use them. Announce when you are using an ability. Text in brackets restricts when they can be used.',
 'R4. Abilities resolve in the order that they are revealed. All parts of the ability must resolve before the next ability can begin to resolve. The exceptions to this are Saboteur, Hacker and Puppeteer, which are played in response to other abilities.',
 'R5. Unless stated otherwise, abilities cannot be used while there are policy tiles in play. After a government passes, abilities can be played before a player draws policy tiles and after a policy is placed on a tracker.',
 '*Terminology',
@@ -28,8 +28,8 @@ RULES = {
 'C1. Dead players cannot use abilities or reveal artifacts.',
 'C2. A player with Aegis cannot be targeted by any abilities. Their abilities also cannot be interacted with in any manner.',
 'C3. Players with the Silenced effect may reveal artifacts.',
-'C4. Abilities that can be Hacked: Martyr, Collector, Harbinger, Jester, Surgeon, Gambler, Senator, Trickster, Usurper, Rebel, Fisherman, Dictator, Decider, Scout, Spelunker.',
-'C5. Abilities that can be Puppeteered: Spy (one target), Assassin, Poisoner (one target), Collector, Harbinger, Soulmate, Avenger, Guardian-Angel, Bandit, Librarian, Spiritualist, Silencer, Denouncer and Big-Brother.',
+'C4. Abilities that can be Hacked: Martyr, Harbinger, Collector, Surgeon, Jester, Decider, Usurper, Rebel, Dictator, Gambler, Senator, Fisherman, Trickster, Scout, Spelunker.',
+'C5. Abilities that can be Puppeteered: Spy, Harbinger, Poisoner, Assassin, Collector, Soulmate, Bandit, Librarian, Silencer, Avenger, Guardian-Angel, Big-Brother, Denouncer, Spiritualist, Broker and Specter.',
 'C6. Cards may not be traded while an ability is being played.'
 }
 CREDITS = 'Made by: \nPiggy\nSionar\n\nSpecial thanks to the entire\nSecret Hitler community!\n\nCome join us on Discord at:\ncFuFmmm'
