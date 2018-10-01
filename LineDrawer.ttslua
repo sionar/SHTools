@@ -539,7 +539,7 @@ function giveTool(clickedButton, playerColor, index)
         self.setLock(true)
         local tempScale = self.getScale()[1]
         self.scale(1/tempScale)
-        self.scale(6.1)
+        self.scale(5.8)
         local pos = {forward = -13, right = 0, up = 3}
         local rot = {x = 0, y = 180, z = 0}
         local options = Global.getTable('options')

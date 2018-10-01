@@ -7,7 +7,7 @@ Made by Sionar, Lost Savage and Hmmmpf
 ------------------Constants
 UPDATE_VERSION = 105
 ADD_ON_VERSION = 6
-BOX_OBJECTS_NUM = 12
+BOX_OBJECTS_NUM = 11
 ADD_ON_NAME = 'Expansion Deck'
 ABILITY_DECK_NAME = 'Abilities'
 EFFECT_DECK_NAME = 'Effects'
@@ -18,7 +18,6 @@ RULEBOOK_NAME = 'SH Expansion Rulebook'
 LINE_DRAWER_NAME = 'Line Drawer'
 CALC_NAME = 'Secret Hitler Probability Calc'
 SELF_NAME = 'Counters'
-DICE_NAME = 'goes first!'
 SELF_POS = {20, 1.71, 11}
 SELF_SCALE = {2.5, 2.5, 2.5}
 SHOWN_ROT = {0,180,0}

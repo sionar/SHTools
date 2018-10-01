@@ -18,7 +18,6 @@ PACKING_LIST = {
    'Rounds until Aegis expires',
    'Line Drawer',
    'Secret Hitler Probability Calc',
-   'goes first!'
 }
 
 function onLoad()

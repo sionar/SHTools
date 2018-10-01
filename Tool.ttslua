@@ -6,6 +6,7 @@ Made by Sionar
 
 ------------------Constants
 COLOR_TABLE = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Tan', 'Maroon'}
+COLOR_RGB = {'[FFFFFF]', '[703A16]', '[DA1917]', '[F3631C]', '[E6E42B]', '[30B22A]', '[20B09A]', '[1E87FF]', '[9F1FEF]', '[F46FCD]', '[D2B48C]', '[800000]'}
 DRAW_ZONE_GUID = '6463d3'
 DISCARD_ZONE_GUID = 'b9bd6e'
 EFFECT_ZONE_GUID = '374a16'
@@ -20,7 +21,6 @@ GIVE_TOOL_BUTTON_POS = {{1,0.1,0.9}, {0,0.1,0.9}, {-1,0.1,0.9}, {-1.7,0.1,0.3}, 
 MAROON_DRAW_POS = {-9, 1.5, -49}
 TAN_DRAW_POS = {20.30, 1.5, -49}
 GREY_PLAYABLE_COLORS = {'Tan', 'Maroon'}
-
 ------------------Variables
 state = 0
 player = ""
@@ -609,14 +609,42 @@ function giveEFCoroutine()
     return 1
 end
 
+function randStart(clickedButton, playerColor, index)
+    if Player[playerColor].admin or not promOnly then
+        local targs = {}
+        local randNum, temp, colorString
+        local broadcastString = 'Random order: '
+        for i = 1, 12 do
+            if targSelected[i] == 1 then
+                colorString = COLOR_RGB[i] .. COLOR_TABLE[i]
+                table.insert(targs, colorString)
+            end
+        end
+
+        for i = #targs, 1, -1 do
+            randNum = math.random(1, i)
+            temp = targs[randNum]
+            targs[randNum] = targs[i]
+            targs[i] = temp
+        end
+
+        for i = 1, #targs do
+            broadcastString = broadcastString .. targs[i] .. ' '
+        end
+        broadcastToAll(broadcastString, {1,1,1})
+        clearValues()
+        mainMenu()
+    end
+end
+
 
 function giveTool(clickedButton, playerColor, index)
     if Player[playerColor].admin or not promOnly then
         self.setLock(true)
         local tempScale = self.getScale()[1]
         self.scale(1/tempScale)
-        self.scale(6.1)
-        local pos = {forward = -13, right = 0, up = 1}
+        self.scale(5.8)
+        local pos = {forward = -13, right = 0, up = 3}
         local rot = {x = 0, y = 180, z = 0}
         local options = Global.getTable('options')
         if options.zoneType ~= 6 then
@@ -922,15 +950,20 @@ function mainMenu()
         position = {0.575,0.1,0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'givetMenu', label = "Give\nTool to", color = {1,1,1}, function_owner = self,
-        position = {1.7,0.1,-0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    local buttonParam = {click_function = 'promStart', function_owner = self, label = '☆', color = {0,0,0,0.8}, font_color = stringColorToRGB('Green'),
+        position = {1.9,0.1,-1.2}, width = 100, height = 100, font_size = 80, tooltip = 'Toggle Promoted Only'}
+    if promOnly == true then
+        buttonParam.label = '★'
+    end
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'promStart', color = {1,1,1}, function_owner = self,
+    local buttonParam = {click_function = 'givetMenu', function_owner = self, label = '☆', color = {0,0,0,0.8}, font_color = stringColorToRGB('Red'),
+        position = {2.2,0.1,-1.2}, width = 100, height = 100, font_size = 80, tooltip = 'Give Tool to:'}
+    self.createButton(buttonParam)
+
+
+    local buttonParam = {click_function = 'randMenu', label = 'Random\nColor', color = {1,1,1}, function_owner = self,
         position = {1.7,0.1,-0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 70}
-    if promOnly == false then    buttonParam.label = "Tool Access:\nAll Players"
-    else                    buttonParam.label = "Tool Access:\nPromoted Only"
-    end
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'lockStart', label = "Toggle Lock\nDecks", color = {1,1,1}, function_owner = self,
@@ -1177,6 +1210,42 @@ function fisherMenu()
     createReturnButton()
 end
 
+function randMenu()
+    self.clearButtons()
+    state = 13
+
+    createLabelButton()
+    createRandTargetButtons()
+    createStartButton()
+    createReturnButton()
+
+    local buttonParam = {click_function = 'randSelAll', label = "Select All", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {0,0.1,-0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'randDeselAll', label = "Deselect All", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {0,0.1,0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+    self.createButton(buttonParam)
+end
+
+function randSelAll(clickedButton, playerColor)
+    if Player[playerColor].admin or not promOnly then
+        local options = Global.getTable('options')
+        if options.zoneType == 6 then
+            targSelected = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+        else
+            targSelected = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0}
+        end
+        refreshButtons()
+    end
+end
+
+function randDeselAll(clickedButton, playerColor)
+    if Player[playerColor].admin or not promOnly then
+        targSelected = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+        refreshButtons()
+    end
+end
 
 function createStartButton()
     local buttonParam = {label = "Start", color = {1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
@@ -1192,6 +1261,7 @@ function createStartButton()
     elseif state == 9 then          buttonParam.click_function = 'giveEfStart'
     elseif state == 10 then         buttonParam.click_function = 'reshufStart'
     elseif state == 12 then         buttonParam.click_function = 'fisherStart'
+    elseif state == 13 then         buttonParam.click_function = 'randStart'
     end
     self.createButton(buttonParam)
 end
@@ -1272,6 +1342,38 @@ function createTargetButtons()
     end
 end
 
+function createRandTargetButtons()
+    local options = Global.getTable('options')
+    local iLimit, posTable
+    local buttonParam = {}
+
+    if options.zoneType == 6 then
+        iLimit = 12
+        posTable = PLAYER_BUTTON_POS_12P
+        buttonParam.width = 200
+    else
+        iLimit = 10
+        posTable = PLAYER_BUTTON_POS_10P
+        buttonParam.width = 300
+    end
+
+    for i = 1,iLimit do
+        buttonParam.click_function = 'setTargets' .. i
+        buttonParam.label = COLOR_TABLE[i]
+        buttonParam.function_owner = self
+        buttonParam.position = posTable[i]
+        buttonParam.font_color = RGB(COLOR_TABLE[i])
+        buttonParam.font_size = 50
+
+        if targSelected[i] == 1 then
+            buttonParam.color = RGB(COLOR_TABLE[i])
+        else
+            buttonParam.color = {0,0,0,1}
+        end
+        self.createButton(buttonParam)
+    end
+end
+
 function createLabelButton()
     local buttonParam = {click_function = 'nulFunc', color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
             position = {-1.7,0.1,-1}, rotation = {0,0,0}, width = 1, height = 1, font_size = 150}
@@ -1286,6 +1388,7 @@ function createLabelButton()
     elseif  state == 9 then         buttonParam.label = "Deal\nEffects"
     elseif  state == 10 then        buttonParam.label = "Reshuffle"
     elseif  state == 12 then        buttonParam.label = "Fisherman"
+    elseif  state == 13 then        buttonParam.label = "Random\nColor"
     end
     self.createButton(buttonParam)
 end
@@ -1369,6 +1472,8 @@ function refreshButtons()
         givetMenu()
     elseif state == 12 then
         fisherMenu()
+    elseif state == 13 then
+        randMenu()
     end
 end
 
