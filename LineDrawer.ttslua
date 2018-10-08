@@ -5,11 +5,12 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.2.3'
+VERSION = '1.3.0'
 COLOR_TABLE = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 LINE_HEIGHT = 1
 LINE_SPACING = 1
-HEIGHT_SPACING = 0.2
+HEIGHT_SPACING = 0.05
+DEFAULT_LINE_COLOR = 'Red'
 
 X_OFF = 1.2
 PLAYER1_POS = {{-1.4+X_OFF*0,0.1,0.7}, {-1.4+X_OFF*0,0.1,1.1}, {-2.0+X_OFF*0,0.1,1.1}, {-2.0+X_OFF*0,0.1,0.7}, {-2.0+X_OFF*0,0.1,0.3}, {-2.0+X_OFF*0,0.1,-0.1}, {-2.0+X_OFF*0,0.1,-0.5}, {-1.4+X_OFF*0,0.1,-0.5}, {-1.4+X_OFF*0,0.1,-0.1}, {-1.4+X_OFF*0,0.1,0.3}}
@@ -21,14 +22,14 @@ POINTS =
 {
     White = {29.3, LINE_HEIGHT, -26},
     Brown = {0, LINE_HEIGHT, -26},
-    Red = {-29.3, LINE_HEIGHT, -26},
+    Red = {-29.3-0.5, LINE_HEIGHT, -26},
     Orange = {-44, LINE_HEIGHT, -11.73},
-    Yellow = {-44, LINE_HEIGHT, 11.73},
+    Yellow = {-44, LINE_HEIGHT, 11.73+0.5},
     Green = {-29.3, LINE_HEIGHT, 26},
     Teal = {0, LINE_HEIGHT, 26},
-    Blue = {29.3, LINE_HEIGHT, 26},
+    Blue = {29.3+0.5, LINE_HEIGHT, 26},
     Purple = {44, LINE_HEIGHT, 11.73},
-    Pink = {44, LINE_HEIGHT, -11.73},
+    Pink = {44, LINE_HEIGHT, -11.73-0.5},
 }
 
 VALUE =
@@ -99,8 +100,13 @@ function addLineStraight(pColor1, pColor2, lColor)
         end
     end
 
-    if pColor1 == '' or pColor2 == '' or lColor == '' then
+    if pColor1 == '' or pColor2 == '' then
         return
+    end
+
+    if lColor == '' then
+        lineColor = DEFAULT_LINE_COLOR
+        lColor = lineColor
     end
 
     local point1 = POINTS[pColor1]
@@ -123,8 +129,13 @@ function addLineBlock(pColor1, pColor2, lColor)
         end
     end
 
-    if pColor1 == '' or pColor2 == '' or lColor == '' then
+    if pColor1 == '' or pColor2 == '' then
         return
+    end
+
+    if lColor == '' then
+        lineColor = DEFAULT_LINE_COLOR
+        lColor = lineColor
     end
 
     local point1 = POINTS[pColor1]
@@ -161,26 +172,26 @@ function addLineBlock(pColor1, pColor2, lColor)
     if GROUP[pColor1] == GROUP[pColor2] then     --Same side of table
         if GROUP[pColor1] == 0 then
             if pColor1 == 'Brown' or pColor2 == 'Brown' then
-                point3 = {point1[1], LINE_HEIGHT, point1[3]+8}
-                point4 = {point2[1], LINE_HEIGHT, point2[3]+8}
+                point3 = {point1[1], LINE_HEIGHT, POINTS['Orange'][3] - 5 * LINE_SPACING}
+                point4 = {point2[1], LINE_HEIGHT, POINTS['Orange'][3] - 5 * LINE_SPACING}
             else
-                point3 = {point1[1], LINE_HEIGHT, point1[3]+9}
-                point4 = {point2[1], LINE_HEIGHT, point2[3]+9}
+                point3 = {point1[1], LINE_HEIGHT, POINTS['Orange'][3] - 4 * LINE_SPACING}
+                point4 = {point2[1], LINE_HEIGHT, POINTS['Orange'][3] - 4 * LINE_SPACING}
             end
         elseif GROUP[pColor1] == 2 then
             if pColor1 == 'Teal' or pColor2 == 'Teal' then
-                point3 = {point1[1], LINE_HEIGHT, point1[3]-8}
-                point4 = {point2[1], LINE_HEIGHT, point2[3]-8}
+                point3 = {point1[1], LINE_HEIGHT, POINTS['Yellow'][3] + 5 * LINE_SPACING}
+                point4 = {point2[1], LINE_HEIGHT, POINTS['Yellow'][3] + 5 * LINE_SPACING}
             else
-                point3 = {point1[1], LINE_HEIGHT, point1[3]-9}
-                point4 = {point2[1], LINE_HEIGHT, point2[3]-9}
+                point3 = {point1[1], LINE_HEIGHT, POINTS['Yellow'][3] + 4 * LINE_SPACING}
+                point4 = {point2[1], LINE_HEIGHT, POINTS['Yellow'][3] + 4 * LINE_SPACING}
             end
         elseif GROUP[pColor1] == 1 then
-            point3 = {point1[1] + 8, LINE_HEIGHT, point1[3]}
-            point4 = {point2[1] + 8, LINE_HEIGHT, point2[3]}
+            point3 = {POINTS['Red'][1] - 4 * LINE_SPACING, LINE_HEIGHT, point1[3]}
+            point4 = {POINTS['Red'][1] - 4 * LINE_SPACING, LINE_HEIGHT, point2[3]}
         else
-            point3 = {point1[1] - 8, LINE_HEIGHT, point1[3]}
-            point4 = {point2[1] - 8, LINE_HEIGHT, point2[3]}
+            point3 = {POINTS['White'][1] + 4 * LINE_SPACING, LINE_HEIGHT, point1[3]}
+            point4 = {POINTS['White'][1] + 4 * LINE_SPACING, LINE_HEIGHT, point2[3]}
         end
         addSegment(pColor1, pColor2, point1, point3, lColor)
         addSegment(pColor1, pColor2, point3, point4, lColor)
@@ -198,21 +209,27 @@ function addLineBlock(pColor1, pColor2, lColor)
            (pColor1 == 'Pink' and pColor2 == 'Orange') then
                addSegment(pColor1, pColor2, point1, point2, lColor)
         else
-            if pColor1 == 'White' or pColor2 == 'White' then
-                point3 = {point1[1], LINE_HEIGHT + HEIGHT_SPACING * 0, 0}
-                point4 = {point2[1], LINE_HEIGHT + HEIGHT_SPACING * 0, 0}
+            if pColor1 == 'White' and pColor2 == 'Green' or pColor1 == 'Green' and pColor2 == 'White' then
+                point3 = {point1[1], LINE_HEIGHT, 0.5}
+                point4 = {point2[1], LINE_HEIGHT, 0.5}
+            elseif pColor1 == 'White' and pColor2 == 'Teal' or pColor1 == 'Teal' and pColor2 == 'White' then
+                    point3 = {point1[1], LINE_HEIGHT, 1}
+                    point4 = {point2[1], LINE_HEIGHT, 1}
             elseif pColor1 == 'Brown' or pColor2 == 'Brown' then
-                point3 = {point1[1], LINE_HEIGHT + HEIGHT_SPACING * 1, 0}
-                point4 = {point2[1], LINE_HEIGHT + HEIGHT_SPACING * 1, 0}
-            elseif pColor1 == 'Red' or pColor2 == 'Red' then
-                point3 = {point1[1], LINE_HEIGHT + HEIGHT_SPACING * 2, 0}
-                point4 = {point2[1], LINE_HEIGHT + HEIGHT_SPACING * 2, 0}
+                point3 = {point1[1], LINE_HEIGHT, 0}
+                point4 = {point2[1], LINE_HEIGHT, 0}
+            elseif pColor1 == 'Red' and pColor2 == 'Teal' or pColor1 == 'Teal' and pColor2 == 'Red' then
+                point3 = {point1[1], LINE_HEIGHT, -1}
+                point4 = {point2[1], LINE_HEIGHT, -1}
+            elseif pColor1 == 'Red' and pColor2 == 'Blue' or pColor1 == 'Blue' and pColor2 == 'Red' then
+                point3 = {point1[1], LINE_HEIGHT, -0.5}
+                point4 = {point2[1], LINE_HEIGHT, -0.5}
             elseif pColor1 == 'Orange' or pColor2 == 'Orange' then
-                point3 = {0, LINE_HEIGHT + HEIGHT_SPACING * 1, point1[3]}
-                point4 = {0, LINE_HEIGHT + HEIGHT_SPACING * 1, point2[3]}
+                point3 = {0.5, LINE_HEIGHT, point1[3]}
+                point4 = {0.5, LINE_HEIGHT, point2[3]}
             elseif pColor1 == 'Yellow' or pColor2 == 'Yellow' then
-                point3 = {0, LINE_HEIGHT + HEIGHT_SPACING * 2, point1[3]}
-                point4 = {0, LINE_HEIGHT + HEIGHT_SPACING * 2, point2[3]}
+                point3 = {-0.5, LINE_HEIGHT, point1[3]}
+                point4 = {-0.5, LINE_HEIGHT, point2[3]}
             end
             addSegment(pColor1, pColor2, point1, point3, lColor)
             addSegment(pColor1, pColor2, point3, point4, lColor)
@@ -300,7 +317,7 @@ function importFunc(clickedButton, playerColor)
                        p2 = noteTakerNotes[i].color2
                     end
                     if lineColor == '' then
-                       lC = p1
+                       lC = DEFAULT_LINE_COLOR
                     else
                        lC = lineColor
                     end
