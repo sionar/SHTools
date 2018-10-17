@@ -68,7 +68,7 @@ function onLoad(saveString)
     startTime = os.time()
     refreshStart()
     moveBoard()
-    startLuaCoroutine(self, 'checkStarted')
+    CheckStarted()
     self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
 end
 
@@ -142,29 +142,16 @@ function onChat(message, player)
 end
 
 function checkStarted()
-    sleep(0.1)
-    Timer.destroy(self.getGUID())
-    Timer.create({
-        identifier     = self.getGUID(),
-        function_name  = 'checkStartedTimer',
-        delay          = 5,
-        repetitions    = 1,
-    })
-    return 1
+    Wait.time(checkStartedTimer, 5)
 end
 
 function checkStartedTimer()
     local started = Global.getVar('started')
     if started then
         updateFunc()
-        Timer.destroy(self.getGUID())
     else
-        startLuaCoroutine(self, 'checkStarted')
+        checkStarted()
     end
-end
-
-function onDestroy()
-    Timer.destroy(self.getGUID())
 end
 
 function moveBoard()
