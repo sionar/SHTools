@@ -36,12 +36,7 @@ function onLoad(saveString)
     pruneWaitlist()
     refreshButtons()
     seatedList = getSeatedList()
-    Timer.create({
-        identifier     = self.getGUID() .. ' Refresh',
-        function_name  = 'TimerRefresh',
-        delay          = 1,
-        repetitions    = 0,
-    })
+    Wait.time(TimerRefresh, 1, -1)
 --    broadcastToAll(LOGIN_MSG, stringColorToRGB('White'))
     for k,v in pairs(Player.getPlayers()) do
         v.print(LOGIN_MSG)
@@ -76,11 +71,6 @@ function onSave()
     local saveString = JSON.encode(save)
     return saveString
 end
-
-function onDestroy()
-    Timer.destroy(self.getGUID() .. ' Refresh')
-end
-
 
 function moveBoard()
     local global_name = Global.getVar('MOD_NAME')
@@ -441,13 +431,9 @@ function nudgeCom(player)
                     end
                     if not nudgeBlock then
                         nudgeBlock = true
-                        Timer.create({
-                        identifier     = self.getGUID(),
-                        function_name  = 'nudge',
-                        parameters     = {waitlist[1].id},
-                        delay          = 60,
-                        repetitions    = 1,
-                        })
+                        Wait.time(function()
+                            nudge({waitlist[1].id})
+                        end, 60)
                         local nudgedPlayer = getPlayerBySteamID(waitlist[1].id)
                         nudgedPlayer.broadcast('You have been nudged! Join a seat in sixty seconds or lose your spot in the waitlist.', stringColorToRGB('Red'))
                         player.broadcast('You have nudged the player at the top of the waitlist. They have sixty seconds to sit down or lose their spot.',stringColorToRGB('Blue'))
