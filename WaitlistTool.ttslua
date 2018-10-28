@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.1.7'
+VERSION = '1.1.8'
 START_POS = {x = 100, y = 1.1, z = 42}
 COLOR_TABLE = {'White', 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple', 'Pink', 'Teal', 'Brown'}
 ROW_S = -1

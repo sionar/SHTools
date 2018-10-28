@@ -7,7 +7,7 @@ Made by Sionar
 ------------------Constants
 ABILITIES =
 {
-    {name = '[DAA520]Mimic',            desc = '[20B09A][Copy another player\'s ability.]'},
+    {name = '[DAA520]Mimic',            desc = '[8A68F0][Copy another player\'s ability.]'},
     {name = '[DAA520]Saboteur',         desc = '[FFFF00][Right after a player reveals an ability,] [FFFFFF]negate it.'},
     {name = '[DAA520]Hacker',           desc = '[FFFF00][Right after a player reveals an ability that affects policy tiles, the election tracker, placards or presidential power tiles or artifacts,] [FFFFFF]you use the ability instead.'},
     {name = '[DAA520]Puppeteer',        desc = '[FFFF00][Right after a player is [EE82EE]targeted [FFFF00]by an ability,] [EE82EE]target a player. [FFFFFF]That player becomes the new target. [FF0000]The new target must be a valid target.'},
@@ -19,7 +19,7 @@ ABILITIES =
     {name = '[DAA520]Peacemaker',       desc = '[FFFF00][Reveal this ability before voting.][After Hitler Territory,] [FFFFFF]destroy all artifacts and effects in play (including Aegis, excluding Banished).'},
     {name = '[FF0000]Collector',        desc = '[FFFFFF]Draw three random artifacts. Choose one and place it concealed on a [EE82EE]target player. [FFFFFF]You may choose to reveal the artifact when the conditions are met.'},
     {name = '[FF0000]Soulmate',         desc = '[FFFF00][Right after you die,] [EE82EE]target another player. [FFFFFF]They also die.\n[A0A0A0]-- OR --\n[EE82EE]Target another player. [FFFFFF]That player gains the [00FFFF]Banished [FFFFFF]effect. You die. If you are Hitler, the game does not end.'},
-    {name = '[FF0000]Gravekeeper',      desc = '[FFFFFF]Investigate each dead player\'s party membership card.\n[A0A0A0]-- OR --\n[20B09A][Copy another dead player\'s ability.]'},
+    {name = '[FF0000]Gravekeeper',      desc = '[FFFFFF]Investigate each dead player\'s party membership card.\n[A0A0A0]-- OR --\n[8A68F0][Copy another dead player\'s ability.]'},
     {name = '[FF0000]Librarian',        desc = '[FFFF00][After Hitler Territory,] [FFFFFF]draw four random abilities from the ability deck. Choose two abilities and place them concealed in front of [EE82EE]two other target players. [FFFFFF]They may look at those abilities and play them.'},
     {name = '[FF0000]Silencer',         desc = '[EE82EE]Target another player. [FFFFFF]That player gains the [00FFFF]Silenced [FFFFFF]effect.'},
     {name = '[FF0000]Poisoner',         desc = '[FFFF00][After Hitler Territory, at the start of a round,] [EE82EE]target three other players. [FFFFFF]Place one poison and two water effects concealed on them. At the start of the fifth round after this round, reveal the effects. The player with the poison dies.'},
@@ -56,9 +56,9 @@ ABILITIES =
     {name = '[7CFC00]Spelunker',        desc = '[FFFFFF]Look at the policy deck then shuffle it.\n[A0A0A0]-- OR --\n[FFFFFF]Look at either the first or second tile at the top of the discard pile.'},
     {name = '[7CFC00]Detective',        desc = '[FFFF00][After Hitler Territory,] [EE82EE]target half of the other players, rounded up. [FFFFFF]Shuffle their party membership cards, discard one, and look at them.'},
     {name = '[7CFC00]Visionary',        desc = '[FFFF00][After Hitler Territory,] [FFFFFF]look at the ability deck. Look at every concealed effect on the table. Each player (including dead players) shows you an unused ability. Every round, you may look at every concealed ability, effect and artifact on the table.'},
-    {name = '[7CFC00]Informant',        desc = '[FFFF00][Reveal this ability before voting, after everyone else has voted.] [FFFFFF]Reveal each player\'s vote for this turn. Each player may change their vote once. You become the last player to vote. Abilities cannot be played until the vote passes or fails. '},
+    {name = '[7CFC00]Informant',        desc = '[FFFF00][Reveal this ability before voting, after everyone else has voted.] [FFFFFF]Reveal each player\'s vote for this turn. Each player may change their vote once. You become the last player to vote. Abilities cannot be played until the vote passes or fails.'},
     {name = '[808080]Sionar',           desc = '[EE82EE]Target another player. [FFFFFF]That player becomes the Sub-Chancellor.'},
-    {name = '[808080]Sub-Chancellor',   desc = 'On every elected government, the chancellor discards one policy and hands you one. You play the policy tile.'}
+    {name = '[808080]Sub-Chancellor',   desc = '[FFFFFF]On every elected government, the chancellor discards one policy and hands you one. You play the policy tile.'}
 }
 
 EFFECTS =
@@ -110,7 +110,7 @@ ABILITY_DECK_DESC = 'Made by Piggy and Sionar'
 ABILITY_DECK_SCALE = {1.5, 1, 1.5}
 EFFECT_DECK_NAME = 'Effects'
 EFFECT_DECK_SCALE = {1.5, 1, 1.5}
-
+SHOW_CARD_NAMES = false
 
 ------------------Main Functions
 function nameAbilities()
@@ -133,11 +133,18 @@ function nameAbilitiesCoroutine()
     local card
     local allObjects
     local pos
+    local tmpString
 
     for i = 1,deck.getQuantity()-1 do
 		card = deck.takeObject(params)
-        card.setName(ABILITIES[i].name)
-        card.setDescription(ABILITIES[i].desc)
+        if SHOW_CARD_NAMES then
+            card.setName(ABILITIES[i].name)
+            card.setDescription(ABILITIES[i].desc)
+        else
+            card.setName('')
+            tmpString = ABILITIES[i].name .. '\n\n' .. ABILITIES[i].desc
+            card.setDescription(tmpString)
+        end
         card.setPosition(NEW_POS)
         sleep(0.05)
     end
@@ -148,8 +155,13 @@ function nameAbilitiesCoroutine()
             card = v
         end
     end
-    card.setName(ABILITIES[#ABILITIES].name)
-    card.setDescription(ABILITIES[#ABILITIES].desc)
+    if SHOW_CARD_NAMES then
+        card.setName(ABILITIES[#ABILITIES].name)
+        card.setDescription(ABILITIES[#ABILITIES].desc)
+    else
+        tmpString = ABILITIES[#ABILITIES].name .. '\n' .. ABILITIES[#ABILITIES].desc
+        card.setDescription(tmpString)
+    end
     card.setPosition(NEW_POS)
     sleep(0.1)
     deck = getDeckFromZoneByGUID(END_ZONE_GUID)
@@ -182,9 +194,15 @@ function nameEffectsCoroutine()
     local pos
 
     for i = 1,deck.getQuantity()-1 do
-		card = deck.takeObject(params)
-        card.setName(EFFECTS[i].name)
-        card.setDescription(EFFECTS[i].desc)
+        card = deck.takeObject(params)
+        if SHOW_CARD_NAMES then
+            card.setName(EFFECTS[i].name)
+            card.setDescription(EFFECTS[i].desc)
+        else
+            card.setName('')
+            tmpString = EFFECTS[i].name .. '\n\n' .. EFFECTS[i].desc
+            card.setDescription(tmpString)
+        end
         card.setPosition(NEW_POS)
         sleep(0.05)
     end
@@ -195,8 +213,13 @@ function nameEffectsCoroutine()
             card = v
         end
     end
-    card.setName(EFFECTS[#EFFECTS].name)
-    card.setDescription(EFFECTS[#EFFECTS].desc)
+    if SHOW_CARD_NAMES then
+        card.setName(EFFECTS[#EFFECTS].name)
+        card.setDescription(EFFECTS[#EFFECTS].desc)
+    else
+        tmpString = EFFECTS[#EFFECTS].name .. '\n' .. EFFECTS[#EFFECTS].desc
+        card.setDescription(tmpString)
+    end
     card.setPosition(NEW_POS)
     sleep(0.1)
     deck = getDeckFromZoneByGUID(END_ZONE_GUID)
