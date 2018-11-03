@@ -253,7 +253,7 @@ function gambleCoroutine()
     local gambleResult
     for _, tmpObj in ipairs(allObjs) do
         tmpPos = tmpObj.getPosition()
-        if tmpObj.getName() == last_gambled and tmpObj.getName() ~= "" and tmpPos['x'] >= pos1['x'] - 15 and tmpPos['x'] <= pos1['x'] and tmpPos['z'] >= pos1['z'] - 8 and tmpPos['z'] <= pos1['z'] + 8 then
+        if tmpObj.getDescription() == last_gambled and tmpObj.getDescription() ~= "" and tmpPos['x'] >= pos1['x'] - 15 and tmpPos['x'] <= pos1['x'] and tmpPos['z'] >= pos1['z'] - 8 and tmpPos['z'] <= pos1['z'] + 8 then
             tmpObj.setRotationSmooth(rotDown)
             tmpObj.setPositionSmooth(pos1)
             sleep(0.5)
@@ -271,7 +271,7 @@ function gambleCoroutine()
         local card = abilityDeck.takeObject(params)
         card.setPositionSmooth({pos1['x'] - 5, pos1['y'], pos1['z']})
         card.setRotationSmooth({rotDown['x'], rotDown['y'], rotDown['z']})
-        last_gambled = card.getName()
+        last_gambled = card.getDescription()
         gambleResult = 'w'
     else
         broadcastString = broadcastString .. "lost!"
@@ -389,11 +389,12 @@ function martyrStart(clickedButton, playerColor)
         reshuffle()
         Global.setVar('lastPres', player)
         Global.setVar('lastChan', player)
+        --[[
         local playerStat = Global.getTable('playerStatus')
         playerStat[player] = 5
         Global.setTable('playerStatus', playerStat)
         Global.call('refreshStatusButtons')
-
+        --]]
         returnFunc()
     end
 end
