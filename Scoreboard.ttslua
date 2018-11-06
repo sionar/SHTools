@@ -572,7 +572,6 @@ function importFunc(clickedButton,playerColor)
             broadcastToColor("SUCCESS: The old records have been migrated to this board.", playerColor, {0,0,1})
             getSteamNames()
         end
-        startLuaCoroutine(self, 'refreshFunc')
         onSave()
     else
         broadcastToColor("Only promoted players can use the admin functions.", playerColor, {1,0,0})
@@ -935,7 +934,6 @@ function mainMenu()
 end
 
 function miscMenu()
-    startLuaCoroutine(self, 'refreshFunc')
     self.clearButtons()
     self.clearInputs()
     state = 1
