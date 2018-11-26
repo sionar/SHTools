@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.7.3'
+VERSION = '1.7.4'
 DEBUG = false
 COLOR_TABLE = {'White', 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple', 'Pink', 'Teal', 'Brown'}
 BUTT_W = 1
@@ -114,7 +114,7 @@ function onChat(message, player)
         refreshStart()
         return false
     elseif command == '!s2' then
-        miscMenu()
+        refreshMisc()
         return false
     elseif command == '!s3' then
         overStart()
