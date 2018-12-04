@@ -6,8 +6,8 @@ Effects Reference
 
 
 ------------------Constants
-START_POS = {x = 89, y = 1.1, z = -84}
-START_POS_12P = {x = 89, y = 1.1, z = -97}
+START_POS = {x = 89, y = 1.1, z = -94}
+START_POS_12P = {x = 89, y = 1.1, z = -107}
 
 
 ------------------Functions

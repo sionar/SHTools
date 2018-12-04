@@ -6,8 +6,9 @@ Ability Reference
 
 
 ------------------Constants
-START_POS = {x = 89, y = 1.1, z = -55}
-START_POS_12P = {x = 89, y = 1.1, z = -72}
+VERSION = '1.8.3'
+START_POS = {x = 89, y = 1.1, z = -60}
+START_POS_12P = {x = 89, y = 1.1, z = -77}
 
 
 ------------------Functions
