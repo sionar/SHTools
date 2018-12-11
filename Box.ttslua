@@ -17,6 +17,7 @@ TOOL_NAME = 'SH Expansion Tool'
 RULEBOOK_NAME = 'SH Expansion Rulebook'
 LINE_DRAWER_NAME = 'Line Drawer'
 CALC_NAME = 'Secret Hitler Probability Calc'
+DRAFT_NAME = 'Ability Drafter'
 SELF_NAME = 'Counters'
 SELF_POS = {20, 1.71, 11}
 SELF_SCALE = {2.5, 2.5, 2.5}
@@ -28,6 +29,7 @@ EFFECT_DECK_POS = {20, 2, 6.25}
 TOOL_POS = {-8,2,-16}
 LINE_DRAWER_POS = {8,2,-16}
 RULEBOOK_POS = {100, 1.1, -22}
+DRAFT_POS = {-20, 1.06, 0}
 
 
 ------------------Functions
@@ -156,6 +158,12 @@ function setupExpansionCoroutine()
 			params.rotation = SHOWN_ROT
 			params.guid = v.guid
 			params.position = DEFAULT_POS
+			self.takeObject(params)
+		end
+		if v.name == DRAFT_NAME then
+			params.rotation = SHOWN_ROT
+			params.guid = v.guid
+			params.position = DRAFT_POS
 			self.takeObject(params)
 		end
 	end

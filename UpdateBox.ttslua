@@ -18,6 +18,8 @@ PACKING_LIST = {
    'Rounds until Aegis expires',
    'Line Drawer',
    'Secret Hitler Probability Calc',
+   'Ability Drafter',
+   'Desperado'
 }
 
 function onLoad()

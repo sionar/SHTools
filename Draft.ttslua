@@ -1,0 +1,427 @@
+--[[
+SH Expansion Draft Tool
+Made by Sionar, with code borrowed from Lost Savage and Markimus
+--]]
+
+
+------------------Constants
+VERSION = '1.0'
+COLOR_ORDER = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
+ABILITY_ZONE_GUID = 'eea120'
+POS1 = {-11, 1.2, 15}
+POS2 = {-6, 1.2, 15}
+POS3 = {-1, 1.2, 15}
+POS4 = {4, 1.2, 15}
+NO_ROT = {x = 0, y = 0, z = 0}
+FACE_UP_ROT = {x = 0, y = 180, z = 0}
+FACE_DOWN_ROT = {x = 0, y = 180, z = 180}
+
+------------------Variables
+decks = {nil, nil, nil, nil}
+decksNum = {nil, nil, nil, nil}
+players = {nil, nil, nil, nil}
+numPlayers = 10
+round = 1
+shufToggle = true
+
+------------------Main Functions
+function onLoad(saveString)
+    refreshButtons()
+    local global_name = Global.getVar('MOD_NAME')
+    if global_name == 'Secret Hitler: CE' then
+        self.setLock(true)
+    end
+    Wait.time(checkStarted, 2, -1)
+end
+
+function setupStart(clickedObject, playerColor)
+	if Player[playerColor].admin then
+        Global.call('deleteCustomBoardCards')
+        if shufToggle then
+		          startLuaCoroutine(self, 'shufflePlayersCoroutine')
+        end
+        dealAbilityDecks()
+	end
+end
+
+function shufflePlayersCoroutine()
+    shufflePlayers()
+    return 1
+end
+
+function findUnusedColor()
+	local checkList = {'Brown', 'Teal', 'Black', 'White', 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple', 'Pink'}
+
+	for _, playerColor in ipairs(checkList) do
+		if not Player[playerColor].seated then
+			return playerColor
+		end
+	end
+end
+
+function shufflePlayers()
+	local blackSteamId
+    local options = Global.getTable('options')
+
+	if #getSeatedPlayers() == 10 and Player['Black'].seated then
+		blackSteamId = Player['Black'].steam_id
+		Player['Black']:changeColor('Grey')
+		while Player['Black'].seated do
+			coroutine.yield()
+		end
+	end
+	swapColor = findUnusedColor()
+
+	local ranColors = {}
+	for _, v in pairs(getSeatedPlayers()) do
+		if (not Player[v].host) then
+			table.insert(ranColors, 1, v)
+		end
+	end
+	shuffleTable(ranColors)
+
+	seatedPlayers = {}
+	local j = 1
+	for _, v in pairs(getSeatedPlayers()) do
+		if (not Player[v].host) or options.shuffleHost then
+			local playerInfo = {}
+			playerInfo.target = ranColors[j]
+			playerInfo.myColor = v
+			table.insert(seatedPlayers, 1, playerInfo)
+			j = j + 1
+		end
+	end
+
+	local doneCount = 0
+	local tryCount = #seatedPlayers
+	while doneCount ~= #seatedPlayers and tryCount > 0 do
+		doneCount = 0
+		for i, v in pairs(seatedPlayers) do
+			if v.target ~= v.myColor then
+				if Player[v.target].seated == false then
+					local myC = v.myColor
+					if Player[myC].seated == true then
+						Player[myC]:changeColor(v.target)
+						while Player[myC].seated and not Player[v.target].seated do
+							coroutine.yield()
+						end
+						v.myColor = v.target
+						doneCount = doneCount + 1
+					end
+				elseif Player[swapColor].seated == false then
+					local myC = v.myColor
+					if Player[myC].seated == true then
+						Player[myC]:changeColor(swapColor)
+						while Player[myC].seated and not Player[swapColor].seated do
+							coroutine.yield()
+						end
+						v.myColor = swapColor
+					end
+				end
+			else
+				doneCount = doneCount + 1
+			end
+		end
+		tryCount = tryCount - 1
+		coroutine.yield()
+	end
+
+	if blackSteamId then
+		for _, p in pairs(Player.getSpectators()) do
+			if p.steam_id == blackSteamId then
+				p:changeColor('Black')
+			end
+		end
+	end
+end
+
+function getNextPlayer(currPlayer, order)
+    local index
+    local found = false
+    for i = 1, #COLOR_ORDER do
+        if currPlayer == COLOR_ORDER[i] then
+            index = i
+            break
+        end
+    end
+    while not found do
+        if order == 'cw' then
+            index = index + 1
+            if index > 10 then
+                index = 1
+            end
+        else
+            index = index - 1
+            if index < 1 then
+                index = 10
+            end
+        end
+        if Player[COLOR_ORDER[index]].seated then
+            found = true
+        end
+    end
+
+    return COLOR_ORDER[index]
+end
+
+function dealAbilityDecks()
+    startLuaCoroutine(self, 'dealCoroutine')
+end
+
+function dealCoroutine()
+    sleep(1.5)
+    local abilityDeck = getDeckFromZoneByGUID(ABILITY_ZONE_GUID)
+    abilityDeck.shuffle()
+    numPlayers = #getSeatedPlayers()
+
+    local params1 = {position = POS1, rotation = FACE_DOWN_ROT}
+    local params2 = {position = POS2, rotation = FACE_DOWN_ROT}
+    local params3 = {position = POS3, rotation = FACE_DOWN_ROT}
+    local params4 = {position = POS4, rotation = FACE_DOWN_ROT}
+    for i = 1, numPlayers do
+        abilityDeck.takeObject(params1)
+        sleep(0.01)
+        abilityDeck.takeObject(params2)
+        sleep(0.01)
+        abilityDeck.takeObject(params3)
+        sleep(0.01)
+        abilityDeck.takeObject(params4)
+        sleep(0.01)
+    end
+    sleep(2)
+
+    local objParam = {
+        type = "DeckCustom",
+        position = {0,0,0},
+        rotation = {0, 0, 0},
+        scale = {1.5, 1, 1.5},
+        sound = false
+    }
+
+    local customParam = {
+        type = "DeckCustom",
+        face = "http://cloud-3.steamusercontent.com/ugc/966483288120157589/563FBEE10DC4852BA9E51826FF254049E2320542/",
+        back = "http://cloud-3.steamusercontent.com/ugc/966483288120157589/563FBEE10DC4852BA9E51826FF254049E2320542/",
+        unique_back = true,
+        width = 2,
+        height = 3,
+        number = 6,
+        back_is_hidden = true
+    }
+
+    local draftDeck = spawnObject(objParam)
+    draftDeck.setCustomObject(customParam)
+    draftDeck.takeObject(params1)
+    sleep(0.01)
+    draftDeck.takeObject(params2)
+    sleep(0.01)
+    draftDeck.takeObject(params3)
+    sleep(0.01)
+    draftDeck.takeObject(params4)
+    sleep(1)
+    draftDeck.destruct()
+
+
+    local allObjects = getAllObjects()
+    local objPosition
+    for k,v in pairs(allObjects) do
+        objPosition = v.getPosition()
+        if objPosition.x > POS1[1] - 0.01 and objPosition.x < POS1[1] + 0.01  and objPosition.z > POS1[3] - 0.01 and objPosition.z < POS1[3] + 0.01 then
+            decks[1] = v
+            decks[1].setLock(true)
+        elseif objPosition.x > POS2[1] - 0.01 and objPosition.x < POS2[1] + 0.01  and objPosition.z > POS2[3] - 0.01 and objPosition.z < POS2[3] + 0.01 then
+            decks[2] = v
+            decks[2].setLock(true)
+        elseif objPosition.x > POS3[1] - 0.01 and objPosition.x < POS3[1] + 0.01  and objPosition.z > POS3[3] - 0.01 and objPosition.z < POS3[3] + 0.01 then
+            decks[3] = v
+            decks[3].setLock(true)
+        elseif objPosition.x > POS4[1] - 0.01 and objPosition.x < POS4[1] + 0.01  and objPosition.z > POS4[3] - 0.01 and objPosition.z < POS4[3] + 0.01 then
+            decks[4] = v
+            decks[4].setLock(true)
+        end
+    end
+    sleep(0.01)
+
+    players[1] = getRandomPlayer()
+    players[3] = players[1]
+    for i = 1, numPlayers/2 do
+        players[3] = getNextPlayer(players[3], 'cw')
+    end
+    players[2] = getNextPlayer(players[1], 'ccw')
+    players[4] = getNextPlayer(players[3], 'ccw')
+
+    local fwd
+    for i = 1, 4 do
+        if i%2 == 1 then
+            fwd = 13
+        else
+            fwd = 20
+        end
+
+        giveObjectToPlayer(decks[i], players[i], {forward = fwd, right = 0, up = 0, forceHeight = 2.2}, FACE_DOWN_ROT)
+    end
+
+    Wait.time(checkRound, 2, -1)
+
+    return 1
+end
+
+function checkRound()
+    for i = 1, 4 do
+        decksNum[i] = decks[i].getQuantity()
+    end
+    if decksNum[1] == numPlayers - round + 1 and decksNum[2] == decksNum[1] and decksNum[3] == decksNum[1] and decksNum[4] == decksNum[1] then
+        round = round + 1
+        broadcastToAll('Round ' .. round .. ' has started.', {1,1,1})
+        players[1] = getNextPlayer(players[1], 'cw')
+        players[2] = getNextPlayer(players[2], 'ccw')
+        players[3] = getNextPlayer(players[3], 'cw')
+        players[4] = getNextPlayer(players[4], 'ccw')
+        for i = 1, 4 do
+            if i%2 == 1 then
+                fwd = 13
+            else
+                fwd = 20
+            end
+
+            giveObjectToPlayer(decks[i], players[i], {forward = fwd, right = 0, up = 0, forceHeight = 2.2}, FACE_DOWN_ROT)
+        end
+        if round == numPlayers then
+            self.destruct()
+        end
+    end
+end
+
+------------------Utility Functions
+function shuffleTable(objects)
+	for i = 1, #objects * 5 do
+		local a = math.random(#objects)
+		local b = math.random(#objects)
+		objects[a], objects[b] = objects[b], objects[a]
+	end
+end
+
+function getDeckFromZoneByGUID(guidIn)
+	local deck = nil
+	local deck_ct = 0
+	local zone = getObjectFromGUID(guidIn)
+	local object
+
+	if zone then
+		local inZone = zone.getObjects()
+		for _, object in ipairs(inZone) do
+			if object.name == 'Card' then
+				deck_ct = 2
+			elseif object.name == 'Deck' then
+				deck = object
+				deck_ct = deck_ct + 1
+			elseif object.name == 'DeckCustom' then
+				deck = object
+				deck_ct = deck_ct + 1
+			end
+		end
+	end
+	if deck_ct == 1 then
+		return deck
+	end
+	return nil
+end
+
+function sleep(numSeconds)
+	local t0 = os.clock()
+	while os.clock() - t0 <= numSeconds do
+        coroutine.yield(0)
+    end
+end
+
+function getPlayerPosRotVectors(playerColor)
+	local returnVal = {}
+	local ph = Player[playerColor].getPlayerHand()
+	if ph then
+		returnVal.pos = {x = ph["pos_x"], y = ph["pos_y"], z = ph["pos_z"]}
+		returnVal.rot = {x = ph["rot_x"], y = ph["rot_y"], z = ph["rot_z"]}
+		returnVal.vForward = {x = ph["trigger_forward_x"], y = ph["trigger_forward_y"], z = ph["trigger_forward_z"]}
+		returnVal.vRight = {x = ph["trigger_right_x"], y = ph["trigger_right_y"], z = ph["trigger_right_z"]}
+		returnVal.vUp = {x = ph["trigger_up_x"], y = ph["trigger_up_y"], z = ph["trigger_up_z"]}
+	end
+
+	return returnVal
+end
+
+function giveObjectToPlayer(object, playerColor, posAdd, rotAdd, ...)
+	local info = getPlayerPosRotVectors(playerColor)
+	if info then
+		if rotAdd["exactRot"] then
+			object.setRotationSmooth({rotAdd["x"], rotAdd["y"], rotAdd["z"]}, ...)
+		else
+			object.setRotationSmooth({info.rot["x"] + rotAdd["x"], info.rot["y"] + rotAdd["y"], info.rot["z"] + rotAdd["z"]}, ...)
+		end
+		if posAdd["forceHeight"] then
+			object.setPositionSmooth({info.pos["x"] + info.vForward["x"] * posAdd["forward"] + info.vRight["x"] * posAdd["right"] + info.vUp["x"] * posAdd["up"],
+											  posAdd["forceHeight"],
+											  info.pos["z"] + info.vForward["z"] * posAdd["forward"] + info.vRight["z"] * posAdd["right"] + info.vUp["z"] * posAdd["up"]}, ...)
+		else
+			object.setPositionSmooth({info.pos["x"] + info.vForward["x"] * posAdd["forward"] + info.vRight["x"] * posAdd["right"] + info.vUp["x"] * posAdd["up"],
+											  info.pos["y"] + info.vForward["y"] * posAdd["forward"] + info.vRight["y"] * posAdd["right"] + info.vUp["y"] * posAdd["up"],
+											  info.pos["z"] + info.vForward["z"] * posAdd["forward"] + info.vRight["z"] * posAdd["right"] + info.vUp["z"] * posAdd["up"]}, ...)
+		end
+	end
+end
+
+function getRandomPlayer()
+    local targs = {}
+    local randNum, temp, colorString
+
+    for i = 1, 10 do
+        if Player[COLOR_ORDER[i]].seated then
+            table.insert(targs, COLOR_ORDER[i])
+        end
+    end
+
+    for i = #targs, 1, -1 do
+        randNum = math.random(1, i)
+        temp = targs[randNum]
+        targs[randNum] = targs[i]
+        targs[i] = temp
+    end
+    return targs[1]
+end
+
+function toggleShuffle(clickedButton, playerColor)
+    if Player[playerColor].admin then
+        shufToggle = not shufToggle
+        refreshButtons()
+    end
+end
+
+function checkStarted()
+    local started = Global.getVar('started')
+    if started then
+        self.destruct()
+    end
+end
+------------------User Interface
+function refreshButtons()
+    self.clearButtons()
+
+    local buttonParam = {click_function = 'nullFunc', label = 'Shuffle Players', color = {1,1,1}, function_owner = self,
+        position = {-0.3,0.1,-0.7}, rotation = {0,0,0}, width = 0, height = 0, font_size = 100, font_color = {1,1,1}}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'toggleShuffle', label = 'X', color = {1,1,1}, function_owner = self,
+        position = {0.8,0.1,-0.7}, rotation = {0,0,0}, width = 200, height = 200, font_size = 100, tooltip = 'Shuffle ON'}
+    if not shufToggle then
+        buttonParam.tooltip = 'Shuffle OFF'
+        buttonParam.label = ''
+    end
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'setupStart', label = 'Start\nDraft', color = {1,1,1}, function_owner = self,
+        position = {0,0.1,0.4}, rotation = {0,0,0}, width = 1000, height = 500, font_size = 100}
+    self.createButton(buttonParam)
+
+    self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
+end
+
+function nullFunc()
+end
