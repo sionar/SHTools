@@ -5,7 +5,7 @@ Made by Sionar, with code borrowed from Lost Savage and Markimus
 
 
 ------------------Constants
-VERSION = '1.2.2'
+VERSION = '1.2.3'
 COLOR_ORDER = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLOR_RGB = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]'}
 ABILITY_ZONE_GUID = 'eea120'
@@ -87,6 +87,9 @@ function onObjectLeaveContainer(container, leave_object)
     local deckIndex, otherIndex
     local started = Global.getVar('started')
 
+    if not string.match(container.getName(), 'Draft Deck') then
+        return
+    end
 
     if leave_object.getName() == 'Draft' and draftStarted then
         container.setLock(false)
@@ -358,19 +361,19 @@ function dealCoroutine()
         if objPosition.x > POS1[1] - 0.01 and objPosition.x < POS1[1] + 0.01  and objPosition.z > POS1[3] - 0.01 and objPosition.z < POS1[3] + 0.01 then
             deck[1] = v
             deck[1].setLock(true)
-            deck[1].setName('Deck 1')
+            deck[1].setName('Draft Deck 1')
         elseif objPosition.x > POS2[1] - 0.01 and objPosition.x < POS2[1] + 0.01  and objPosition.z > POS2[3] - 0.01 and objPosition.z < POS2[3] + 0.01 then
             deck[2] = v
             deck[2].setLock(true)
-            deck[2].setName('Deck 2')
+            deck[2].setName('Draft Deck 2')
         elseif objPosition.x > POS3[1] - 0.01 and objPosition.x < POS3[1] + 0.01  and objPosition.z > POS3[3] - 0.01 and objPosition.z < POS3[3] + 0.01 then
             deck[3] = v
             deck[3].setLock(true)
-            deck[3].setName('Deck 3')
+            deck[3].setName('Draft Deck 3')
         elseif objPosition.x > POS4[1] - 0.01 and objPosition.x < POS4[1] + 0.01  and objPosition.z > POS4[3] - 0.01 and objPosition.z < POS4[3] + 0.01 then
             deck[4] = v
             deck[4].setLock(true)
-            deck[4].setName('Deck 4')
+            deck[4].setName('Draft Deck 4')
         end
     end
     sleep(0.01)
