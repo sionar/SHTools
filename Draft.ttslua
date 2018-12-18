@@ -1,11 +1,11 @@
---[[
+fwd = 11.5--[[
 SH Expansion Draft Tool
 Made by Sionar, with code borrowed from Lost Savage and Markimus
 --]]
 
 
 ------------------Constants
-VERSION = '1.1.2'
+VERSION = '1.2.2'
 COLOR_ORDER = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLOR_RGB = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]'}
 ABILITY_ZONE_GUID = 'eea120'
@@ -20,6 +20,7 @@ FACE_DOWN_ROT = {x = 0, y = 180, z = 180}
 ------------------Variables
 deck = {nil, nil, nil, nil}
 deckNum = {nil, nil, nil, nil}
+deckDir = {'cw', 'ccw', 'cw', 'ccw'}
 deckGUID = {nil, nil, nil, nil}
 players = {nil, nil, nil, nil}
 numPlayers = 10
@@ -27,6 +28,8 @@ round = 1
 shufToggle = true
 seatedTable = {}
 draftStarted = false
+syncDraft = true
+doneDecks = 0
 
 ------------------Load Save
 function onLoad(saveString)
@@ -39,6 +42,8 @@ function onLoad(saveString)
         draftStarted = save['ds'] or false
         shufToggle = save['ts'] or true
         deckGUID = save['g'] or {nil, nil, nil, nil}
+        syncDraft = save['sd'] or false
+        doneDecks = save['dd'] or 0
     end
     for i = 1,4 do
         deck[i] = getObjectFromGUID(deckGUID[i])
@@ -62,6 +67,8 @@ function onSave()
     save['ds'] = draftStarted
     save['ts'] = shufToggle
     save['g'] = deckGUID
+    save['sd'] = syncDraft
+    save['dd'] = doneDecks
 
     local saveString = JSON.encode(save)
     return saveString
@@ -73,6 +80,80 @@ function saveDeckGUID()
     end
 end
 
+------------------Event
+function onObjectLeaveContainer(container, leave_object)
+    local pos
+    local fwd, rgt
+    local deckIndex, otherIndex
+    local started = Global.getVar('started')
+
+
+    if leave_object.getName() == 'Draft' and draftStarted then
+        container.setLock(false)
+        pos = container.getPosition()
+        pos['y'] = pos['y'] + 0.1
+        Wait.time(function() leave_object.setPosition(pos) end, 3)
+        Wait.time(function() container.setLock(true) end, 4)
+        Wait.time(resetDeckPos, 4.01)
+        return
+    end
+    if not syncDraft and draftStarted and container.getQuantity() ~= 2 then
+        deckIndex = getDeckByGUID(container.getGUID())
+        otherIndex = (deckIndex + 1)%4 + 1         --deck that's going the same direction
+        players[deckIndex] = getNextPlayer(players[deckIndex], deckDir[deckIndex])
+        if players[deckIndex] == players[otherIndex] then
+            if deckDir[deckIndex] == 'cw' then
+                rgt = 5
+            else
+                rgt = -5
+            end
+        else
+            rgt = 0
+        end
+
+        if deckIndex%2 == 1 then
+            fwd = 11.5
+        else
+            fwd = 16.5
+        end
+
+        giveObjectToPlayer(container, players[deckIndex], {forward = fwd, right = rgt, up = 0, forceHeight = 2.2}, FACE_DOWN_ROT)
+
+        if container.getQuantity() == 3 then
+            local deckTable = container.getObjects()
+            for j = 1,3 do
+                if deckTable[j].name ~= 'Draft' then
+                    local card = container.takeObject({index = j-1})
+                    giveObjectToPlayer(card, players[deckIndex], {forward = 0, right = 0, up = 0, forceHeight = 2.2}, FACE_DOWN_ROT)
+                    break
+                end
+            end
+            container.destruct()
+            doneDecks = doneDecks + 1
+            if doneDecks == 4 then
+                self.destruct()
+            end
+        end
+    end
+end
+
+function onPlayerChangeColor(player_color)
+    if draftStarted then
+        Wait.time(function() Global.call('deleteCustomBoardCards') end, 2)
+    end
+end
+
+function resetDeckPos()
+    for i = 1, 4 do
+        if i%2 == 1 then
+            fwd = 11.5
+        else
+            fwd = 16.5
+        end
+
+        giveObjectToPlayer(deck[i], players[i], {forward = fwd, right = 0, up = 0, forceHeight = 2.2}, FACE_DOWN_ROT)
+    end
+end
 ------------------Main Functions
 function setupStart(clickedObject, playerColor)
 	if Player[playerColor].admin then
@@ -86,7 +167,6 @@ function setupStart(clickedObject, playerColor)
         if shufToggle then
 		          startLuaCoroutine(self, 'shufflePlayersCoroutine')
         end
-        draftStarted = true
         dealAbilityDecks()
 	end
 end
@@ -216,10 +296,11 @@ function dealAbilityDecks()
 end
 
 function dealCoroutine()
-    local params1 = {position = POS1, rotation = FACE_DOWN_ROT}
-    local params2 = {position = POS2, rotation = FACE_DOWN_ROT}
-    local params3 = {position = POS3, rotation = FACE_DOWN_ROT}
-    local params4 = {position = POS4, rotation = FACE_DOWN_ROT}
+    local params = {}
+    params[1] = {position = POS1, rotation = FACE_DOWN_ROT}
+    params[2] = {position = POS2, rotation = FACE_DOWN_ROT}
+    params[3] = {position = POS3, rotation = FACE_DOWN_ROT}
+    params[4] = {position = POS4, rotation = FACE_DOWN_ROT}
 
     local objParam = {
         type = "DeckCustom",
@@ -240,37 +321,35 @@ function dealCoroutine()
         back_is_hidden = true
     }
 
+    sleep(2)
     local draftDeck = spawnObject(objParam)
+    local card
     draftDeck.setCustomObject(customParam)
-    draftDeck.takeObject(params1)
-    draftDeck.takeObject(params2)
-    draftDeck.takeObject(params3)
-    draftDeck.takeObject(params4)
+    for i = 1,4 do
+        card = draftDeck.takeObject(params[i])
+        card.setName('Draft')
+    end
     draftDeck.destruct()
+    sleep(2)
     local abilityDeck = getDeckFromZoneByGUID(ABILITY_ZONE_GUID)
     abilityDeck.shuffle()
-    numPlayers = #getSeatedPlayers()
-
+    numPlayers = #seatedTable
 
     for i = 1, numPlayers do
-        abilityDeck.takeObject(params1)
-        sleep(0.01)
-        abilityDeck.takeObject(params2)
-        sleep(0.01)
-        abilityDeck.takeObject(params3)
-        sleep(0.01)
-        abilityDeck.takeObject(params4)
-        sleep(0.01)
+        for j = 1,4 do
+            abilityDeck.takeObject(params[j])
+            sleep(0.01)
+        end
     end
     sleep(0.1)
     draftDeck = spawnObject(objParam)
     draftDeck.setCustomObject(customParam)
-    draftDeck.takeObject(params1)
-    draftDeck.takeObject(params2)
-    draftDeck.takeObject(params3)
-    draftDeck.takeObject(params4)
-    sleep(2.5)
+    for i = 1,4 do
+        card = draftDeck.takeObject(params[i])
+        card.setName('Draft')
+    end
     draftDeck.destruct()
+    sleep(2)
 
     local allObjects = getAllObjects()
     local objPosition
@@ -279,15 +358,19 @@ function dealCoroutine()
         if objPosition.x > POS1[1] - 0.01 and objPosition.x < POS1[1] + 0.01  and objPosition.z > POS1[3] - 0.01 and objPosition.z < POS1[3] + 0.01 then
             deck[1] = v
             deck[1].setLock(true)
+            deck[1].setName('Deck 1')
         elseif objPosition.x > POS2[1] - 0.01 and objPosition.x < POS2[1] + 0.01  and objPosition.z > POS2[3] - 0.01 and objPosition.z < POS2[3] + 0.01 then
             deck[2] = v
             deck[2].setLock(true)
+            deck[2].setName('Deck 2')
         elseif objPosition.x > POS3[1] - 0.01 and objPosition.x < POS3[1] + 0.01  and objPosition.z > POS3[3] - 0.01 and objPosition.z < POS3[3] + 0.01 then
             deck[3] = v
             deck[3].setLock(true)
+            deck[3].setName('Deck 3')
         elseif objPosition.x > POS4[1] - 0.01 and objPosition.x < POS4[1] + 0.01  and objPosition.z > POS4[3] - 0.01 and objPosition.z < POS4[3] + 0.01 then
             deck[4] = v
             deck[4].setLock(true)
+            deck[4].setName('Deck 4')
         end
     end
     sleep(0.01)
@@ -303,30 +386,33 @@ function dealCoroutine()
     local fwd
     for i = 1, 4 do
         if i%2 == 1 then
-            fwd = 13
+            fwd = 11.5
         else
-            fwd = 20
+            fwd = 16.5
         end
 
         giveObjectToPlayer(deck[i], players[i], {forward = fwd, right = 0, up = 0, forceHeight = 2.2}, FACE_DOWN_ROT)
     end
 
     saveDeckGUID()
+
+    draftStarted = true
     local broadcastString = 'First round picks go to: '
     for i = 1,4 do
         broadcastString = broadcastString .. COLOR_RGB[players[i]] .. players[i] .. ' '
     end
 
     broadcastToAll(broadcastString, {1,1,1})
-    broadcastToAll('Round ' .. round .. ' has started.', {1,1,1})
 
-    Wait.time(checkRound, 2, -1)
+    if syncDraft then
+        broadcastToAll('Round ' .. round .. ' has started.', {1,1,1})
+        Wait.time(checkSync, 2, -1)
+    end
 
     return 1
 end
 
-
-function checkRound()
+function checkSync()
     local deckTable
     local card
 
@@ -343,9 +429,9 @@ function checkRound()
         players[4] = getNextPlayer(players[4], 'ccw')
         for i = 1, 4 do
             if i%2 == 1 then
-                fwd = 13
+                fwd = 11.5
             else
-                fwd = 20
+                fwd = 16.5
             end
 
             giveObjectToPlayer(deck[i], players[i], {forward = fwd, right = 0, up = 0, forceHeight = 2.2}, FACE_DOWN_ROT)
@@ -354,8 +440,8 @@ function checkRound()
             for i = 1,4 do
                 deckTable = deck[i].getObjects()
                 for j = 1,3 do
-                    if deckTable[j].name ~= '' then
-                        card = deck[i].takeObject({index = j})
+                    if deckTable[j].name ~= 'Draft' then
+                        card = deck[i].takeObject({index = j-1})
                         giveObjectToPlayer(card, players[i], {forward = 0, right = 0, up = 0, forceHeight = 2.2}, FACE_DOWN_ROT)
                         break
                     end
@@ -373,8 +459,17 @@ end
 function checkDraftStarted()
     if draftStarted then
         Wait.time(function() Global.call('deleteCustomBoardCards') end, 1)
-        Wait.time(checkRound, 2, -1)
+        Wait.time(checkSync, 2, -1)
     end
+end
+
+function getDeckByGUID(guid)
+    for i = 1,4 do
+        if guid == deckGUID[i] then
+            return i
+        end
+    end
+    return nil
 end
 
 ------------------Utility Functions
@@ -385,6 +480,8 @@ function shuffleTable(objects)
 		objects[a], objects[b] = objects[b], objects[a]
 	end
 end
+
+
 
 function getDeckFromZoneByGUID(guidIn)
 	local deck = nil
@@ -458,7 +555,7 @@ function getRandomPlayer()
     local randNum, temp, colorString
 
     for i = 1, 10 do
-        if Player[COLOR_ORDER[i]].seated then
+        if inTable(COLOR_ORDER[i], seatedTable) then
             table.insert(targs, COLOR_ORDER[i])
         end
     end
@@ -475,6 +572,13 @@ end
 function toggleShuffle(clickedButton, playerColor)
     if Player[playerColor].admin then
         shufToggle = not shufToggle
+        refreshButtons()
+    end
+end
+
+function toggleSync(clickedButton, playerColor)
+    if Player[playerColor].admin then
+        syncDraft = not syncDraft
         refreshButtons()
     end
 end
@@ -500,13 +604,25 @@ function refreshButtons()
     self.clearButtons()
 
     local buttonParam = {click_function = 'nullFunc', label = 'Shuffle Players', color = {1,1,1}, function_owner = self,
-        position = {-0.3,0.1,-0.7}, rotation = {0,0,0}, width = 0, height = 0, font_size = 100, font_color = {1,1,1}}
+        position = {-0.3,0.1,-0.9}, rotation = {0,0,0}, width = 0, height = 0, font_size = 100, font_color = {1,1,1}}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'toggleShuffle', label = 'X', color = {1,1,1}, function_owner = self,
-        position = {0.8,0.1,-0.7}, rotation = {0,0,0}, width = 200, height = 200, font_size = 100, tooltip = 'Shuffle ON'}
+        position = {0.8,0.1,-0.9}, rotation = {0,0,0}, width = 200, height = 200, font_size = 100, tooltip = 'Shuffle ON'}
     if not shufToggle then
         buttonParam.tooltip = 'Shuffle OFF'
+        buttonParam.label = ''
+    end
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'nullFunc', label = 'Synchronous Draft', color = {1,1,1}, function_owner = self,
+        position = {-0.3,0.1,-0.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 100, font_color = {1,1,1}}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'toggleSync', label = 'X', color = {1,1,1}, function_owner = self,
+        position = {0.8,0.1,-0.5}, rotation = {0,0,0}, width = 200, height = 200, font_size = 100, tooltip = 'Synchronous Draft'}
+    if not syncDraft then
+        buttonParam.tooltip = 'Asynchronous Draft'
         buttonParam.label = ''
     end
     self.createButton(buttonParam)
