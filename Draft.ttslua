@@ -1,11 +1,11 @@
-fwd = 11.5--[[
+--[[
 SH Expansion Draft Tool
 Made by Sionar, with code borrowed from Lost Savage and Markimus
 --]]
 
 
 ------------------Constants
-VERSION = '1.2.3'
+VERSION = '1.2.4'
 COLOR_ORDER = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLOR_RGB = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]'}
 ABILITY_ZONE_GUID = 'eea120'
@@ -16,6 +16,7 @@ POS4 = {4, 1.2, 15}
 NO_ROT = {x = 0, y = 0, z = 0}
 FACE_UP_ROT = {x = 0, y = 180, z = 0}
 FACE_DOWN_ROT = {x = 0, y = 180, z = 180}
+SETUP_BOARD_GUID = '39d283'
 
 ------------------Variables
 deck = {nil, nil, nil, nil}
@@ -170,6 +171,8 @@ function setupStart(clickedObject, playerColor)
         if shufToggle then
 		          startLuaCoroutine(self, 'shufflePlayersCoroutine')
         end
+        local setupBoard = getObjectFromGUID(SETUP_BOARD_GUID)
+        setupBoard.scale(0.25)
         dealAbilityDecks()
 	end
 end
