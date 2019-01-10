@@ -34,8 +34,8 @@ RULES = {
 'C1. Dead players cannot use abilities or reveal artifacts.',
 'C2. A player with Aegis cannot be targeted by any abilities. Their abilities also cannot be interacted with in any manner.',
 'C3. Players with the Silenced effect may reveal artifacts.',
-'C4. Abilities that can be Hacked: Martyr, Harbinger, Collector, Surgeon, Jester, Decider, Usurper, Rebel, Dictator, Gambler, Senator, Fisherman, Trickster, Scout, Spelunker.',
-'C5. Abilities that can be Puppeteered: Spy, Harbinger, Collector, Soulmate, Librarian, Silencer, Poisoner, Assassin, Broker, Guardian-Angel, Bandit, Avenger, Big-Brother, Specter, Denouncer, Spiritualist and Scion.',
+'C4. Abilities that can be Hacked: Martyr, Harbinger, Collector, Pacifist, Pariah, Surgeon, Jester, Decider, Usurper, Rebel, Specter, Dictator, Gambler, Senator, Fisherman, Trickster, Scout, Reporter.',
+'C5. Abilities that can be Puppeteered: Spy, Harbinger, Collector, Soulmate, Librarian, Silencer, Poisoner, Assassin, Broker, Guardian-Angel, Knight, Pacifist, Pariah, Bandit, Avenger, Big-Brother, Specter, Mentor, Denouncer, Spiritualist, Scion, Drunkard, Detective, Reporter.',
 'C6. Cards may not be traded while an ability is being played.'
 }
 CREDITS = 'Made by: \nPiggy\nSionar\n\nSpecial thanks to the entire\nSecret Hitler community!\n\nCome join us on Discord at:\ncFuFmmm'

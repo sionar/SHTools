@@ -29,7 +29,7 @@ numSelected = 0
 drawNum = 1
 option = 0
 promOnly = true
-last_gambled = "none"
+gambleTable = {White = '', Brown = '', Red = '', Orange = '', Yellow = '', Green = '', Teal = '', Blue = '', Purple = '', Pink = '', Tan = '', Brown = '' }
 efName = ''
 
 
@@ -41,7 +41,7 @@ function onLoad(saveString)
         local save = JSON.decode(saveString)
         state = save['st']
         promOnly = save['pr']
-        last_gambled = save['l']
+        gambleTable = save['g'] or gambleTable
     end
     refreshButtons()
     self.setDescription('v ' .. VERSION .. '\nMade by Sionar\nUse with SH Consolidator Edition workshop mod.')
@@ -51,7 +51,7 @@ function onSave()
     local save = {}
     save['st'] = state
     save['pr'] = promOnly
-    save['l'] = last_gambled
+    save['g'] = gambleTable
     local saveString = JSON.encode(save)
     return saveString
 end
@@ -82,7 +82,7 @@ function drawStart(clickedButton, playerColor)
             return
         end
         Global.call('callFunction', {fcn = 'drawCards', params = {drawNum, player}})
-        if drawNum >= 6 or drawNum >= drawDeck.getQuantity() then
+        if drawNum >= 6 or drawNum > drawDeck.getQuantity() then
             startShufTimer()
         end
         returnFunc()
@@ -253,10 +253,10 @@ function gambleCoroutine()
     local gambleResult
     for _, tmpObj in ipairs(allObjs) do
         tmpPos = tmpObj.getPosition()
-        if tmpObj.getDescription() == last_gambled and tmpObj.getDescription() ~= "" and tmpPos['x'] >= pos1['x'] - 15 and tmpPos['x'] <= pos1['x'] and tmpPos['z'] >= pos1['z'] - 8 and tmpPos['z'] <= pos1['z'] + 8 then
-            tmpObj.setRotationSmooth(rotDown)
+        if tmpObj.getName() ~= '' and tmpObj.getName() == gambleTable[player]  then
             tmpObj.setPositionSmooth(pos1)
-            sleep(0.5)
+            tmpObj.setRotationSmooth(rotDown)
+            sleep(2)
         end
     end
     abilityDeck.shuffle()
@@ -269,9 +269,8 @@ function gambleCoroutine()
         broadcastString = broadcastString .. "won!"
         local params = {index = 1}
         local card = abilityDeck.takeObject(params)
-        card.setPositionSmooth({pos1['x'] - 5, pos1['y'], pos1['z']})
-        card.setRotationSmooth({rotDown['x'], rotDown['y'], rotDown['z']})
-        last_gambled = card.getDescription()
+        giveObjectToPlayer(card, player, {forward = 16.5, right = 0, up = 0}, rotDown)
+        gambleTable[player] = card.getName()
         gambleResult = 'w'
     else
         broadcastString = broadcastString .. "lost!"
@@ -367,36 +366,41 @@ function martyrStart(clickedButton, playerColor)
         end
 
         reshuffle()
-        local deckTable = drawDeck.getObjects()
-        local size = drawDeck.getQuantity()
-        local found = 0
-        found = getIndex(option, size, deckTable, "Liberal Policy", "Fascist Policy")
-        local broadcastString
-        if option == 0 then
-            broadcastString = player .. " played a Liberal policy card and died!"
-        else
-            broadcastString = player .. " played a Fascist policy card and died!"
-        end
-        broadcastToAll(broadcastString, {1,1,1})
-        local params = {index = found-1}
-
-        local card = drawDeck.takeObject(params)
-        local delta = {forward = 0, right = 0, up = 0}
-        if player == 'Tan' or player == 'Maroon' then
-            delta = {forward = 2.66, right = -9, up = 0}
-        end
-        giveObjectToPlayer(card, player, delta, {x = 0, y = 180, z = 180})
-        reshuffle()
-        Global.setVar('lastPres', player)
-        Global.setVar('lastChan', player)
-        --[[
-        local playerStat = Global.getTable('playerStatus')
-        playerStat[player] = 5
-        Global.setTable('playerStatus', playerStat)
-        Global.call('refreshStatusButtons')
-        --]]
-        returnFunc()
+        Wait.time(martyrStart2, 1)
     end
+end
+
+function martyrStart2()
+    local drawDeck = getDeckFromZoneByGUID(DRAW_ZONE_GUID)
+    local deckTable = drawDeck.getObjects()
+    local size = drawDeck.getQuantity()
+    local found = 0
+    found = getIndex(option, size, deckTable, "Liberal Policy", "Fascist Policy")
+    local broadcastString
+    if option == 0 then
+        broadcastString = player .. " played a Liberal policy card and died!"
+    else
+        broadcastString = player .. " played a Fascist policy card and died!"
+    end
+    broadcastToAll(broadcastString, {1,1,1})
+    local params = {index = found-1}
+
+    local card = drawDeck.takeObject(params)
+    local delta = {forward = 0, right = 0, up = 0}
+    if player == 'Tan' or player == 'Maroon' then
+        delta = {forward = 2.66, right = -9, up = 0}
+    end
+    giveObjectToPlayer(card, player, delta, {x = 0, y = 180, z = 180})
+    reshuffle()
+    Global.setVar('lastPres', player)
+    Global.setVar('lastChan', player)
+    --[[
+    local playerStat = Global.getTable('playerStatus')
+    playerStat[player] = 5
+    Global.setTable('playerStatus', playerStat)
+    Global.call('refreshStatusButtons')
+    --]]
+    returnFunc()
 end
 
 function startShufTimer()
