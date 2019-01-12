@@ -93,6 +93,7 @@ function abilitydrawStart(clickedButton, playerColor)
             broadcastToColor("ERROR: Ability deck not found.", playerColor, {1,0,0})
             return
         end
+        abilityDeck.shuffle()
         abilitydrawcards(drawNum)
       end
         mainMenu()
