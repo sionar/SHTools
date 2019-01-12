@@ -93,25 +93,23 @@ function abilitydrawStart(clickedButton, playerColor)
             broadcastToColor("ERROR: Ability deck not found.", playerColor, {1,0,0})
             return
         end
-        for i = 1, drawNum do
-        abilitydrawcards()
+        abilitydrawcards(drawNum)
       end
         mainMenu()
     end
-end
 
-function abilitydrawcards()
+function abilitydrawcards(drawNum)
     local abilityDeck = getDeckFromZoneByGUID(ABILITY_ZONE_GUID)
     local pos1 = abilityDeck.getPosition()
     local rotUp = {x = 0, y = 180, z = 0}
     local rotDown = {x = 0, y = 180, z = 180}
     local allObjs = getAllObjects()
 	local tmpObj
-    abilityDeck.shuffle()
+        for i = 1, drawNum do
         local params = {index = 1}
         local card = abilityDeck.takeObject(params)
         giveObjectToPlayer(card, player, {forward = 16.5, right = 0, up = 0}, rotDown)
-        gambleTable[player] = card.getName()
+      end
     end
 
 function drawStart(clickedButton, playerColor)
