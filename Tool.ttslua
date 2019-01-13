@@ -69,20 +69,20 @@ function incDraw()
     drawNum = drawNum + 1
     drawMenu()
 end
-function decaDraw()
+function decAbDraw()
     if drawNum ~= 1 then
         drawNum = drawNum - 1
     end
-    abilitydrawMenu()
+    abDrawMenu()
 end
 
-function incaDraw()
+function incAbDraw()
     drawNum = drawNum + 1
-    abilitydrawMenu()
+    abDrawMenu()
 end
 
 
-function abilitydrawStart(clickedButton, playerColor)
+function abDrawStart(clickedButton, playerColor)
     if Player[playerColor].admin or not promOnly then
         if player == "" then
             broadcastToColor("ERROR: Player not selected.", playerColor, {1,0,0})
@@ -93,25 +93,22 @@ function abilitydrawStart(clickedButton, playerColor)
             broadcastToColor("ERROR: Ability deck not found.", playerColor, {1,0,0})
             return
         end
-        abilityDeck.shuffle()
-        abilitydrawcards(drawNum)
-      end
-        mainMenu()
-    end
-
-function abilitydrawcards(drawNum)
-    local abilityDeck = getDeckFromZoneByGUID(ABILITY_ZONE_GUID)
-    local pos1 = abilityDeck.getPosition()
-    local rotUp = {x = 0, y = 180, z = 0}
-    local rotDown = {x = 0, y = 180, z = 180}
-    local allObjs = getAllObjects()
-	local tmpObj
-        for i = 1, drawNum do
+        local pos1 = abilityDeck.getPosition()
+        local rotUp = {x = 0, y = 180, z = 0}
+        local rotDown = {x = 0, y = 180, z = 180}
+        local allObjs = getAllObjects()
+        local tmpObj
+        local card
         local params = {index = 1}
-        local card = abilityDeck.takeObject(params)
-        giveObjectToPlayer(card, player, {forward = 16.5, right = 0, up = 0}, rotDown)
-      end
+
+        abilityDeck.shuffle()
+        for i = 1, drawNum do
+            card = abilityDeck.takeObject(params)
+            giveObjectToPlayer(card, player, {forward = 16.5, right = 0, up = 0}, rotDown)
+        end
+        returnFunc()
     end
+end
 
 function drawStart(clickedButton, playerColor)
     if Player[playerColor].admin or not promOnly then
@@ -987,7 +984,7 @@ function mainMenu()
     self.clearButtons()
     self.clearInputs()
 
-    local buttonParam = {click_function = 'drawMenu', label = "Draw", color = {1,1,1}, function_owner = self,
+    local buttonParam = {click_function = 'drawMenu', label = "Policy\nDraw", color = {1,1,1}, function_owner = self,
         position = {-1.7,0.1,-0.85}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
     self.createButton(buttonParam)
 
@@ -1019,16 +1016,16 @@ function mainMenu()
         position = {-0.575,0.1,0.95}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'shufStart', label = "Shuffle\nDeck", color = {1,1,1}, function_owner = self,
-        position = {0.575,0.1,-0.85}, rotation = {0,0,0}, width = 500, height = 275, font_size = 90}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'passedStart', label = "Vote\nPassed", color = {1,1,1}, function_owner = self,
-        position = {0.575,0.1,-0.25}, rotation = {0,0,0}, width = 500, height = 275, font_size = 90}
-    self.createButton(buttonParam)
-
     local buttonParam = {click_function = 'reshufMenu', label = "Reshuffle", color = {1,1,1}, function_owner = self,
-        position = {0.575,0.1,0.35}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
+        position = {0.575,0.1,-0.85}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'abDrawMenu', label = "Ability\nDraw", color = {1,1,1}, function_owner = self,
+        position = {0.575,0.1,-0.25}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'giveEfMenu', label = "Deal\nEffect Cards", color = {1,1,1}, function_owner = self,
+        position = {0.575,0.1,0.35}, rotation = {0,0,0}, width = 500, height = 275, font_size = 80}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'givepMenu', label = "Give\nParty Card", color = {1,1,1}, function_owner = self,
@@ -1046,24 +1043,24 @@ function mainMenu()
         position = {2.2,0.1,-1.2}, width = 100, height = 100, font_size = 80, tooltip = 'Give Tool to:'}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'abilitydrawMenu', label = "Ability\nDraw", color = {1,1,1}, function_owner = self,
-        position = {1.7,0.1,-0.85}, rotation = {0,0,0}, width = 500, height = 275, font_size = 90}
+    local buttonParam = {click_function = 'shufStart', label = "Shuffle\nDeck", color = {1,1,1}, function_owner = self,
+        position = {1.7,0.1,-0.85}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'randMenu', label = 'Random\nColor', color = {1,1,1}, function_owner = self,
-        position = {1.7,0.1,-0.25}, rotation = {0,0,0}, width = 500, height = 275, font_size = 70}
+    local buttonParam = {click_function = 'passedStart', label = "Vote\nPassed", color = {1,1,1}, function_owner = self,
+        position = {1.7,0.1,-0.25}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'lockStart', label = "Toggle Lock\nDecks", color = {1,1,1}, function_owner = self,
-        position = {1.7,0.1,0.35}, rotation = {0,0,0}, width = 500, height = 275, font_size = 70}
+        position = {1.7,0.1,0.35}, rotation = {0,0,0}, width = 500, height = 275, font_size = 80}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'giveEfMenu', label = "Deal\nEffect Cards", color = {1,1,1}, function_owner = self,
-        position = {1.7,0.1,0.95}, rotation = {0,0,0}, width = 500, height = 275, font_size = 70}
+    local buttonParam = {click_function = 'randMenu', label = 'Random\nColor', color = {1,1,1}, function_owner = self,
+        position = {1.7,0.1,0.95}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
     self.createButton(buttonParam)
 end
 
-function abilitydrawMenu()
+function abDrawMenu()
     self.clearButtons()
     self.clearInputs()
     state = 14
@@ -1076,11 +1073,11 @@ function abilitydrawMenu()
         position = {0,0.1,-0.5}, rotation = {0,0,0}, width = 300, height = 200, font_size = 150, alignment = 3, validation = 2}
     self.createInput(inputParam)
 
-    local buttonParam = {click_function = 'decaDraw', label = "-", color = stringColorToRGB('White'), function_owner = self,
+    local buttonParam = {click_function = 'decAbDraw', label = "-", color = stringColorToRGB('White'), function_owner = self,
         position = {-0.25,0.1,0}, rotation = {0,0,0}, width = 250, height = 100, font_size = 150}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'incaDraw', label = "+", color = stringColorToRGB('White'), function_owner = self,
+    local buttonParam = {click_function = 'incAbDraw', label = "+", color = stringColorToRGB('White'), function_owner = self,
         position = {0.25,0.1,0}, rotation = {0,0,0}, width = 250, height = 100, font_size = 150}
     self.createButton(buttonParam)
 
@@ -1388,7 +1385,7 @@ function createStartButton()
     elseif state == 10 then         buttonParam.click_function = 'reshufStart'
     elseif state == 12 then         buttonParam.click_function = 'fisherStart'
     elseif state == 13 then         buttonParam.click_function = 'randStart'
-    elseif state == 14 then         buttonParam.click_function = 'abilitydrawStart'
+    elseif state == 14 then         buttonParam.click_function = 'abDrawStart'
     end
     self.createButton(buttonParam)
 end
@@ -1603,7 +1600,7 @@ function refreshButtons()
     elseif state == 13 then
         randMenu()
     elseif state == 14 then
-       abilitydrawMenu()
+       abDrawMenu()
     end
 end
 
