@@ -25,7 +25,7 @@ RULES = {
 'T4. Right after: This timing window refers to the time before anything else occurs. This includes a player using an ability or a presidential power, or a president choosing a chancellor.',
 'T5. Reveal this ability before voting: The ability can only be played while you are still voting on a government. It cannot be played after the vote passes and before the start of a new voting session.',
 '*Etiquette and Timing',
-'E1. Saboteur and Hacker cannot be used once the player has already started performing the actions of the ability. When you announce an ability, wait at least five seconds to give other players a chance to respond before you play your ability.',
+'E1. Saboteur, Hacker and Interceptor cannot be used once the player has already started performing the actions of the ability. When you announce an ability, wait at least five seconds to give other players a chance to respond before you play your ability.',
 'E2. If a player wants you to wait before you use your ability, give them at least thirty seconds to decide whether or not they want to respond to your ability.',
 'E3. After a government passes, wait at least five seconds before you draw cards in case someone wants to play an ability.',
 'E4. After a player dies, wait five seconds before asking if they are Hitler in case someone decides to save them with an ability.',
@@ -34,8 +34,8 @@ RULES = {
 'C1. Dead players cannot use abilities or reveal artifacts.',
 'C2. A player with Aegis cannot be targeted by any abilities. Their abilities also cannot be interacted with in any manner.',
 'C3. Players with the Silenced effect may reveal artifacts.',
-'C4. Abilities that can be Hacked: Martyr, Harbinger, Collector, Pacifist, Pariah, Surgeon, Jester, Decider, Usurper, Rebel, Specter, Dictator, Gambler, Senator, Fisherman, Trickster, Scout, Reporter.',
-'C5. Abilities that can be Puppeteered: Spy, Harbinger, Collector, Soulmate, Librarian, Silencer, Poisoner, Assassin, Broker, Guardian-Angel, Knight, Pacifist, Pariah, Bandit, Avenger, Big-Brother, Specter, Mentor, Denouncer, Spiritualist, Scion, Drunkard, Detective, Reporter.',
+'C4. Abilities that can be Hacked: Any ability with the green lock symbol.',
+'C5. Abilities that can be Puppeteered: Any ability with the yellow puppet symbol.',
 'C6. Cards may not be traded while an ability is being played.'
 }
 CREDITS = 'Made by: \nPiggy\nSionar\n\nSpecial thanks to the entire\nSecret Hitler community!\n\nCome join us on Discord at:\ncFuFmmm'

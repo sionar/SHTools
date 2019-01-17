@@ -6,7 +6,7 @@ Made by Sionar
 
 ------------------Constants
 COLOR_TABLE = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Tan', 'Maroon'}
-COLOR_RGB = {'[FFFFFF]', '[703A16]', '[DA1917]', '[F3631C]', '[E6E42B]', '[30B22A]', '[20B09A]', '[1E87FF]', '[9F1FEF]', '[F46FCD]', '[D2B48C]', '[800000]'}
+COLOR_RGB = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Tan = '[D2B48C]', Maroon = '800000'}
 DRAW_ZONE_GUID = '6463d3'
 DISCARD_ZONE_GUID = 'b9bd6e'
 EFFECT_ZONE_GUID = '374a16'
@@ -81,7 +81,6 @@ function incAbDraw()
     abDrawMenu()
 end
 
-
 function abDrawStart(clickedButton, playerColor)
     if Player[playerColor].admin or not promOnly then
         if player == "" then
@@ -105,7 +104,10 @@ function abDrawStart(clickedButton, playerColor)
         for i = 1, drawNum do
             card = abilityDeck.takeObject(params)
             giveObjectToPlayer(card, player, {forward = 16.5, right = 0, up = 0}, rotDown)
+
         end
+        local broadcastString = colorString(player) .. " draws " .. drawNum .. " abilities from the ability deck."
+        broadcastToAll(broadcastString, {1,1,1})
         returnFunc()
     end
 end
@@ -150,10 +152,10 @@ function sdStart(clickedButton, playerColor)
             return
         end
 
-        local broadcastString = player .. " inspects "
+        local broadcastString = colorString(player) .. " inspects "
         for i = 1,12 do
             if targSelected[i] == 1 then
-                broadcastString = broadcastString .. COLOR_TABLE[i] .. " "
+                broadcastString = broadcastString .. colorString(COLOR_TABLE[i]) .. " "
                 if roles[COLOR_TABLE[i]] == "liberal" then
                     table.insert(inspectedRoles, "liberal")
                 else
@@ -205,16 +207,16 @@ function inspectStart(clickedButton, playerColor)
         end
 
         local roles = Global.getTable('roles')
-        local broadcastString = player .. " inspects "
+        local broadcastString = colorString(player) .. " inspects "
         local inspectMessage
         for i = 1,12 do
             if targSelected[i] == 1 then
-                broadcastString = broadcastString .. COLOR_TABLE[i] .. " "
+                broadcastString = broadcastString .. colorString(COLOR_TABLE[i]) .. " "
                 if roles[COLOR_TABLE[i]] == "liberal" then
-                    inspectMessage = COLOR_TABLE[i] .. " is a Liberal!"
+                    inspectMessage = colorString(COLOR_TABLE[i]) .. " is a Liberal!"
                     broadcastToColor12P(inspectMessage, player, {0,0,1})
                 else
-                    inspectMessage = COLOR_TABLE[i] .. " is a Fascist!"
+                    inspectMessage = colorString(COLOR_TABLE[i]) .. " is a Fascist!"
                     broadcastToColor12P(inspectMessage, player, {1,0,0})
                 end
             end
@@ -287,7 +289,7 @@ function gambleCoroutine()
     local pos1 = abilityDeck.getPosition()
     local rotUp = {x = 0, y = 180, z = 0}
     local rotDown = {x = 0, y = 180, z = 180}
-    local broadcastString = player.." bet on a "
+    local broadcastString = colorString(player) .. " bet on a "
     local allObjs = getAllObjects()
 	local tmpObj
     local gambleResult
@@ -385,7 +387,7 @@ function fisherStart(clickedButton, playerColor)
             startLuaCoroutine(self, 'fishCoroutine')
         end
 
-        local broadcastString = player .. " draws 3 cards from the discard pile."
+        local broadcastString = colorString(player) .. " draws 3 cards from the discard pile."
         broadcastToAll(broadcastString, {1,1,1})
         startShufTimer()
 
@@ -418,9 +420,9 @@ function martyrStart2()
     found = getIndex(option, size, deckTable, "Liberal Policy", "Fascist Policy")
     local broadcastString
     if option == 0 then
-        broadcastString = player .. " played a Liberal policy card and died!"
+        broadcastString = colorString(player) .. " played a Liberal policy card and died!"
     else
-        broadcastString = player .. " played a Fascist policy card and died!"
+        broadcastString = colorString(player) .. " played a Fascist policy card and died!"
     end
     broadcastToAll(broadcastString, {1,1,1})
     local params = {index = found-1}
@@ -500,11 +502,11 @@ function givePCoroutine()
     for i = 1,12 do
         if targSelected[i] == 1 then
             if roles[COLOR_TABLE[i]] == "liberal" then
-                broadcastString = COLOR_TABLE[i] .. " is a Liberal!"
+                broadcastString = colorString(COLOR_TABLE[i]) .. " is a Liberal!"
                 broadcastToAll(broadcastString, {0,0,1})
                 card = getObjectFromGUID(LIBERALPARTY_CARD_GUID)
             else
-                broadcastString = COLOR_TABLE[i] .. " is a Fascist!"
+                broadcastString = colorString(COLOR_TABLE[i]) .. " is a Fascist!"
                 broadcastToAll(broadcastString, {1,0,0})
                 card = getObjectFromGUID(FASCISTPARTY_CARD_GUID)
             end
@@ -585,7 +587,7 @@ function giveEFCoroutine()
                 sleep(0.1)
             end
         end
-        broadcastToAll('The Poisoner effect cards have been dealt to ' .. player .. '.', {1,1,1})
+        broadcastToAll('The Poisoner effect cards have been dealt to ' .. colorString(player) .. '.', {1,1,1})
     elseif option == 1 then
         for i = 1,size do
             if deckTable[i].name ~= 'Card' then
@@ -624,7 +626,7 @@ function giveEFCoroutine()
                 sleep(0.1)
             end
         end
-        broadcastToAll('The Detective effect cards have been dealt to ' .. player .. '.', {1,1,1})
+        broadcastToAll('The Detective effect cards have been dealt to ' .. colorString(player) .. '.', {1,1,1})
     elseif option == 2 then
         for i = 1,size do
             if deckTable[i].name ~= 'Card' then
@@ -662,7 +664,7 @@ function giveEFCoroutine()
                 sleep(0.1)
             end
         end
-        broadcastToAll('The Artifact effect cards have been dealt to ' .. player .. '.', {1,1,1})
+        broadcastToAll('The Artifact effect cards have been dealt to ' .. colorString(player) .. '.', {1,1,1})
     else
         for i = size,1,-1 do
             if deckTable[i].name ~= 'Card' then
@@ -677,7 +679,7 @@ function giveEFCoroutine()
                 params = {index = i-1, flip = true}
                 card = effectDeck.takeObject(params)
                 giveObjectToPlayer(card, player, {forward = 16.5, right = 0, up = 0}, {x = 0, y = 180, z = 0})
-                broadcastToAll('The ' .. tmpString .. ' [FFFFFF]effect card has been dealt to ' .. player .. '.', {1,1,1})
+                broadcastToAll('The ' .. tmpString .. ' [FFFFFF]effect card has been dealt to ' .. colorString(player) .. '.', {1,1,1})
                 break
             end
         end
@@ -698,7 +700,7 @@ function randStart(clickedButton, playerColor, index)
         local broadcastString = 'Random order: '
         for i = 1, 12 do
             if targSelected[i] == 1 then
-                colorString = COLOR_RGB[i] .. COLOR_TABLE[i]
+                colorString = COLOR_RGB[COLOR_TABLE[i]] .. COLOR_TABLE[i]
                 table.insert(targs, colorString)
             end
         end
@@ -1612,4 +1614,8 @@ function clearValues()
     drawNum = 1
     option = 0
     efName = ''
+end
+
+function colorString(color)
+    return COLOR_RGB[color] .. color .. '[-]'
 end
