@@ -71,43 +71,70 @@ ABILITIES =
 
 EFFECTS =
 {
-    {name = '[8B4513]Mark of Shame[-]',                            desc = '[FFFFFF]You didn\'t read the card. Reading the card explains the card.'},
-    {name = '[00FFFF]Banished[-]',                                 desc = '[FFFFFF]This effect cannot be removed. You cannot vote, use abilities or use artifacts. This effect has priority over Lobbyist.'},
-    {name = '[00FFFF]Silenced[-]',                                 desc = '[FFFFFF]You cannot vote, speak, or use abilities until the round after the next policy is placed on a track.'},
-    {name = '[00FFFF]Death Sentence[-]',                           desc = '[FFFFFF]At the start of the third round after this round, you die if the Assassin is not dead.'},
-    {name = '[00FFFF]Aegis[-]',                                    desc = '[FFFFFF]Destroy all artifacts and effects on you. You cannot be affected by other players\' abilities unless you allow it.'},
-    {name = '[00FFFF]Mighty[-]',                                   desc = '[FFFFFF]You may play all of your abilities.'},
-    {name = '[00FFFF]Tracked[-]',                                  desc = '[FFFFFF]You are being watched by Big-Brother. They look at your vote and abilities every round. Once per game they decide how you vote.'},
-    {name = '[00FFFF]Unpopular[-]',                                desc = '[FFFFFF]You are ineligible for government until the round after the next policy is placed on a track. This effect has priority over Usurper and Rebel.'},
-    {name = '[00FFFF]Ethereal[-]',                                 desc = '[FFFFFF]If you are dead, you vote, but cannot be in government, speak, use abilities or use artifacts. The Spiritualist may nominate you as chancellor.'},
-    {name = '[00FFFF]Protected[-]',                                desc = '[FFFFFF][Right before you die,] the Pacifist decides if you die. You then lose this effect.'},
-    {name = '[DAA520]Inspected 1[-]',                              desc = '[FFFFFF]You have been inspected by the Detective.'},
-    {name = '[DAA520]Inspected 1[-]',                              desc = '[FFFFFF]You have been inspected by the Detective.'},
-    {name = '[DAA520]Inspected 1[-]',                              desc = '[FFFFFF]You have been inspected by the Detective.'},
-    {name = '[DAA520]Inspected 1[-]',                              desc = '[FFFFFF]You have been inspected by the Detective.'},
-    {name = '[DAA520]Inspected 1[-]',                              desc = '[FFFFFF]You have been inspected by the Detective.'},
-    {name = '[C71585]Inspected 2[-]',                              desc = '[FFFFFF]You have been inspected by the Detective.'},
-    {name = '[C71585]Inspected 2[-]',                              desc = '[FFFFFF]You have been inspected by the Detective.'},
-    {name = '[C71585]Inspected 2[-]',                              desc = '[FFFFFF]You have been inspected by the Detective.'},
-    {name = '[C71585]Inspected 2[-]',                              desc = '[FFFFFF]You have been inspected by the Detective.'},
-    {name = '[C71585]Inspected 2[-]',                              desc = '[FFFFFF]You have been inspected by the Detective.'},
-    {name = '[008000]Poisoned Drink 1[-]',                         desc = '[FFFFFF]You have been poisoned. You die.'},
-    {name = '[008000]Water 1[-]',                                  desc = '[FFFFFF]You drink a refreshing glass of water.'},
-    {name = '[008000]Water 1[-]',                                  desc = '[FFFFFF]You drink a refreshing glass of water.'},
-    {name = '[008000]Poisoned Drink 2[-]',                         desc = '[FFFFFF]You have been poisoned. You die.'},
-    {name = '[008000]Water 2[-]',                                  desc = '[FFFFFF]You drink a refreshing glass of water.'},
-    {name = '[008000]Water 2[-]',                                  desc = '[FFFFFF]You drink a refreshing glass of water.'},
-    {name = '[6A5ACD]Artifact: Cursed Crown[-]',                   desc = '[20B09A][Reveal right after the player is elected as president.] [FFFFFF]You die. If you die, the government is cancelled and the election tracker does not move.'},
-    {name = '[6A5ACD]Artifact: Ring of Power[-]',                  desc = '[20B09A][Reveal right after the player is elected as president.] [FFFFFF]You may play all of your abilities.'},
-    {name = '[6A5ACD]Artifact: Amulet of Warding[-]',              desc = '[20B09A][Reveal anytime.] [FFFFFF]You gain the Aegis effect for three rounds.'},
-    {name = '[6A5ACD]Artifact: Nullification Collar[-]',           desc = '[20B09A][Reveal right after the player plays an ability.] [FFFFFF]Your ability is negated.'},
-    {name = '[6A5ACD]Artifact: Last Horcrux[-]',                   desc = '[20B09A][Reveal right before the player dies.] [FFFFFF]You do not die.'},
-    {name = '[6A5ACD]Artifact: Mirror of Kalandra[-]',             desc = '[20B09A][Reveal anytime. Cannot be placed on yourself.] [FFFFFF]The owner of the artifact plays a copy of your ability.'},
-    {name = '[6A5ACD]Artifact: Staff of Necromancy[-]',            desc = '[20B09A][Reveal anytime the player is dead.] [FFFFFF]You vote during this round. The owner of the artifact decides how you vote. You give the owner of the artifact an unused ability. They may play it.'},
-    {name = '[6A5ACD]Artifact: Sword of Accolades[-]',             desc = '[20B09A][Reveal before voting.] [FFFFFF]Force a special election where you are the president.'},
-    {name = '[6A5ACD]Artifact: Forbidden Grimoire[-]',             desc = '[20B09A][Reveal anytime.] [FFFFFF]Draw three random abilities from the ability deck. Choose one ability and place it concealed in front of you. You may play it.'},
-    {name = '[6A5ACD]Artifact: Dagger of Compulsion[-]',           desc = '[20B09A][Reveal right after the player is elected as president.] [FFFFFF]The owner of the artifact becomes the president instead of you. You keep the presidential power unless Magician was played.'}
+    {name = '[8B4513]Mark of Shame[-]',                             desc = '[FFFFFF]You didn\'t read the card. Reading the card explains the card.'},
+    {name = '[00FFFF]Banished[-]',                                  desc = '[FFFFFF]This effect cannot be removed. You cannot vote, use abilities or use artifacts. This effect has priority over Lobbyist.'},
+    {name = '[00FFFF]Silenced[-]',                                  desc = '[FFFFFF]You cannot vote, speak, or use abilities until the round after the next policy is placed on a track.'},
+    {name = '[00FFFF]Death Sentence[-]',                            desc = '[FFFFFF]At the start of the third round after this round, you die if the Assassin is not dead.'},
+    {name = '[00FFFF]Aegis[-]',                                     desc = '[FFFFFF]Destroy all artifacts and effects on you. You cannot be affected by other players\' abilities unless you allow it.'},
+    {name = '[00FFFF]Mighty[-]',                                    desc = '[FFFFFF]You may play all of your abilities.'},
+    {name = '[00FFFF]Tracked[-]',                                   desc = '[FFFFFF]You are being watched by Big-Brother. They look at your vote and abilities every round. Once per game they decide how you vote.'},
+    {name = '[00FFFF]Unpopular[-]',                                 desc = '[FFFFFF]You are ineligible for government until the round after the next policy is placed on a track. This effect has priority over Usurper and Rebel.'},
+    {name = '[00FFFF]Ethereal[-]',                                  desc = '[FFFFFF]If you are dead, you vote, but cannot be in government, speak, use abilities or use artifacts. The Spiritualist may nominate you as chancellor.'},
+    {name = '[00FFFF]Protected[-]',                                 desc = '[FFFFFF][Right before you die,] the Pacifist decides if you die. You then lose this effect.'},
+    {name = '[DAA520]Inspected 1[-]',                               desc = '[FFFFFF]You have been inspected by the Detective.'},
+    {name = '[DAA520]Inspected 1[-]',                               desc = '[FFFFFF]You have been inspected by the Detective.'},
+    {name = '[DAA520]Inspected 1[-]',                               desc = '[FFFFFF]You have been inspected by the Detective.'},
+    {name = '[DAA520]Inspected 1[-]',                               desc = '[FFFFFF]You have been inspected by the Detective.'},
+    {name = '[DAA520]Inspected 1[-]',                               desc = '[FFFFFF]You have been inspected by the Detective.'},
+    {name = '[C71585]Inspected 2[-]',                               desc = '[FFFFFF]You have been inspected by the Detective.'},
+    {name = '[C71585]Inspected 2[-]',                               desc = '[FFFFFF]You have been inspected by the Detective.'},
+    {name = '[C71585]Inspected 2[-]',                               desc = '[FFFFFF]You have been inspected by the Detective.'},
+    {name = '[C71585]Inspected 2[-]',                               desc = '[FFFFFF]You have been inspected by the Detective.'},
+    {name = '[C71585]Inspected 2[-]',                               desc = '[FFFFFF]You have been inspected by the Detective.'},
+    {name = '[008000]Poisoned Drink 1[-]',                          desc = '[FFFFFF]You have been poisoned. You die.'},
+    {name = '[008000]Water 1[-]',                                   desc = '[FFFFFF]You drink a refreshing glass of water.'},
+    {name = '[008000]Water 1[-]',                                   desc = '[FFFFFF]You drink a refreshing glass of water.'},
+    {name = '[008000]Poisoned Drink 2[-]',                          desc = '[FFFFFF]You have been poisoned. You die.'},
+    {name = '[008000]Water 2[-]',                                   desc = '[FFFFFF]You drink a refreshing glass of water.'},
+    {name = '[008000]Water 2[-]',                                   desc = '[FFFFFF]You drink a refreshing glass of water.'},
+    {name = '[6A5ACD]Artifact: Cursed Crown[-]',                    desc = '[20B09A][Reveal right after the player is elected as president.] [FFFFFF]You die. If you die, the government is cancelled and the election tracker does not move.'},
+    {name = '[6A5ACD]Artifact: Ring of Power[-]',                   desc = '[20B09A][Reveal right after the player is elected as president.] [FFFFFF]You may play all of your abilities.'},
+    {name = '[6A5ACD]Artifact: Amulet of Warding[-]',               desc = '[20B09A][Reveal anytime.] [FFFFFF]You gain the Aegis effect for three rounds.'},
+    {name = '[6A5ACD]Artifact: Nullification Collar[-]',            desc = '[20B09A][Reveal right after the player plays an ability.] [FFFFFF]Your ability is negated.'},
+    {name = '[6A5ACD]Artifact: Last Horcrux[-]',                    desc = '[20B09A][Reveal right before the player dies.] [FFFFFF]You do not die.'},
+    {name = '[6A5ACD]Artifact: Mirror of Kalandra[-]',              desc = '[20B09A][Reveal anytime. Cannot be placed on yourself.] [FFFFFF]The owner of the artifact plays a copy of your ability.'},
+    {name = '[6A5ACD]Artifact: Staff of Necromancy[-]',             desc = '[20B09A][Reveal anytime the player is dead.] [FFFFFF]You vote during this round. The owner of the artifact decides how you vote. You give the owner of the artifact an unused ability. They may play it.'},
+    {name = '[6A5ACD]Artifact: Sword of Accolades[-]',              desc = '[20B09A][Reveal before voting.] [FFFFFF]Force a special election where you are the president.'},
+    {name = '[6A5ACD]Artifact: Forbidden Grimoire[-]',              desc = '[20B09A][Reveal anytime.] [FFFFFF]Draw three random abilities from the ability deck. Choose one ability and place it concealed in front of you. You may play it.'},
+    {name = '[6A5ACD]Artifact: Dagger of Compulsion[-]',            desc = '[20B09A][Reveal right after the player is elected as president.] [FFFFFF]The owner of the artifact becomes the president instead of you. You keep the presidential power unless Magician was played.'}
 }
+
+PLAYERS =
+{
+    {name = '[000000]BigFrostie[-]',                                desc = '[FFFFFF]Summon a familiar. The familiar counts as a player. The familiar votes the same as you every round and its vote counts as half a vote. The familiar may play one of your abilities.'},
+    {name = '[000000]Familiar[-]',                                  desc = '[FFFFFF]'},
+    {name = '[000000]Bornis[-]',                                    desc = '[FF4040][Reveal this ability before voting.] [FFFFFF]Hitler Territory is active for the rest of the game.'},
+    {name = '[000000]Brittany[-]',                                  desc = '[FFFFFF]At the end of the game, you win as long as you do not die.'},
+    {name = '[000000]Brokenhope Magoo[-]',                          desc = '[FF4040][Reveal this ability before voting.] [DAA520]Target another player. [FFFFFF]You switch seats with that player for three rounds.'},
+    {name = '[000000]Broubison[-]',                                 desc = '[FFFFFF]Every liberal policy becomes a fascist policy. Every fascist policy becomes a liberal policy. Discard any extra policies that would cause a team to win the game. Remove all used presidential power tiles. Reshuffle the deck.'},
+    {name = '[000000]Darthvader925[-]',                             desc = '[FFFFFF]Draw three random effects from the effect deck and place them on three [DAA520]target players.'},
+    {name = '[000000]Dastina[-]',                                   desc = '[DAA520]Target another player. [FFFFFF]That player cannot lie for the remainder of the game.'},
+    {name = '[000000]Ducktales[-]',                                 desc = '[FFFFFF]On this round and the next two rounds, abilities may not be played, and any player who does not vote within thirty seconds gains the [00FFFF]Silenced [FFFFFF]effect. If a chancellor is not chosen in time, the government fails.'},
+    {name = '[000000]GG77R6[-]',                                    desc = '[FFFFFF]Until Hitler Territory, at the start of each round, the president and chancellor are chosen randomly.'},
+    {name = '[000000]Ghost[-]',                                     desc = '[FF4040][Right after you die, if nobody else is dead,] [FFFFFF]you win. Everyone else loses.'},
+    {name = '[000000]Ikigai[-]',                                    desc = '[FFFFFF]Draw ten random abilities from the ability deck and choose one. You may play it. If you lose this game, keep this ability in your hand for the next game.'},
+    {name = '[000000]Lightning Mcqueen[-]',                         desc = '[FF4040]Cannot be copied. [FFFFFF]You control the outcome of every random event. This ability does not affect policy tiles.'},
+    {name = '[000000]Lost Savage[-]',                               desc = '[FFFFFF]Ignore all bracketed text on abilities, except for abilities that must be played before voting. Gain the [00FFFF]Mighty [FFFFFF]effect.'},
+    {name = '[000000]Manaphy[-]',                                   desc = '[FFFFFF]Draw a number of random abilities equal to the number of players. Choose one ability, then pass the rest to another player. Each player chooses one ability and passes the rest to a player who has not chosen an ability yet. Each player may play those abilities.'},
+    {name = '[000000]Negative Nancy[-]',                            desc = '[FFFFFF]Inspect each player\'s role. Look at each player\'s unused abilities.'},
+    {name = '[000000]Penshar[-]',                                   desc = '[DAA520]Target another player. [FFFFFF]That player and you both gain the [00FFFF]Mighty [FFFFFF]effect. Both players\' abilities can be played in response to all abilities.'},
+    {name = '[000000]Piggy[-]',                                     desc = '[FFFFFF]Until Hitler Territory, once per round, you may shuffle and reveal the top ability of the ability deck. If you can play that ability, play it. Place the ability back into the ability deck.'},
+    {name = '[000000]Prinny[-]',                                    desc = '[FFFFFF]Once per round, you may replay one of your used abilities.'},
+    {name = '[000000]Rix[-]',                                       desc = '[FFFFFF]At the start of the twelth round after this one, all other players die unless you die.'},
+    {name = '[000000]Severyn[-]',                                   desc = '[FF4040][Right after a player reveals an ability,] [FFFFFF]you use the ability instead.'},
+    {name = '[000000]Sionar[-]',                                    desc = '[FF4040]Cannot be copied. [DAA520]Target another player. [FFFFFF]That player must perform an action of your choice or die. If they are incapable of performing the action, then this ability has no effect.'}
+}
+
 
 NAMER_ZONE_GUID = 'de8a67'
 END_ZONE_GUID = '43f223'
@@ -116,10 +143,9 @@ CARD_POS = {x = 37, y = 1, z = -20.5}
 MARGIN_OF_ERROR = 1
 ABILITY_DECK_NAME = 'Abilities'
 ABILITY_DECK_DESC = 'Made by Piggy and Sionar'
-ABILITY_DECK_SCALE = {1.5, 1, 1.5}
 EFFECT_DECK_NAME = 'Effects'
-EFFECT_DECK_SCALE = {1.5, 1, 1.5}
-SHOW_CARD_NAMES = true
+PLAYER_DECK_NAME = 'Players'
+SCALE = {1.5, 1, 1.5}
 
 ------------------Main Functions
 function nameAbilities()
@@ -146,14 +172,8 @@ function nameAbilitiesCoroutine()
 
     for i = 1,deck.getQuantity()-1 do
 		card = deck.takeObject(params)
-        if SHOW_CARD_NAMES then
-            card.setName(ABILITIES[i].name)
-            card.setDescription(ABILITIES[i].desc)
-        else
-            card.setName('')
-            tmpString = ABILITIES[i].name .. '\n\n' .. ABILITIES[i].desc
-            card.setDescription(tmpString)
-        end
+        card.setName(ABILITIES[i].name)
+        card.setDescription(ABILITIES[i].desc)
         card.setPosition(NEW_POS)
         sleep(0.05)
     end
@@ -164,19 +184,14 @@ function nameAbilitiesCoroutine()
             card = v
         end
     end
-    if SHOW_CARD_NAMES then
-        card.setName(ABILITIES[#ABILITIES].name)
-        card.setDescription(ABILITIES[#ABILITIES].desc)
-    else
-        tmpString = ABILITIES[#ABILITIES].name .. '\n' .. ABILITIES[#ABILITIES].desc
-        card.setDescription(tmpString)
-    end
+    card.setName(ABILITIES[#ABILITIES].name)
+    card.setDescription(ABILITIES[#ABILITIES].desc)
     card.setPosition(NEW_POS)
     sleep(0.1)
     deck = getDeckFromZoneByGUID(END_ZONE_GUID)
     deck.setName(ABILITY_DECK_NAME)
     deck.setDescription(ABILITY_DECK_DESC)
-    deck.setScale(ABILITY_DECK_SCALE)
+    deck.setScale(SCALE)
     deck.use_grid = false
     return 1
 end
@@ -204,14 +219,8 @@ function nameEffectsCoroutine()
 
     for i = 1,deck.getQuantity()-1 do
         card = deck.takeObject(params)
-        if SHOW_CARD_NAMES then
-            card.setName(EFFECTS[i].name)
-            card.setDescription(EFFECTS[i].desc)
-        else
-            card.setName('')
-            tmpString = EFFECTS[i].name .. '\n\n' .. EFFECTS[i].desc
-            card.setDescription(tmpString)
-        end
+        card.setName(EFFECTS[i].name)
+        card.setDescription(EFFECTS[i].desc)
         card.setPosition(NEW_POS)
         sleep(0.05)
     end
@@ -222,23 +231,62 @@ function nameEffectsCoroutine()
             card = v
         end
     end
-    if SHOW_CARD_NAMES then
-        card.setName(EFFECTS[#EFFECTS].name)
-        card.setDescription(EFFECTS[#EFFECTS].desc)
-    else
-        tmpString = EFFECTS[#EFFECTS].name .. '\n' .. EFFECTS[#EFFECTS].desc
-        card.setDescription(tmpString)
-    end
+    card.setName(EFFECTS[#EFFECTS].name)
+    card.setDescription(EFFECTS[#EFFECTS].desc)
     card.setPosition(NEW_POS)
     sleep(0.1)
     deck = getDeckFromZoneByGUID(END_ZONE_GUID)
     deck.setName(EFFECT_DECK_NAME)
-    deck.setScale(EFFECT_DECK_SCALE)
+    deck.setScale(SCALE)
     deck.use_grid = false
     return 1
 end
 
+function namePlayers()
+    local deck = getDeckFromZoneByGUID(NAMER_ZONE_GUID)
+    if deck == nil then
+        print('ERROR: Deck not found.')
+        return
+    end
+    if deck.getQuantity() ~= #PLAYERS then
+        print('ERROR: Deck size does not match the card database size.')
+        return
+    end
 
+    startLuaCoroutine(self, 'namePlayersCoroutine')
+end
+
+function namePlayersCoroutine()
+    local deck = getDeckFromZoneByGUID(NAMER_ZONE_GUID)
+    local params = {}
+    local card
+    local allObjects
+    local pos
+
+    for i = 1,deck.getQuantity()-1 do
+        card = deck.takeObject(params)
+        card.setName(PLAYERS[i].name)
+        card.setDescription(PLAYERS[i].desc)
+        card.setPosition(NEW_POS)
+        sleep(0.05)
+    end
+    allObjects = getAllObjects()
+    for k,v in pairs(allObjects) do
+        pos = v.getPosition()
+        if pos.x < CARD_POS.x + MARGIN_OF_ERROR and pos.x > CARD_POS.x - MARGIN_OF_ERROR and pos.z < CARD_POS.z + MARGIN_OF_ERROR and pos.z > CARD_POS.z - MARGIN_OF_ERROR then
+            card = v
+        end
+    end
+    card.setName(PLAYERS[#PLAYERS].name)
+    card.setDescription(PLAYERS[#PLAYERS].desc)
+    card.setPosition(NEW_POS)
+    sleep(0.1)
+    deck = getDeckFromZoneByGUID(END_ZONE_GUID)
+    deck.setName(PLAYER_DECK_NAME)
+    deck.setScale(SCALE)
+    deck.use_grid = false
+    return 1
+end
 
 function getDeckFromZoneByGUID(guidIn)
 	local deck = nil
@@ -276,11 +324,15 @@ end
 
 ------------------User Interface
 local buttonParam = {click_function = 'nameAbilities', label = 'Set Ability\nName and Description', color = {1,1,1}, function_owner = self,
-    position = {0,0.1,-0.7}, rotation = {0,0,0}, width = 1000, height = 500, font_size = 100}
+    position = {-1.1,0.1,-0.6}, rotation = {0,0,0}, width = 1000, height = 500, font_size = 100}
 self.createButton(buttonParam)
 
 local buttonParam = {click_function = 'nameEffects', label = 'Set Effect\nName and Description', color = {1,1,1}, function_owner = self,
-    position = {0,0.1,0.7}, rotation = {0,0,0}, width = 1000, height = 500, font_size = 100}
+    position = {-1.1,0.1,0.6}, rotation = {0,0,0}, width = 1000, height = 500, font_size = 100}
+self.createButton(buttonParam)
+
+local buttonParam = {click_function = 'namePlayers', label = 'Set Player\nName and Description', color = {1,1,1}, function_owner = self,
+    position = {1.1,0.1,-0.6}, rotation = {0,0,0}, width = 1000, height = 500, font_size = 100}
 self.createButton(buttonParam)
 
 self.setDescription('v ' .. VERSION .. '\nPlace the deck in the white zone above and click the button to give each card in the deck a name and description. The deck must be placed face down and in the right order.')

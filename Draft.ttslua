@@ -5,14 +5,16 @@ Made by Sionar, with code borrowed from Lost Savage and Markimus
 
 
 ------------------Constants
-VERSION = '1.2.4'
+VERSION = '1.2.5'
 COLOR_ORDER = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLOR_RGB = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]'}
 ABILITY_ZONE_GUID = 'eea120'
-POS1 = {-11, 1.2, 15}
-POS2 = {-6, 1.2, 15}
-POS3 = {-1, 1.2, 15}
-POS4 = {4, 1.2, 15}
+POS = {
+{-11, 5, 15},
+{-6, 5, 15},
+{-1, 5, 15},
+{4, 5, 15}
+}
 NO_ROT = {x = 0, y = 0, z = 0}
 FACE_UP_ROT = {x = 0, y = 180, z = 0}
 FACE_DOWN_ROT = {x = 0, y = 180, z = 180}
@@ -128,7 +130,7 @@ function onObjectLeaveContainer(container, leave_object)
             for j = 1,3 do
                 if deckTable[j].name ~= 'Draft' then
                     local card = container.takeObject({index = j-1})
-                    giveObjectToPlayer(card, players[deckIndex], {forward = 0, right = 0, up = 0, forceHeight = 2.2}, FACE_DOWN_ROT)
+                    giveObjectToPlayer(card, players[deckIndex], {forward = 0, right = 0, up = 0, forceHeight = 8}, FACE_DOWN_ROT)
                     break
                 end
             end
@@ -303,10 +305,10 @@ end
 
 function dealCoroutine()
     local params = {}
-    params[1] = {position = POS1, rotation = FACE_DOWN_ROT}
-    params[2] = {position = POS2, rotation = FACE_DOWN_ROT}
-    params[3] = {position = POS3, rotation = FACE_DOWN_ROT}
-    params[4] = {position = POS4, rotation = FACE_DOWN_ROT}
+    params[1] = {position = POS[1], rotation = FACE_DOWN_ROT, callback_function = function(obj) takeCallback(obj) end,}
+    params[2] = {position = POS[2], rotation = FACE_DOWN_ROT, callback_function = function(obj) takeCallback(obj) end,}
+    params[3] = {position = POS[3], rotation = FACE_DOWN_ROT, callback_function = function(obj) takeCallback(obj) end,}
+    params[4] = {position = POS[4], rotation = FACE_DOWN_ROT, callback_function = function(obj) takeCallback(obj) end,}
 
     local objParam = {
         type = "DeckCustom",
@@ -343,9 +345,9 @@ function dealCoroutine()
 
     for i = 1, numPlayers do
         for j = 1,4 do
-            abilityDeck.takeObject(params[j])
-            sleep(0.01)
+            card = abilityDeck.takeObject(params[j])
         end
+        sleep(0.2)
     end
     sleep(0.1)
     draftDeck = spawnObject(objParam)
@@ -355,25 +357,25 @@ function dealCoroutine()
         card.setName('Draft')
     end
     draftDeck.destruct()
-    sleep(2)
+    sleep(3)
 
     local allObjects = getAllObjects()
     local objPosition
     for k,v in pairs(allObjects) do
         objPosition = v.getPosition()
-        if objPosition.x > POS1[1] - 0.01 and objPosition.x < POS1[1] + 0.01  and objPosition.z > POS1[3] - 0.01 and objPosition.z < POS1[3] + 0.01 then
+        if objPosition.x > POS[1][1] - 0.01 and objPosition.x < POS[1][1] + 0.01  and objPosition.z > POS[1][3] - 0.01 and objPosition.z < POS[1][3] + 0.01 then
             deck[1] = v
             deck[1].setLock(true)
             deck[1].setName('Draft Deck 1')
-        elseif objPosition.x > POS2[1] - 0.01 and objPosition.x < POS2[1] + 0.01  and objPosition.z > POS2[3] - 0.01 and objPosition.z < POS2[3] + 0.01 then
+        elseif objPosition.x > POS[2][1] - 0.01 and objPosition.x < POS[2][1] + 0.01  and objPosition.z > POS[2][3] - 0.01 and objPosition.z < POS[2][3] + 0.01 then
             deck[2] = v
             deck[2].setLock(true)
             deck[2].setName('Draft Deck 2')
-        elseif objPosition.x > POS3[1] - 0.01 and objPosition.x < POS3[1] + 0.01  and objPosition.z > POS3[3] - 0.01 and objPosition.z < POS3[3] + 0.01 then
+        elseif objPosition.x > POS[3][1] - 0.01 and objPosition.x < POS[3][1] + 0.01  and objPosition.z > POS[3][3] - 0.01 and objPosition.z < POS[3][3] + 0.01 then
             deck[3] = v
             deck[3].setLock(true)
             deck[3].setName('Draft Deck 3')
-        elseif objPosition.x > POS4[1] - 0.01 and objPosition.x < POS4[1] + 0.01  and objPosition.z > POS4[3] - 0.01 and objPosition.z < POS4[3] + 0.01 then
+        elseif objPosition.x > POS[4][1] - 0.01 and objPosition.x < POS[4][1] + 0.01  and objPosition.z > POS[4][3] - 0.01 and objPosition.z < POS[4][3] + 0.01 then
             deck[4] = v
             deck[4].setLock(true)
             deck[4].setName('Draft Deck 4')
@@ -416,6 +418,10 @@ function dealCoroutine()
     end
 
     return 1
+end
+
+function takeCallback(obj)
+    obj.setState(2)
 end
 
 function checkSync()

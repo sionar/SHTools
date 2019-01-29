@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.3.1'
+VERSION = '1.3.2'
 COLOR_TABLE = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 LINE_HEIGHT = 1
 LINE_SPACING = 1
@@ -81,8 +81,9 @@ function onLoad(saveString)
         promOnly = save['p']
     end
     refreshButtons()
+    local global_name = Global.getVar('MOD_NAME')
     local started = Global.getVar('started')
-    if not started then
+    if not started and global_name == 'Secret Hitler: CE' then
         clearLines()
     end
     self.setDescription('v ' .. VERSION .. '\nMade by Sionar\nUse with SH Consolidator Edition workshop mod.')
