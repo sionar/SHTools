@@ -5,16 +5,16 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.1.8'
+VERSION = '1.2.1'
 START_POS = {x = 100, y = 1.1, z = 42}
 COLOR_TABLE = {'White', 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple', 'Pink', 'Teal', 'Brown'}
 ROW_S = -1
 ROW_W = 0.25
 BUTTON_SIZE = 100
-COLUMN = {-0.8, 0.1, 0.7, 0.9, 1.1}
+COLUMN = {-0.9, 0, 0.5, 0.7, 0.9, 1.1, 1.3}
 ROW = {ROW_S + 0 * ROW_W, ROW_S + 1 * ROW_W, ROW_S + 2 * ROW_W, ROW_S + 3 * ROW_W, ROW_S + 4 * ROW_W, ROW_S + 5 * ROW_W, ROW_S + 6 * ROW_W, ROW_S + 7 * ROW_W, ROW_S + 8 * ROW_W, ROW_S + 9 * ROW_W, ROW_S + 10 * ROW_W}
 LOGIN_MSG = '[000000]-------------------------\n[FFFFFF]Waitlist Commands:\n[FFD700]!j [000000]or [FFD700]!join [FFFFFF]-- Join the waitlist.\n[FFD700]!l [000000]or [FFD700]!leave [FFFFFF]-- Leave the waitlist.\n[FFD700]!s [DDA0DD]Color [000000]or [FFD700]!sit [DDA0DD]Color [FFFFFF]-- Sit down at a color.\n[FFD700]!n [000000]or [FFD700]!nudge [FFFFFF]-- Nudge the player at the top of the waitlist.\n[FFD700]!h [000000]or [FFD700]!help [FFFFFF]-- Brings up this text\n[000000]-------------------------'
-ADMIN_MSG = '[000000]-------------------------\n[FFFFFF]Admin Commands:\n[FFD700]!a [FF7F50]Player [000000]or [FFD700]!add [FF7F50]Player [FFFFFF]-- Add a player to the waitlist.\n[FFD700]!r [FF7F50]Player [000000]or [FFD700]!remove [FF7F50]Player [FFFFFF]-- Remove a player from the waitlist.\n[FFD700]!m [FF7F50]Player [DDA0DD]Color [000000]or [FFD700]!move [FF7F50]Player [DDA0DD]Color [FFFFFF]-- Move a player to a seat.\n[FFD700]!b [FF7F50]Player [000000]or [FFD700]!bump [FF7F50]Player [FFFFFF]-- Move a player to the bottom of the waitlist.\n[FFD700]!k [FF7F50]Player [000000]or [FFD700]!kick [FF7F50]Player [FFFFFF]-- Kick a player from the lobby.\n[FFD700]!c [000000]or [FFD700]!clear [FFFFFF]-- Clear the waitlist.\n[FFD700]!p [DDA0DD]Number [000000]or [FFD700]!players [DDA0DD]Number [FFFFFF]-- Set the max number of players that can sit down.\n[FFD700]!ams [DDA0DD]Message [FFFFFF]-- Set the announcement message that players see when they join the lobby.\n[FFD700]!amc [FFFFFF]-- Clear the announcement message.\n[000000]-------------------------'
+ADMIN_MSG = '[000000]-------------------------\n[FFFFFF]Admin Commands:\n[FFD700]!a [FF7F50]Player [000000]or [FFD700]!add [FF7F50]Player [FFFFFF]-- Add a player to the waitlist.\n[FFD700]!r [FF7F50]Player [000000]or [FFD700]!remove [FF7F50]Player [FFFFFF]-- Remove a player from the waitlist.\n[FFD700]!m [FF7F50]Player [DDA0DD]Color [000000]or [FFD700]!move [FF7F50]Player [DDA0DD]Color [FFFFFF]-- Move a player to a seat.\n[FFD700]!v [FF7F50]Player [000000]or [FFD700]!vip [FF7F50]Player [FFFFFF]-- Move a player to the top of the waitlist.\n[FFD700]!b [FF7F50]Player [000000]or [FFD700]!bump [FF7F50]Player [FFFFFF]-- Move a player to the bottom of the waitlist.\n[FFD700]!k [FF7F50]Player [000000]or [FFD700]!kick [FF7F50]Player [FFFFFF]-- Kick a player from the lobby.\n[FFD700]!c [000000]or [FFD700]!clear [FFFFFF]-- Clear the waitlist.\n[FFD700]!p [DDA0DD]Number [000000]or [FFD700]!players [DDA0DD]Number [FFFFFF]-- Set the max number of players that can sit down.\n[FFD700]!ams [DDA0DD]Message [FFFFFF]-- Set the announcement message that players see when they join the lobby.\n[FFD700]!amc [FFFFFF]-- Clear the announcement message.\n[000000]-------------------------'
 
 
 ------------------Variables
@@ -51,7 +51,7 @@ end
 function TimerRefresh()
     for i=1, #waitlist do
         local timeLabel = getWaitTime(i)
-        self.editButton({index=(i-1)*5 + 2, label = timeLabel})
+        self.editButton({index=(i-1)*7 + 2, label = timeLabel})
     end
 end
 
@@ -125,6 +125,8 @@ function onChat(message, player)
         result = moveCom(args[1], args[2], player)
     elseif command == '!b' or command == '!bump' then
         result = bumpCom(args[1], player)
+    elseif command == '!v' or command == '!vip' then
+        result = vipCom(args[1], player)
     elseif command == '!k' or command == '!kick' then
         result = kickCom(args[1], player)
     elseif command == '!c' or command == '!clear' then
@@ -201,6 +203,20 @@ end
 function nullFunc()
 end
 
+function vip(clickedButton,playerColor,index)
+    if Player[playerColor].admin then
+        local tempEntry = waitlist[index]
+        table.remove(waitlist,index)
+        table.insert(waitlist,1,tempEntry)
+        refreshButtons()
+    end
+end
+for k = 1,10 do
+    _G['vip' .. k] = function(obj, col)
+        vip(obj, col, k)
+    end
+end
+
 function up(clickedButton,playerColor,index)
     if Player[playerColor].admin then
         if index == 1 then
@@ -234,6 +250,20 @@ end
 for k = 1,10 do
     _G['down' .. k] = function(obj, col)
         down(obj, col, k)
+    end
+end
+
+function bump(clickedButton,playerColor,index)
+    if Player[playerColor].admin then
+        local tempEntry = waitlist[index]
+        table.remove(waitlist,index)
+        table.insert(waitlist,tempEntry)
+        refreshButtons()
+    end
+end
+for k = 1,10 do
+    _G['bump' .. k] = function(obj, col)
+        bump(obj, col, k)
     end
 end
 
@@ -602,6 +632,36 @@ function bumpCom(player_name, user)
     end
 end
 
+function vipCom(player_name, user)
+    if user.admin then
+        if player_name == nil then
+            user.broadcast('Please enter a name.', stringColorToRGB('Red'))
+            return true
+        end
+        local player = getPlayerByName(player_name,'s')
+        if player == nil then
+            user.broadcast('Player not found', {1,0,0})
+            return true
+        else
+            for i = 1,#waitlist do
+                if waitlist[i].id == player.steam_id then
+                    local tempEntry = waitlist[i]
+                    table.remove(waitlist,i)
+                    table.insert(waitlist,1,tempEntry)
+                    user.broadcast(player.steam_name .. ' has been moved to the top of the waitlist.',stringColorToRGB('Green'))
+                    refreshButtons()
+                    return true
+                end
+            end
+            user.broadcast(player.steam_name .. ' is not on the waitlist.',stringColorToRGB('Red'))
+            return true
+        end
+    else
+        user.broadcast('Only promoted players can bump players on the waitlist.',stringColorToRGB('Red'))
+        return true
+    end
+end
+
 function kickCom(player_name, user)
     if user.admin then
         if player_name == nil then
@@ -745,15 +805,23 @@ function refreshButtons()
             position = {COLUMN[2],0.1,ROW[i]}, width = 0, height = 0, font_size = 80}
         self.createButton(buttonParam)
 
+        local buttonParam = {click_function = 'vip'..i, function_owner = self, label = '⇪', color = {0,0,0,1}, font_color = stringColorToRGB('Blue'),
+            position = {COLUMN[3],0.1,ROW[i]}, width = BUTTON_SIZE, height = BUTTON_SIZE, font_size = 100, tooltip = 'Move to the top of the Waitlist'}
+        self.createButton(buttonParam)
+
         local buttonParam = {click_function = 'up'..i, function_owner = self, label = '⇧', color = {0,0,0,1}, font_color = stringColorToRGB('Green'),
-            position = {COLUMN[3],0.1,ROW[i]}, width = BUTTON_SIZE, height = BUTTON_SIZE, font_size = 100, tooltip = 'Move up the Waitlist'}
+            position = {COLUMN[4],0.1,ROW[i]}, width = BUTTON_SIZE, height = BUTTON_SIZE, font_size = 100, tooltip = 'Move up the Waitlist'}
         self.createButton(buttonParam)
         local buttonParam = {click_function = 'down'..i, function_owner = self, label = '⇩', color = {0,0,0,1}, font_color = stringColorToRGB('Yellow'),
-            position = {COLUMN[4],0.1,ROW[i]}, width = BUTTON_SIZE, height = BUTTON_SIZE, font_size = 100, tooltip = 'Move down the Waitlist'}
+            position = {COLUMN[5],0.1,ROW[i]}, width = BUTTON_SIZE, height = BUTTON_SIZE, font_size = 100, tooltip = 'Move down the Waitlist'}
+        self.createButton(buttonParam)
+
+        local buttonParam = {click_function = 'bump'..i, function_owner = self, label = '⇪', color = {0,0,0,1}, font_color = stringColorToRGB('Orange'),
+            position = {COLUMN[6],0.1,ROW[i]-0.02}, rotation = {0, 180, 0}, width = BUTTON_SIZE, height = BUTTON_SIZE, font_size = 100, tooltip = 'Move to the bottom of the Waitlist'}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'remove'..i, function_owner = self, label = '✕', color = {0,0,0,1}, font_color = stringColorToRGB('Red'),
-            position = {COLUMN[5],0.1,ROW[i]}, width = BUTTON_SIZE, height = BUTTON_SIZE, font_size = 100, tooltip = 'Remove from the Waitlist'}
+            position = {COLUMN[7],0.1,ROW[i]}, width = BUTTON_SIZE, height = BUTTON_SIZE, font_size = 80, tooltip = 'Remove from the Waitlist'}
         self.createButton(buttonParam)
     end
 end
