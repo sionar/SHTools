@@ -112,27 +112,38 @@ EFFECTS =
 PLAYERS =
 {
     {name = '[000000]BigFrostie[-]',                                desc = '[FFFFFF]Summon a familiar. The familiar counts as a player. The familiar votes the same as you every round and its vote counts as half a vote. The familiar may play one of your abilities.'},
-    {name = '[000000]Familiar[-]',                                  desc = '[FFFFFF]'},
+    {name = '[000000]Familiar[-]',                                  desc = '[FFFFFF]This familiar counts as a player. The familiar does not have a role and cannot be a part of government.'},
     {name = '[000000]Bornis[-]',                                    desc = '[FF4040][Reveal this ability before voting.] [FFFFFF]Hitler Territory is active for the rest of the game.'},
     {name = '[000000]Brittany[-]',                                  desc = '[FFFFFF]At the end of the game, you win as long as you do not die.'},
     {name = '[000000]Brokenhope Magoo[-]',                          desc = '[FF4040][Reveal this ability before voting.] [DAA520]Target another player. [FFFFFF]You switch seats with that player for three rounds.'},
     {name = '[000000]Broubison[-]',                                 desc = '[FFFFFF]Every liberal policy becomes a fascist policy. Every fascist policy becomes a liberal policy. Discard any extra policies that would cause a team to win the game. Remove all used presidential power tiles. Reshuffle the deck.'},
+    {name = '[000000]Coo Person[-]',                                desc = '[FF4040]Cannot be copied or affected. [FFFFFF]Choose another player. That player draws any ability from the ability deck. That player gains the [00FFFF]Blessed [FFFFFF]effect. You die.'},
     {name = '[000000]Darthvader925[-]',                             desc = '[FFFFFF]Draw three random effects from the effect deck and place them on three [DAA520]target players.'},
-    {name = '[000000]Dastina[-]',                                   desc = '[DAA520]Target another player. [FFFFFF]That player cannot lie for the remainder of the game.'},
+    {name = '[000000]Dastina[-]',                                   desc = '[DAA520]Target another player. [FFFFFF]That player gains the [00FFFF]Honest [FFFFFF]effect..'},
     {name = '[000000]Ducktales[-]',                                 desc = '[FFFFFF]On this round and the next two rounds, abilities may not be played, and any player who does not vote within thirty seconds gains the [00FFFF]Silenced [FFFFFF]effect. If a chancellor is not chosen in time, the government fails.'},
     {name = '[000000]GG77R6[-]',                                    desc = '[FFFFFF]Until Hitler Territory, at the start of each round, the president and chancellor are chosen randomly.'},
     {name = '[000000]Ghost[-]',                                     desc = '[FF4040][Right after you die, if nobody else is dead,] [FFFFFF]you win. Everyone else loses.'},
     {name = '[000000]Ikigai[-]',                                    desc = '[FFFFFF]Draw ten random abilities from the ability deck and choose one. You may play it. If you lose this game, keep this ability in your hand for the next game.'},
-    {name = '[000000]Lightning Mcqueen[-]',                         desc = '[FF4040]Cannot be copied. [FFFFFF]You control the outcome of every random event. This ability does not affect policy tiles.'},
-    {name = '[000000]Lost Savage[-]',                               desc = '[FFFFFF]Ignore all bracketed text on abilities, except for abilities that must be played before voting. Gain the [00FFFF]Mighty [FFFFFF]effect.'},
+    {name = '[000000]Lightning Mcqueen[-]',                         desc = '[FF4040]Cannot be copied. [FFFFFF]You gain the [00FFFF]Lucky [FFFFFF]effect.'},
+    {name = '[000000]Lost Savage[-]',                               desc = 'You gain the [00FFFF]Unlawful [FFFFFF]effect.'},
     {name = '[000000]Manaphy[-]',                                   desc = '[FFFFFF]Draw a number of random abilities equal to the number of players. Choose one ability, then pass the rest to another player. Each player chooses one ability and passes the rest to a player who has not chosen an ability yet. Each player may play those abilities.'},
     {name = '[000000]Negative Nancy[-]',                            desc = '[FFFFFF]Inspect each player\'s role. Look at each player\'s unused abilities.'},
-    {name = '[000000]Penshar[-]',                                   desc = '[DAA520]Target another player. [FFFFFF]That player and you both gain the [00FFFF]Mighty [FFFFFF]effect. Both players\' abilities can be played in response to all abilities.'},
+    {name = '[000000]Penshar[-]',                                   desc = '[DAA520]Target another player. [FFFFFF]That player and you both gain the [00FFFF]Quick [FFFFFF]effect.'},
     {name = '[000000]Piggy[-]',                                     desc = '[FFFFFF]Until Hitler Territory, once per round, you may shuffle and reveal the top ability of the ability deck. If you can play that ability, play it. Place the ability back into the ability deck.'},
     {name = '[000000]Prinny[-]',                                    desc = '[FFFFFF]Once per round, you may replay one of your used abilities.'},
     {name = '[000000]Rix[-]',                                       desc = '[FFFFFF]At the start of the twelth round after this one, all other players die unless you die.'},
     {name = '[000000]Severyn[-]',                                   desc = '[FF4040][Right after a player reveals an ability,] [FFFFFF]you use the ability instead.'},
-    {name = '[000000]Sionar[-]',                                    desc = '[FF4040]Cannot be copied. [DAA520]Target another player. [FFFFFF]That player must perform an action of your choice or die. If they are incapable of performing the action, then this ability has no effect.'}
+    {name = '[000000]Sionar[-]',                                    desc = '[FF4040]Cannot be copied. [DAA520]Target another player. [FFFFFF]That player must perform an action of your choice or die. If they are incapable of performing the action, then this ability has no effect.'},
+    {name = '[000000]Tetarus[-]',                                   desc = 'Each time you correctly guess the next policy placed, gain one gold. Once per game, look at the ability deck and buy up to two abilities. The lowest tier of abilities cost one gold, and each tier increases in cost by one gold. Reveal the two abilities that you bought. You may play them.'}
+}
+
+PLAYER_EFFECTS =
+{
+    {name = '[00FFFF]Blessed[-]',                                   desc = '[FFFFFF]This effect cannot be removed. Destroy all artifacts and effects on you. You cannot be affected by other players\' abilities unless you allow it. You may play all of your other abilities. You cannot die.'},
+    {name = '[00FFFF]Honest[-]',                                    desc = '[FFFFFF]You cannot lie.'},
+    {name = '[00FFFF]Lucky[-]',                                     desc = '[FFFFFF]You control the outcome of every random event. This effect does not affect policy cards.'},
+    {name = '[00FFFF]Quick[-]',                                     desc = '[FFFFFF]You may play all of your abilities. All of your abilities may be played in response to an ability being revealed.'},
+    {name = '[00FFFF]Unlawful[-]',                                  desc = '[FFFFFF]You may play all of your abilities. You ignore all bracketed text on abilities, except on abilities that must be revealed before voting.'}
 }
 
 
@@ -145,6 +156,7 @@ ABILITY_DECK_NAME = 'Abilities'
 ABILITY_DECK_DESC = 'Made by Piggy and Sionar'
 EFFECT_DECK_NAME = 'Effects'
 PLAYER_DECK_NAME = 'Players'
+PEFFECTS_DECK_NAME = 'Player Effects'
 SCALE = {1.5, 1, 1.5}
 
 ------------------Main Functions
@@ -288,6 +300,52 @@ function namePlayersCoroutine()
     return 1
 end
 
+function namePEffects()
+    local deck = getDeckFromZoneByGUID(NAMER_ZONE_GUID)
+    if deck == nil then
+        print('ERROR: Deck not found.')
+        return
+    end
+    if deck.getQuantity() ~= #PLAYER_EFFECTS then
+        print('ERROR: Deck size does not match the card database size.')
+        return
+    end
+
+    startLuaCoroutine(self, 'namePEffectsCoroutine')
+end
+
+function namePEffectsCoroutine()
+    local deck = getDeckFromZoneByGUID(NAMER_ZONE_GUID)
+    local params = {}
+    local card
+    local allObjects
+    local pos
+
+    for i = 1,deck.getQuantity()-1 do
+        card = deck.takeObject(params)
+        card.setName(PLAYER_EFFECTS[i].name)
+        card.setDescription(PLAYER_EFFECTS[i].desc)
+        card.setPosition(NEW_POS)
+        sleep(0.05)
+    end
+    allObjects = getAllObjects()
+    for k,v in pairs(allObjects) do
+        pos = v.getPosition()
+        if pos.x < CARD_POS.x + MARGIN_OF_ERROR and pos.x > CARD_POS.x - MARGIN_OF_ERROR and pos.z < CARD_POS.z + MARGIN_OF_ERROR and pos.z > CARD_POS.z - MARGIN_OF_ERROR then
+            card = v
+        end
+    end
+    card.setName(PLAYER_EFFECTS[#PLAYER_EFFECTS].name)
+    card.setDescription(PLAYER_EFFECTS[#PLAYER_EFFECTS].desc)
+    card.setPosition(NEW_POS)
+    sleep(0.1)
+    deck = getDeckFromZoneByGUID(END_ZONE_GUID)
+    deck.setName(PEFFECTS_DECK_NAME)
+    deck.setScale(SCALE)
+    deck.use_grid = false
+    return 1
+end
+
 function getDeckFromZoneByGUID(guidIn)
 	local deck = nil
 	local deck_ct = 0
@@ -333,6 +391,10 @@ self.createButton(buttonParam)
 
 local buttonParam = {click_function = 'namePlayers', label = 'Set Player\nName and Description', color = {1,1,1}, function_owner = self,
     position = {1.1,0.1,-0.6}, rotation = {0,0,0}, width = 1000, height = 500, font_size = 100}
+self.createButton(buttonParam)
+
+local buttonParam = {click_function = 'namePEffects', label = 'Set Player Effect\nName and Description', color = {1,1,1}, function_owner = self,
+    position = {1.1,0.1,0.6}, rotation = {0,0,0}, width = 1000, height = 500, font_size = 100}
 self.createButton(buttonParam)
 
 self.setDescription('v ' .. VERSION .. '\nPlace the deck in the white zone above and click the button to give each card in the deck a name and description. The deck must be placed face down and in the right order.')
