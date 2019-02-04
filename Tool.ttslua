@@ -665,6 +665,43 @@ function giveEFCoroutine()
             end
         end
         broadcastToAll('The Artifact effect cards have been dealt to ' .. colorString(player) .. '.', {1,1,1})
+    elseif option == 3 then
+        for i = 1,size do
+            if deckTable[i].name ~= 'Card' then
+                tmpString = deckTable[i].name
+            else
+                tmpString = deckTable[i].description
+                tmpStartIndex, tmpEndIndex = string.find(tmpString, '\n')
+                tmpString = string.sub(tmpString, 1, tmpEndIndex)
+            end
+            if string.match(tmpString, 'Life') then
+                found = 1
+                break
+            end
+        end
+        if found == 0 then
+            broadcastToAll('ERROR: Desperado cards not found in effects deck.', {1,0,0})
+            clearValues()
+            mainMenu()
+            return 1
+        end
+
+        for i = size,1,-1 do
+            if deckTable[i].name ~= 'Card' then
+                tmpString = deckTable[i].name
+            else
+                tmpString = deckTable[i].description
+                tmpStartIndex, tmpEndIndex = string.find(tmpString, '\n')
+                tmpString = string.sub(tmpString, 1, tmpEndIndex)
+            end
+            if string.match(tmpString, 'Life') or string.match(tmpString, 'Death') and not string.match(tmpString, 'Sentence') then
+                params = {index = i-1}
+                card = effectDeck.takeObject(params)
+                giveObjectToPlayer(card, player, {forward = 16.5, right = 0, up = 0}, {x = 0, y = 180, z = 180})
+                sleep(0.1)
+            end
+        end
+        broadcastToAll('The Desperado cards have been dealt to ' .. colorString(player) .. '.', {1,1,1})
     else
         for i = size,1,-1 do
             if deckTable[i].name ~= 'Card' then
@@ -827,6 +864,7 @@ end
 function opt0()  option = 0   refreshButtons()    end
 function opt1()  option = 1   refreshButtons()    end
 function opt2()  option = 2   refreshButtons()    end
+function opt3()  option = 3   refreshButtons()    end
 
 function getIndex(flag, size, table, string1, string2)
     for i = 1,size,1 do
@@ -1242,22 +1280,29 @@ function giveEfMenu()
     state = 9
 
     local buttonParam = {click_function = 'opt0', label = "Poisoner", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0,0.1,-0.5}, rotation = {0,0,0}, width = 800, height = 200, font_size = 80}
+        position = {0,0.1,-0.9}, rotation = {0,0,0}, width = 800, height = 200, font_size = 80}
     if option == 0 then
         buttonParam.font_color = stringColorToRGB('Red')
     end
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'opt1', label = "Detective", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0,0.1,-0.1}, rotation = {0,0,0}, width = 800, height = 200, font_size = 80}
+        position = {0,0.1,-0.5}, rotation = {0,0,0}, width = 800, height = 200, font_size = 80}
     if option == 1 then
         buttonParam.font_color = stringColorToRGB('Red')
     end
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'opt2', label = "Artifacts", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0,0.1,0.3}, rotation = {0,0,0}, width = 800, height = 200, font_size = 80}
+        position = {0,0.1,-0.1}, rotation = {0,0,0}, width = 800, height = 200, font_size = 80}
     if option == 2 then
+        buttonParam.font_color = stringColorToRGB('Red')
+    end
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'opt3', label = "Desperado", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {0,0.1,0.3}, rotation = {0,0,0}, width = 800, height = 200, font_size = 80}
+    if option == 3 then
         buttonParam.font_color = stringColorToRGB('Red')
     end
     self.createButton(buttonParam)

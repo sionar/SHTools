@@ -6,7 +6,7 @@ Player Reference
 
 
 ------------------Constants
-START_POS = {x = 133.8, y = 1.1, z = -89.9}
+START_POS = {x = 133.8, y = 1.1, z = -94.02}
 START_POS_12P = {x = 133.8, y = 1.1, z = -89.9}
 
 

@@ -117,7 +117,7 @@ PLAYERS =
     {name = '[000000]Brittany[-]',                                  desc = '[FFFFFF]At the end of the game, you win as long as you do not die.'},
     {name = '[000000]Brokenhope Magoo[-]',                          desc = '[FF4040][Reveal this ability before voting.] [DAA520]Target another player. [FFFFFF]You switch seats with that player for three rounds.'},
     {name = '[000000]Broubison[-]',                                 desc = '[FFFFFF]Every liberal policy becomes a fascist policy. Every fascist policy becomes a liberal policy. Discard any extra policies that would cause a team to win the game. Remove all used presidential power tiles. Reshuffle the deck.'},
-    {name = '[000000]Coo Person[-]',                                desc = '[FF4040]Cannot be copied or affected. [FFFFFF]Choose another player. That player draws any ability from the ability deck. That player gains the [00FFFF]Blessed [FFFFFF]effect. You die.'},
+    {name = '[000000]Coo Person[-]',                                desc = '[FF4040]Cannot be copied or affected. [FFFFFF]Choose another player. That player draws any ability from the ability deck. That player gains the [00FFFF]Blessed [FFFFFF]effect. You gain the [00FFFF]Banished [FFFFFF]effect and die.'},
     {name = '[000000]Darthvader925[-]',                             desc = '[FFFFFF]Draw three random effects from the effect deck and place them on three [DAA520]target players.'},
     {name = '[000000]Dastina[-]',                                   desc = '[DAA520]Target another player. [FFFFFF]That player gains the [00FFFF]Honest [FFFFFF]effect..'},
     {name = '[000000]Ducktales[-]',                                 desc = '[FFFFFF]On this round and the next two rounds, abilities may not be played, and any player who does not vote within thirty seconds gains the [00FFFF]Silenced [FFFFFF]effect. If a chancellor is not chosen in time, the government fails.'},
@@ -130,7 +130,7 @@ PLAYERS =
     {name = '[000000]Negative Nancy[-]',                            desc = '[FFFFFF]Inspect each player\'s role. Look at each player\'s unused abilities.'},
     {name = '[000000]Penshar[-]',                                   desc = '[DAA520]Target another player. [FFFFFF]That player and you both gain the [00FFFF]Quick [FFFFFF]effect.'},
     {name = '[000000]Piggy[-]',                                     desc = '[FFFFFF]Until Hitler Territory, once per round, you may shuffle and reveal the top ability of the ability deck. If you can play that ability, play it. Place the ability back into the ability deck.'},
-    {name = '[000000]Prinny[-]',                                    desc = '[FFFFFF]Once per round, you may replay one of your used abilities.'},
+    {name = '[000000]Prinny[-]',                                    desc = 'You gain the [00FFFF]Amnesic [FFFFFF]effect.'},
     {name = '[000000]Rix[-]',                                       desc = '[FFFFFF]At the start of the twelth round after this one, all other players die unless you die.'},
     {name = '[000000]Severyn[-]',                                   desc = '[FF4040][Right after a player reveals an ability,] [FFFFFF]you use the ability instead.'},
     {name = '[000000]Sionar[-]',                                    desc = '[FF4040]Cannot be copied. [DAA520]Target another player. [FFFFFF]That player must perform an action of your choice or die. If they are incapable of performing the action, then this ability has no effect.'},
@@ -139,6 +139,7 @@ PLAYERS =
 
 PLAYER_EFFECTS =
 {
+    {name = '[00FFFF]Amnesic[-]',                                   desc = '[FFFFFF]Once per round, you may replay one of your used abilities.'},    
     {name = '[00FFFF]Blessed[-]',                                   desc = '[FFFFFF]This effect cannot be removed. Destroy all artifacts and effects on you. You cannot be affected by other players\' abilities unless you allow it. You may play all of your other abilities. You cannot die.'},
     {name = '[00FFFF]Honest[-]',                                    desc = '[FFFFFF]You cannot lie.'},
     {name = '[00FFFF]Lucky[-]',                                     desc = '[FFFFFF]You control the outcome of every random event. This effect does not affect policy cards.'},

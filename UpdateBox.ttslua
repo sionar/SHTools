@@ -19,7 +19,11 @@ PACKING_LIST = {
    'Line Drawer',
    'Secret Hitler Probability Calc',
    'Ability Drafter',
-   'Desperado'
+   'Players',
+   'Player Effects',
+   'Darthvader Effect Deck',
+   'Player Reference',
+   'Player Effect Reference'
 }
 
 function onLoad()
