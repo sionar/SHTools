@@ -6,6 +6,12 @@ Made by Lost Savage
 
 ------------------Constants
 BOX_NAME = 'SH Expansion Box'
+PACKING_LIST_PLAYERS = {
+    'Players',
+    'Player Effects',
+    'Darthvader Effect Deck',
+    'Player Reference',
+}
 PACKING_LIST = {
    'Abilities',
    'Effects',
@@ -24,13 +30,13 @@ PACKING_LIST = {
 function onLoad()
    local buttonParam = {
       click_function = 'updateBox',
-      label = 'Update Box',
+      label = 'Update Box\nWith Player Abilities',
       function_owner = self,
       position = {0, 0.2, 0},
       rotation = {0, 0, 0},
       width = 3400,
       height = 1500,
-      font_size = 600
+      font_size = 300
    }
    self.createButton(buttonParam)
    self.setDescription('v ' .. VERSION)
@@ -57,13 +63,21 @@ function updateBox()
       --Clone objects and put them in the box
       allObjs = getAllObjects()
       if boxObj then
-         for _, tmpObj in ipairs(allObjs) do
-            if inTable(PACKING_LIST, tmpObj.getName()) then
-               local newObj = tmpObj.clone({position = boxObj.getPosition()})
-               newObj.setLock(false)
-               sleep(0.5)
+        for _, tmpObj in ipairs(allObjs) do
+            if inTable(PACKING_LIST_PLAYERS, tmpObj.getName()) then
+                local newObj = tmpObj.clone({position = boxObj.getPosition()})
+                newObj.setLock(false)
+                sleep(0.5)
             end
-         end
+        end
+
+        for _, tmpObj in ipairs(allObjs) do
+            if inTable(PACKING_LIST, tmpObj.getName()) then
+                local newObj = tmpObj.clone({position = boxObj.getPosition()})
+                newObj.setLock(false)
+                sleep(0.5)
+            end
+        end
       else
          broadcastToAll("ERROR: " .. BOX_NAME .. " not found.", {1, 0, 0})
       end

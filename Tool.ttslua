@@ -45,6 +45,17 @@ function onLoad(saveString)
     end
     refreshButtons()
     self.setDescription('v ' .. VERSION .. '\nMade by Sionar\nUse with SH Consolidator Edition workshop mod.')
+    local global_name = Global.getVar('MOD_NAME')
+    local started = Global.getVar('started')
+    if not started and global_name == 'Secret Hitler: CE' then
+        self.setLock(true)
+        local tempScale = self.getScale()[1]
+        self.scale(1/tempScale)
+        self.scale(5.8)
+        local pos = {forward = -13, right = 0, up = 3}
+        local rot = {x = 0, y = 180, z = 0}
+        giveObjectToPlayer(self, COLOR_TABLE[2], pos, rot)
+    end
 end
 
 function onSave()
@@ -1341,7 +1352,7 @@ function efInputFunc(obj, color, input, stillEditing)
                 end
             end
         end
-        option = 3
+        option = 4
         return 1
     end
 end

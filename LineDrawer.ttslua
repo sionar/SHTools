@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.3.2'
+VERSION = '1.3.3'
 COLOR_TABLE = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 LINE_HEIGHT = 1
 LINE_SPACING = 1
@@ -85,6 +85,13 @@ function onLoad(saveString)
     local started = Global.getVar('started')
     if not started and global_name == 'Secret Hitler: CE' then
         clearLines()
+        self.setLock(true)
+        local tempScale = self.getScale()[1]
+        self.scale(1/tempScale)
+        self.scale(5.8)
+        local pos = {forward = -13, right = 0, up = 3}
+        local rot = {x = 0, y = 180, z = 0}
+        giveObjectToPlayer(self, COLOR_TABLE[3], pos, rot)
     end
     self.setDescription('v ' .. VERSION .. '\nMade by Sionar\nUse with SH Consolidator Edition workshop mod.')
 end

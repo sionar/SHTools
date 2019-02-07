@@ -123,28 +123,31 @@ PLAYERS =
     {name = '[000000]Ducktales[-]',                                 desc = '[FFFFFF]On this round and the next two rounds, abilities may not be played, and any player who does not vote within thirty seconds gains the [00FFFF]Silenced [FFFFFF]effect. If a chancellor is not chosen in time, the government fails.'},
     {name = '[000000]GG77R6[-]',                                    desc = '[FFFFFF]Until Hitler Territory, at the start of each round, the president and chancellor are chosen randomly.'},
     {name = '[000000]Ghost[-]',                                     desc = '[FF4040][Right after you die, if nobody else is dead,] [FFFFFF]you win. Everyone else loses.'},
-    {name = '[000000]Ikigai[-]',                                    desc = '[FFFFFF]Draw ten random abilities from the ability deck and choose one. You may play it. If you lose this game, keep this ability in your hand for the next game.'},
+    {name = '[000000]Ikigai[-]',                                    desc = '[FF4040][Right after you die,] [FFFFFF]the two living players sitting directly next to you also die.'},
     {name = '[000000]Lightning Mcqueen[-]',                         desc = '[FF4040]Cannot be copied. [FFFFFF]You gain the [00FFFF]Lucky [FFFFFF]effect.'},
     {name = '[000000]Lost Savage[-]',                               desc = 'You gain the [00FFFF]Unlawful [FFFFFF]effect.'},
     {name = '[000000]Manaphy[-]',                                   desc = '[FFFFFF]Draw a number of random abilities equal to the number of players. Choose one ability, then pass the rest to another player. Each player chooses one ability and passes the rest to a player who has not chosen an ability yet. Each player may play those abilities.'},
-    {name = '[000000]Negative Nancy[-]',                            desc = '[FFFFFF]Inspect each player\'s role. Look at each player\'s unused abilities.'},
+    {name = '[000000]Negative Nancy[-]',                            desc = '[FFFFFF]You gain the [00FFFF]Quiet [FFFFFF]effect. Inspect each player\'s role. Look at each player\'s unused abilities.'},
     {name = '[000000]Penshar[-]',                                   desc = '[DAA520]Target another player. [FFFFFF]That player and you both gain the [00FFFF]Quick [FFFFFF]effect.'},
     {name = '[000000]Piggy[-]',                                     desc = '[FFFFFF]Until Hitler Territory, once per round, you may shuffle and reveal the top ability of the ability deck. If you can play that ability, play it. Place the ability back into the ability deck.'},
     {name = '[000000]Prinny[-]',                                    desc = 'You gain the [00FFFF]Amnesic [FFFFFF]effect.'},
     {name = '[000000]Rix[-]',                                       desc = '[FFFFFF]At the start of the twelth round after this one, all other players die unless you die.'},
     {name = '[000000]Severyn[-]',                                   desc = '[FF4040][Right after a player reveals an ability,] [FFFFFF]you use the ability instead.'},
     {name = '[000000]Sionar[-]',                                    desc = '[FF4040]Cannot be copied. [DAA520]Target another player. [FFFFFF]That player must perform an action of your choice or die. If they are incapable of performing the action, then this ability has no effect.'},
-    {name = '[000000]Tetarus[-]',                                   desc = 'Each time you correctly guess the next policy placed, gain one gold. Once per game, look at the ability deck and buy up to two abilities. The lowest tier of abilities cost one gold, and each tier increases in cost by one gold. Reveal the two abilities that you bought. You may play them.'}
+    {name = '[000000]Tetarus[-]',                                   desc = 'Each time you correctly guess the next policy placed, gain one gold. Once per game, look at the ability deck and buy up to two abilities. The lowest tier of abilities cost one gold, and each tier increases in cost by one gold. Reveal the two abilities that you bought. You may play them.'},
+    {name = '[000000]Yincrash[-]',                                  desc = '[FFFFFF]Draw ten random abilities from the ability deck and choose one. You may play it. If you lose this game, keep this ability in your hand for the next game.'},
 }
 
 PLAYER_EFFECTS =
 {
-    {name = '[00FFFF]Amnesic[-]',                                   desc = '[FFFFFF]Once per round, you may replay one of your used abilities.'},    
+    {name = '[00FFFF]Amnesic[-]',                                   desc = '[FFFFFF]Once per policy played, you may replay one of your used abilities.'},
     {name = '[00FFFF]Blessed[-]',                                   desc = '[FFFFFF]This effect cannot be removed. Destroy all artifacts and effects on you. You cannot be affected by other players\' abilities unless you allow it. You may play all of your other abilities. You cannot die.'},
     {name = '[00FFFF]Honest[-]',                                    desc = '[FFFFFF]You cannot lie.'},
     {name = '[00FFFF]Lucky[-]',                                     desc = '[FFFFFF]You control the outcome of every random event. This effect does not affect policy cards.'},
     {name = '[00FFFF]Quick[-]',                                     desc = '[FFFFFF]You may play all of your abilities. All of your abilities may be played in response to an ability being revealed.'},
+    {name = '[00FFFF]Quiet[-]',                                     desc = '[FFFFFF]This effect cannot be removed. You cannot speak or communicate.'},
     {name = '[00FFFF]Unlawful[-]',                                  desc = '[FFFFFF]You may play all of your abilities. You ignore all bracketed text on abilities, except on abilities that must be revealed before voting.'}
+
 }
 
 
