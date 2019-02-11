@@ -54,7 +54,7 @@ function onLoad(saveString)
         self.scale(5.8)
         local pos = {forward = -13, right = 0, up = 3}
         local rot = {x = 0, y = 180, z = 0}
-        giveObjectToPlayer(self, COLOR_TABLE[2], pos, rot)
+        giveObjectToPlayer(self, COLOR_TABLE[3], pos, rot)
     end
 end
 

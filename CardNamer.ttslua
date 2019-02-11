@@ -123,7 +123,7 @@ PLAYERS =
     {name = '[000000]Ducktales[-]',                                 desc = '[FFFFFF]On this round and the next two rounds, abilities may not be played, and any player who does not vote within thirty seconds gains the [00FFFF]Silenced [FFFFFF]effect. If a chancellor is not chosen in time, the government fails.'},
     {name = '[000000]GG77R6[-]',                                    desc = '[FFFFFF]Until Hitler Territory, at the start of each round, the president and chancellor are chosen randomly.'},
     {name = '[000000]Ghost[-]',                                     desc = '[FF4040][Right after you die, if nobody else is dead,] [FFFFFF]you win. Everyone else loses.'},
-    {name = '[000000]Ikigai[-]',                                    desc = '[FF4040][Right after you die,] [FFFFFF]the two living players sitting directly next to you also die.'},
+    {name = '[000000]Ikigai[-]',                                    desc = '[FF4040][Right after you die,] [FFFFFF]the two living players sitting to your left and right also die.'},
     {name = '[000000]Lightning Mcqueen[-]',                         desc = '[FF4040]Cannot be copied. [FFFFFF]You gain the [00FFFF]Lucky [FFFFFF]effect.'},
     {name = '[000000]Lost Savage[-]',                               desc = 'You gain the [00FFFF]Unlawful [FFFFFF]effect.'},
     {name = '[000000]Manaphy[-]',                                   desc = '[FFFFFF]Draw a number of random abilities equal to the number of players. Choose one ability, then pass the rest to another player. Each player chooses one ability and passes the rest to a player who has not chosen an ability yet. Each player may play those abilities.'},

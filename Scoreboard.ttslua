@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.7.4'
+VERSION = '1.8.1'
 DEBUG = false
 COLOR_TABLE = {'White', 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple', 'Pink', 'Teal', 'Brown'}
 BUTT_W = 1
@@ -42,6 +42,7 @@ passHash = ''
 recordCheck = false
 startTime = 0
 minGames = 10
+startRank = 1
 fWins = 0
 lWins = 0
 state = 0
@@ -603,166 +604,175 @@ function getSteamNamesCB(req)
 end
 
 function overLeader()
-    local db_copy = {}
-    for v in pairs(db) do
-        local tempEntry = {}
-        tempEntry.sn = db[v].sn or db[v].name
-        tempEntry.fg = db[v].fg
-        tempEntry.hg = db[v].hg
-        tempEntry.lg = db[v].lg
-        tempEntry.fw = db[v].fw
-        tempEntry.hw = db[v].hw
-        tempEntry.lw = db[v].lw
-        table.insert(db_copy, tempEntry)
-    end
-
     local tab = self.getInputs()
     if tab == nil then
         minGames = 10
     else
-        minGames = tonumber(tab[1].value)
+        startRank = tonumber(tab[1].value)
+        minGames = tonumber(tab[2].value)
     end
 
-    if minGames == 0  or minGames == nil then
-        minGames = 1
-    end
-
-    for v in pairs(db_copy) do
-        if db_copy[v].fg + db_copy[v].hg + db_copy[v].lg < minGames then
-            db_copy[v].owr = 0
-        else
-            db_copy[v].owr = (db_copy[v].fw + db_copy[v].hw + db_copy[v].lw) / (db_copy[v].fg + db_copy[v].hg + db_copy[v].lg)
+    local db_copy = {}
+    local tempEntry = {}
+    for v in pairs(db) do
+        if db[v].fg + db[v].hg + db[v].lg >= minGames then
+            tempEntry = {}
+            tempEntry.sn = db[v].sn or db[v].name
+            tempEntry.fg = db[v].fg
+            tempEntry.hg = db[v].hg
+            tempEntry.lg = db[v].lg
+            tempEntry.fw = db[v].fw
+            tempEntry.hw = db[v].hw
+            tempEntry.lw = db[v].lw
+            table.insert(db_copy, tempEntry)
         end
     end
 
-    table.sort(db_copy, compO)
-    local endpoint = #db_copy
-    if endpoint > 10 then
-        endpoint = 10
+    for v in pairs(db_copy) do
+        db_copy[v].wr = (db_copy[v].fw + db_copy[v].hw + db_copy[v].lw) / (db_copy[v].fg + db_copy[v].hg + db_copy[v].lg)
     end
 
-    for i=1,endpoint do
-        if db_copy[i].fg + db_copy[i].hg + db_copy[i].lg < minGames then
-            namesDisp[i] = ""
-            gamesDisp[i] = ""
-            ratesDisp[i] = ""
-        else
-            namesDisp[i] = db_copy[i].sn
-            gamesDisp[i] = db_copy[i].fg + db_copy[i].hg + db_copy[i].lg
-            ratesDisp[i] = round(db_copy[i].owr * 100) .. "%"
+    table.sort(db_copy, comp)
+    local endPoint = #db_copy
+    if startRank + 9 > endPoint then
+        startRank = endPoint - 9
+    end
+    if startRank < 1 then
+        startRank = 1
+    end
+    if #db_copy < 10 then
+        for i=1,#db_copy do
+            namesDisp[i] = db_copy[startRank-1+i].sn
+            gamesDisp[i] = db_copy[startRank-1+i].fg + db_copy[startRank-1+i].hg + db_copy[startRank-1+i].lg
+            ratesDisp[i] = round(db_copy[startRank-1+i].wr * 100) .. "%"
+        end
+        for i=#db_copy+1,10 do
+            namesDisp[i] = ''
+            gamesDisp[i] = ''
+            ratesDisp[i] = ''
+        end
+    else
+        for i=1,10 do
+            namesDisp[i] = db_copy[startRank-1+i].sn
+            gamesDisp[i] = db_copy[startRank-1+i].fg + db_copy[startRank-1+i].hg + db_copy[startRank-1+i].lg
+            ratesDisp[i] = round(db_copy[startRank-1+i].wr * 100) .. "%"
         end
     end
     overMenu()
 end
 
 function libLeader()
-    local db_copy = {}
-    for v in pairs(db) do
-        local tempEntry = {}
-        tempEntry.sn = db[v].sn or db[v].name
-        tempEntry.lg = db[v].lg
-        tempEntry.lw = db[v].lw
-        table.insert(db_copy, tempEntry)
-    end
-
     local tab = self.getInputs()
     if tab == nil then
         minGames = 10
     else
-        minGames = tonumber(tab[1].value)
+        startRank = tonumber(tab[1].value)
+        minGames = tonumber(tab[2].value)
     end
 
-    if minGames == 0  or minGames == nil then
-        minGames = 1
-    end
-
-    for v in pairs(db_copy) do
-        if tonumber(db_copy[v].lg) < minGames then
-            db_copy[v].lwr = 0
-        else
-            db_copy[v].lwr = (db_copy[v].lw) / (db_copy[v].lg)
+    local db_copy = {}
+    local tempEntry = {}
+    for v in pairs(db) do
+        if tonumber(db[v].lg) >= minGames then
+            tempEntry = {}
+            tempEntry.sn = db[v].sn or db[v].name
+            tempEntry.lg = db[v].lg
+            tempEntry.lw = db[v].lw
+            table.insert(db_copy, tempEntry)
         end
     end
 
-    table.sort(db_copy, compL)
-    local endpoint = #db_copy
-    if endpoint > 10 then
-        endpoint = 10
+    for v in pairs(db_copy) do
+        db_copy[v].wr = (db_copy[v].lw) / (db_copy[v].lg)
     end
-    for i=1,endpoint do
-        if tonumber(db_copy[i].lg) < minGames then
-            namesDisp[i] = ""
-            gamesDisp[i] = ""
-            ratesDisp[i] = ""
-        else
-            namesDisp[i] = db_copy[i].sn
-            gamesDisp[i] = db_copy[i].lg
-            ratesDisp[i] = round(db_copy[i].lwr * 100) .. "%"
+
+    table.sort(db_copy, comp)
+    local endPoint = #db_copy
+    if startRank + 9 > endPoint then
+        startRank = endPoint - 9
+    end
+    if startRank < 1 then
+        startRank = 1
+    end
+    if #db_copy < 10 then
+        for i=1,#db_copy do
+            namesDisp[i] = db_copy[startRank-1+i].sn
+            gamesDisp[i] = db_copy[startRank-1+i].lg
+            ratesDisp[i] = round(db_copy[startRank-1+i].wr * 100) .. "%"
+        end
+        for i=#db_copy+1,10 do
+            namesDisp[i] = ''
+            gamesDisp[i] = ''
+            ratesDisp[i] = ''
+        end
+    else
+        for i=1,10 do
+            namesDisp[i] = db_copy[startRank-1+i].sn
+            gamesDisp[i] = db_copy[startRank-1+i].lg
+            ratesDisp[i] = round(db_copy[startRank-1+i].wr * 100) .. "%"
         end
     end
     libMenu()
 end
 
 function fasLeader()
-    local db_copy = {}
-    for v in pairs(db) do
-        local tempEntry = {}
-        tempEntry.sn = db[v].name or db[v].sn
-        tempEntry.fg = db[v].fg
-        tempEntry.hg = db[v].hg
-        tempEntry.fw = db[v].fw
-        tempEntry.hw = db[v].hw
-        table.insert(db_copy, tempEntry)
-    end
-
     local tab = self.getInputs()
     if tab == nil then
         minGames = 10
     else
-        minGames = tonumber(tab[1].value)
+        startRank = tonumber(tab[1].value)
+        minGames = tonumber(tab[2].value)
     end
 
-    if minGames == 0  or minGames == nil then
-        minGames = 1
-    end
-
-    for v in pairs(db_copy) do
-        if db_copy[v].fg + db_copy[v].hg < minGames then
-            db_copy[v].fwr = 0
-        else
-            db_copy[v].fwr = (db_copy[v].fw + db_copy[v].hw) / (db_copy[v].fg + db_copy[v].hg)
+    local db_copy = {}
+    local tempEntry = {}
+    for v in pairs(db) do
+        if tonumber(db[v].fg + db[v].hg) >= minGames then
+            tempEntry = {}
+            tempEntry.sn = db[v].name or db[v].sn
+            tempEntry.fg = db[v].fg
+            tempEntry.hg = db[v].hg
+            tempEntry.fw = db[v].fw
+            tempEntry.hw = db[v].hw
+            table.insert(db_copy, tempEntry)
         end
     end
 
-    table.sort(db_copy, compF)
-    local endpoint = #db_copy
-    if endpoint > 10 then
-        endpoint = 10
+    for v in pairs(db_copy) do
+        db_copy[v].wr = (db_copy[v].fw + db_copy[v].hw) / (db_copy[v].fg + db_copy[v].hg)
     end
-    for i=1,endpoint do
-        if db_copy[i].fg + db_copy[i].hg < minGames then
-            namesDisp[i] = ""
-            gamesDisp[i] = ""
-            ratesDisp[i] = ""
-        else
-            namesDisp[i] = db_copy[i].sn
+
+    table.sort(db_copy, comp)
+    local endPoint = #db_copy
+    if startRank + 9 > endPoint then
+        startRank = endPoint - 9
+    end
+    if startRank < 1 then
+        startRank = 1
+    end
+    if #db_copy < 10 then
+        for i=1,#db_copy do
+            namesDisp[i] = db_copy[startRank-1+i].sn
             gamesDisp[i] = db_copy[i].fg + db_copy[i].hg
-            ratesDisp[i] = round(db_copy[i].fwr * 100) .. "%"
+            ratesDisp[i] = round(db_copy[startRank-1+i].wr * 100) .. "%"
+        end
+        for i=#db_copy+1,10 do
+            namesDisp[i] = ''
+            gamesDisp[i] = ''
+            ratesDisp[i] = ''
+        end
+    else
+        for i=1,10 do
+            namesDisp[i] = db_copy[startRank-1+i].sn
+            gamesDisp[i] = db_copy[startRank-1+i].fg + db_copy[startRank-1+i].hg
+            ratesDisp[i] = round(db_copy[startRank-1+i].wr * 100) .. "%"
         end
     end
     fasMenu()
 end
 
-function compF(a,b)
-    return a.fwr > b.fwr
-end
-
-function compL(a,b)
-    return a.lwr > b.lwr
-end
-
-function compO(a,b)
-    return a.owr > b.owr
+function comp(a,b)
+    return a.wr > b.wr
 end
 
 function round(n)
@@ -1121,7 +1131,7 @@ end
 
 function createLeaderValueButtons()
     for i = 1,10 do
-        local buttonParam = {click_function = 'nullFunc', label = i..".", color = BUTT_B_COLOR, font_color = stringColorToRGB(COLOR_TABLE[i]), function_owner = self,
+        local buttonParam = {click_function = 'nullFunc', label = startRank -1 + i..".", color = BUTT_B_COLOR, font_color = stringColorToRGB(COLOR_TABLE[i]), function_owner = self,
             position = {COL[1],0.1,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
         self.createButton(buttonParam)
 
@@ -1140,21 +1150,40 @@ function createLeaderValueButtons()
 end
 
 function createMinButtons()
-    local buttonParam = {click_function = 'nullFunc', label = "Minimum\n# Games", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {1.2,0.1,-0.6}, rotation = {0,0,0}, width = 0, height = 0, font_size = 50}
+    local buttonParam = {click_function = 'nullFunc', label = "Starting\nRank", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {1.2,0.1,-1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 50}
     self.createButton(buttonParam)
 
-    local inputParam = {input_function = 'nullFunc', color = stringColorToRGB('White'), function_owner = self, font_color = stringColorToRGB('Black'), function_owner = self,
-        position = {1.2,0.1,-0.25}, rotation = {0,0,0}, width = 400, height = 150, font_size = 100, value = minGames, alignment = 3, validation = 2, tab = 1}
+    local inputParam = {input_function = 'rankUpdate', color = stringColorToRGB('White'), function_owner = self, font_color = stringColorToRGB('Black'), function_owner = self,
+        position = {1.2,0.1,-0.75}, rotation = {0,0,0}, width = 400, height = 124, font_size = 100, value = startRank, alignment = 3, validation = 2, tab = 1}
     self.createInput(inputParam)
 
-    local buttonParam = {label = "Update", color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
-        position = {1.2,0.1,0.2}, rotation = {0,0,0}, width = 400, height = 200, font_size = 50}
-    if     state == 2 then      buttonParam.click_function = 'overLeader'
-    elseif state == 3 then      buttonParam.click_function = 'libLeader'
-    elseif state == 4 then      buttonParam.click_function = 'fasLeader'
-    end
+    local buttonParam = {click_function = 'nullFunc', label = "Minimum\n# Games", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {1.2,0.1,0}, rotation = {0,0,0}, width = 0, height = 0, font_size = 50}
     self.createButton(buttonParam)
+
+    local inputParam = {input_function = 'minUpdate', color = stringColorToRGB('White'), function_owner = self, font_color = stringColorToRGB('Black'), function_owner = self,
+        position = {1.2,0.1,0.25}, rotation = {0,0,0}, width = 400, height = 124, font_size = 100, value = minGames, alignment = 3, validation = 2, tab = 1}
+    self.createInput(inputParam)
+end
+
+function rankUpdate(obj, player_clicker_color, input_value, selected)
+    if not selected then
+        startRank = input_value
+        if     state == 2 then      overLeader()
+        elseif state == 3 then      libLeader()
+        elseif state == 4 then      fasLeader()
+        end
+    end
+end
+
+function minUpdate(obj, player_clicker_color, input_value, selected)
+    if not selected then
+        if     state == 2 then      overLeader()
+        elseif state == 3 then      libLeader()
+        elseif state == 4 then      fasLeader()
+        end
+    end
 end
 
 function lookupMenu()
