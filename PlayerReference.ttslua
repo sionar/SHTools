@@ -6,12 +6,62 @@ Player Reference
 
 
 ------------------Constants
-START_POS = {x = -90, y = 1.1, z = 40.5}
-START_POS_12P = {x = -90, y = 1.1, z = 40.5}
+START_POS = {x = -115, y = 1.1, z = 40.5}
+START_POS_12P = {x = -115, y = 1.1, z = 40.5}
+X_RADIUS = -1.792
+Z_RADIUS = 1
+X_WIDTH = 10
+Z_WIDTH = 4
+X_SEG_LENGTH = -1 * X_RADIUS / (X_WIDTH / 2)
+Z_SEG_LENGTH = Z_RADIUS / (Z_WIDTH / 2)
+X_C = {}
+Z_C = {}
+for i = 1, X_WIDTH + 1 do
+	X_C[i] = X_RADIUS + X_SEG_LENGTH * (i-1)
+end
+for i = 1, Z_WIDTH + 1 do
+	Z_C[i] = Z_RADIUS - Z_SEG_LENGTH * (i-1)
+end
+
+PLAYERS =
+{
+	'Astuart007',
+	'BigFrostie',
+	'Familiar',
+	'Bornis',
+	'Brittany',
+	'Brokenhope Magoo',
+	'Broubison',
+	'Coo Person',
+	'Craig',
+	'Darthvader',
+	'Dastina',
+	'Ducktales',
+	'GG77R6',
+	'Ghost',
+	'Ikigai',
+	'Lightning McQueen',
+	'Lost Savage',
+	'Manaphy',
+	'Negative Nancy',
+	'Penshar',
+	'Piggy',
+	'Prinny',
+	'Rix',
+	'Severyn',
+	'Sionar',
+	'Tetarus',
+	'Yincrash',
+}
+
+
+------------------Variables
+lineTable = {}
+
 
 
 ------------------Functions
-function onLoad()
+function onLoad(saveString)
 	local global_name = Global.getVar('MOD_NAME')
     if global_name == 'Secret Hitler: CE' then
         local options = Global.getTable('options')
@@ -22,5 +72,72 @@ function onLoad()
 		  end
         self.setLock(true)
     end
-	 self.setDescription('v ' .. VERSION)
+	self.setDescription('v ' .. VERSION)
+
+	local buttonParam = {
+	   click_function = 'drawBoxes',
+	   label = 'Highlight\nPlayers',
+	   function_owner = self,
+	   position = {1.5, 0.2, 0.8},
+	   rotation = {0, 0, 0},
+	   width = 300,
+	   height = 100,
+	   font_size = 50
+	}
+	self.createButton(buttonParam)
+
+	if not (saveString == '') then
+		local save = JSON.decode(saveString)
+		lineTable = save['lt']
+	end
+end
+
+function onSave()
+    local save = {}
+    save['lt'] = lineTable
+    local saveString = JSON.encode(save)
+    return saveString
+end
+
+function addSegment(point1, point2)
+    local lineData =
+        {
+            points    = {point1, point2},
+            color     = 'Red',
+            thickness = 0.01,
+            rotation  = {0,180,0}
+        }
+    table.insert(lineTable, lineData)
+end
+
+function addBox(id)
+	local x = id % X_WIDTH
+	if x == 0 then x = 10 end
+	local z = math.floor((id-1) / X_WIDTH) + 1
+	local p1 = {X_C[x], 0.3, Z_C[z]}
+	local p2 = {X_C[x+1], 0.3, Z_C[z]}
+	local p3 = {X_C[x+1], 0.3, Z_C[z+1]}
+	local p4 = {X_C[x], 0.3, Z_C[z+1]}
+	addSegment(p1, p2)
+	addSegment(p2, p3)
+	addSegment(p3, p4)
+	addSegment(p4, p1)
+end
+
+function drawBoxes()
+	local started = Global.getVar('started')
+		if not started then
+		lineTable = {}
+		local allObjects = getAllObjects()
+		for k,v in pairs(allObjects) do
+			for i = 1, #PLAYERS do
+				if string.match(v.getName(), PLAYERS[i]) then
+					addBox(i)
+				end
+			end
+		end
+		self.setVectorLines(lineTable)
+	else
+		self.setVectorLines(lineTable)
+	end
 end

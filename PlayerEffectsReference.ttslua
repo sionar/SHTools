@@ -22,5 +22,5 @@ function onLoad()
 		  end
         self.setLock(true)
     end
-	 self.setDescription('v ' .. VERSION)
+	self.setDescription('v ' .. VERSION)
 end

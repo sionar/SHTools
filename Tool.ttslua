@@ -92,6 +92,12 @@ function incAbDraw()
     abDrawMenu()
 end
 
+function piggyCall(clickedButton, playerColor)    --For calling ability draw from the Piggy card.
+    player = playerColor
+    drawNum = 1
+    abDrawStart(_, playerColor)
+end
+
 function abDrawStart(clickedButton, playerColor)
     if Player[playerColor].admin or not promOnly then
         if player == "" then
@@ -117,7 +123,12 @@ function abDrawStart(clickedButton, playerColor)
             giveObjectToPlayer(card, player, {forward = 16.5, right = 0, up = 0}, rotDown)
 
         end
-        local broadcastString = colorString(player) .. " draws " .. drawNum .. " abilities from the ability deck."
+        local broadcastString = colorString(player) .. " draws " .. drawNum
+        if drawNum == 1 then
+            broadcastString = broadcastString .. " ability from the ability deck."
+        else
+            broadcastString = broadcastString .. " abilities from the ability deck."
+        end
         broadcastToAll(broadcastString, {1,1,1})
         returnFunc()
     end

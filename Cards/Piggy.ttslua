@@ -1,0 +1,25 @@
+function onLoad()
+    local toolObj = findTool()
+    local buttonParam = {
+	   click_function = 'piggyCall',
+       function_owner = toolObj,
+	   label = '★',
+	   position = {0.6, 0.5, 1.2},
+	   rotation = {0, 0, 0},
+	   width = 100,
+	   height = 100,
+	   font_size = 50,
+       color = {1,1,1},
+       font_color = {0,0,0}
+	}
+	self.createButton(buttonParam)
+end
+
+function findTool()
+    local allObjs = getAllObjects()
+    for k,v in pairs(allObjs) do
+        if string.match(v.getName(), 'Expansion Tool') then
+            return v
+        end
+    end
+end

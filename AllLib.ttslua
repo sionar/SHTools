@@ -1,0 +1,46 @@
+replace_guids = {
+	'5997ea',  -- hitler deck
+	'5f2055','fb58cf', '4a3cf4', -- fascist decks
+	'b156f7', 'd1735a', 'c8ab2a', 'b2873d', '313939', '40d8f5' -- liberal decks
+}
+
+function onLoad(saveString)
+	local parameters = {}
+	parameters.identifier = 'setupExtraOption' .. self.getGUID()
+	parameters.function_name = 'setupExtraOption'
+	parameters.function_owner = self
+	parameters.delay = 0.1
+	Timer.create(parameters)
+end
+
+function setupExtraOption()
+	local global_name = Global.getVar('MOD_NAME')
+	local started = Global.getVar('started')
+
+	if global_name ~= 'Secret Hitler: CE' then
+		printToAll('ERROR: Secret Hitler: CE not found.', {1,0,0})
+	else
+        if started then
+            printToAll('ERROR: Can not add this option. Game has already started.', {1,0,0})
+        else
+        	self.setPosition({0, 100, 0})
+
+        	local objGUID
+        	local tmpObj
+        	local params = {}
+
+        	for _, objGUID in ipairs(replace_guids) do
+        		local tmpObj = getObjectFromGUID(objGUID)
+        		params.rotation = tmpObj.getRotation()
+        		params.position = tmpObj.getPosition()
+        		destroyObject(tmpObj)
+        		tmpObj = self.takeObject(params)
+        		tmpObj.setLock(true)
+        		tmpObj.interactable = false
+        	end
+
+            Global.setVar('game_mode', 'all_lib')
+        	destroyObject(self)
+        end
+    end
+end
