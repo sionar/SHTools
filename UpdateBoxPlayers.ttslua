@@ -11,6 +11,9 @@ PACKING_LIST_PLAYERS = {
     'Player Effects',
     'Darthvader Effect Deck',
     'Player Reference',
+    'Rounds Until Armageddon',
+    'Rounds Until Swap',
+    'Gold',   
 }
 PACKING_LIST = {
    'Abilities',
@@ -21,7 +24,7 @@ PACKING_LIST = {
    'Effect Reference',
    'Rounds Until Poisoning',
    'Rounds Until Death',
-   'Rounds until Aegis expires',
+   'Rounds Until Aegis Expires',
    'Line Drawer',
    'Secret Hitler Probability Calc',
    'Ability Drafter',

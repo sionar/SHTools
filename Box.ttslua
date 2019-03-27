@@ -35,16 +35,33 @@ LINE_DRAWER_POS = {8,2,-16}
 RULEBOOK_POS = {100, 1.1, -22}
 DRAFT_POS = {-20, 1.06, 0}
 
+PACKING_LIST = {
+   'Abilities',
+   'Effects',
+   'SH Expansion Tool',
+   'SH Expansion Rulebook',
+   'Ability Reference',
+   'Effect Reference',
+   'Rounds Until Poisoning',
+   'Rounds Until Death',
+   'Rounds Until Aegis Expires',
+   'Line Drawer',
+   'Secret Hitler Probability Calc',
+   'Ability Drafter',
+   'Players',
+   'Player Effects',
+   'Darthvader Effect Deck',
+   'Player Reference',
+   'Rounds Until Armageddon',
+   'Rounds Until Swap',
+   'Gold',
+   'Secret Hitler Expansion Box'
+}
 
 
 ------------------Functions
 function onLoad(saveString)
-	local parameters = {}
-	parameters.identifier = 'setupExpansionSP'
-	parameters.function_name = 'setupExpansion'
-	parameters.function_owner = self
-	parameters.delay = 0.3
-	Timer.create(parameters)
+	Wait.time(setupExpansion, 0.3)
 	self.setDescription('v ' .. VERSION .. '\nMade by Piggy and Sionar')
 end
 
@@ -98,7 +115,8 @@ function setupExpansion()
 						if options.zoneType ~= 6 then
 							Global.call('refreshHiddenZones')
 						end
-						startLuaCoroutine(self, 'setupExpansionCoroutine')
+						deleteOldObjects()
+						Wait.time(unpackObjects,3)
 						createSnapPoints()
 					end
 				end
@@ -107,7 +125,16 @@ function setupExpansion()
 	end
 end
 
-function setupExpansionCoroutine()
+function deleteOldObjects()
+	local allObjs = getAllObjects()
+	   for _, tmpObj in ipairs(allObjs) do
+		  if inTable(PACKING_LIST, tmpObj.getName()) and tmpObj.getGUID() ~= self.getGUID() then
+			 tmpObj.destruct()
+		  end
+	   end
+end
+
+function unpackObjects()
 	self.setPosition(SELF_POS)
 	self.setScale(SELF_SCALE)
 	self.setName(SELF_NAME)
@@ -399,9 +426,21 @@ function createSnapPoints()
 		},
 		{
 			position = {20,0.96,0},
-			rotation = {0,0,0},
+			rotation = {0,180,0},
 			rotation_snap = true
 		},
 	}
 	)
+end
+
+function inTable(tableIn, valueIn)
+	local value
+	if tableIn then
+		for _, value in pairs(tableIn) do
+			if value == valueIn then
+				return true
+			end
+		end
+	end
+	return false
 end

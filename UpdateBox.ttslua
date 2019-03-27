@@ -15,7 +15,7 @@ PACKING_LIST = {
    'Effect Reference',
    'Rounds Until Poisoning',
    'Rounds Until Death',
-   'Rounds until Aegis expires',
+   'Rounds Until Aegis Expires',
    'Line Drawer',
    'Secret Hitler Probability Calc',
    'Ability Drafter',
