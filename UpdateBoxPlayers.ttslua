@@ -13,7 +13,7 @@ PACKING_LIST_PLAYERS = {
     'Player Reference',
     'Rounds Until Armageddon',
     'Rounds Until Swap',
-    'Gold',   
+    'Gold',
 }
 PACKING_LIST = {
    'Abilities',
@@ -28,6 +28,7 @@ PACKING_LIST = {
    'Line Drawer',
    'Secret Hitler Probability Calc',
    'Ability Drafter',
+   'Timer',
 }
 
 function onLoad()

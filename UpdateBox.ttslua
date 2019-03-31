@@ -19,6 +19,7 @@ PACKING_LIST = {
    'Line Drawer',
    'Secret Hitler Probability Calc',
    'Ability Drafter',
+   'Timer',
 }
 
 function onLoad()

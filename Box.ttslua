@@ -22,6 +22,7 @@ PLAYER_DECK_NAME = 'Players'
 PEFFECT_DECK_NAME = 'Player Effects'
 PLAYER_REFERENCE_NAME = 'Player Reference'
 SELF_NAME = 'Secret Hitler Expansion Box'
+TIMER_NAME = 'Timer'
 SELF_POS = {20, 1.71, 11}
 SELF_SCALE = {2.5, 2.5, 2.5}
 SHOWN_ROT = {0,180,0}
@@ -55,7 +56,8 @@ PACKING_LIST = {
    'Rounds Until Armageddon',
    'Rounds Until Swap',
    'Gold',
-   'Secret Hitler Expansion Box'
+   'Secret Hitler Expansion Box',
+   'Timer',
 }
 
 
@@ -216,6 +218,12 @@ function unpackObjects()
 			params.position = DEFAULT_POS
 			self.takeObject(params)
 		end
+        if v.name == TIMER_NAME then
+            params.rotation = SHOWN_ROT
+            params.guid = v.guid
+            params.position = DEFAULT_POS
+            self.takeObject(params)
+        end
 	end
 
 	return true
