@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.4.0'
+VERSION = '1.5.0'
 COLOR_TABLE = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 LINE_HEIGHT = 1
 LINE_SPACING = 1
@@ -335,25 +335,15 @@ function importFunc(clickedButton, playerColor)
         clearLines()
         local noteTakerNotes = Global.getTable('noteTakerNotes')
         for i = 1, #noteTakerNotes do
-            if noteTakerNotes[i].conflict == '(Conflict)' or noteTakerNotes[i].conflict == '(Rev Con)' then
+            if ((noteTakerNotes[i].conflict == '(Conflict)' or noteTakerNotes[i].conflict == '(Rev Con)') and noteTakerNotes[i].color2 ~= '') or (noteTakerNotes[i].action == 'inspects' and noteTakerNotes[i].result == 'claims [FF0000]Fascist[-]' and noteTakerNotes[i].color2 ~= '') then
                 local p1, p2, lC
-                if noteTakerNotes[i].color1 ~= '' then
-                    p1 = noteTakerNotes[i].color1
-                    if noteTakerNotes[i].color2 == '' then
-                       p2 = p1
-                    else
-                       p2 = noteTakerNotes[i].color2
-                    end
-                    if lineColor == '' then
-                       lC = DEFAULT_LINE_COLOR
-                    else
-                       lC = lineColor
-                    end
-                    if style == 'straight' then
-                        addLineStraight(p1, p2, lC)
-                    else
-                        addLineBlock(p1, p2, lC)
-                    end
+                p1 = noteTakerNotes[i].color1
+                p2 = noteTakerNotes[i].color2
+                lC = p1
+                if style == 'straight' then
+                    addLineStraight(p1, p2, lC)
+                else
+                    addLineBlock(p1, p2, lC)
                 end
             end
         end
