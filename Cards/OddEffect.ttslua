@@ -1,0 +1,17 @@
+function onLoad()
+    Wait.time(changeState,1)
+end
+
+function changeState()
+    local global_name = Global.getVar('MOD_NAME')
+    local started = Global.getVar('started')
+    local players = Global.getTable('players')
+
+    if global_name == 'Secret Hitler: CE' then
+        if started and #players%2 == 1 then
+            if self.getStateId() ~= 2 then
+                self.setState(2)
+            end
+        end
+    end
+end

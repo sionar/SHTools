@@ -64,7 +64,7 @@ PACKING_LIST = {
 ------------------Functions
 function onLoad(saveString)
 	Wait.time(setupExpansion, 0.3)
-	self.setDescription('v ' .. VERSION .. '\nMade by Piggy and Sionar')
+	self.setDescription('v ' .. VERSION .. '\nMade by Sionar and Piggy')
 end
 
 function setupExpansion()
@@ -109,6 +109,7 @@ function setupExpansion()
 						options.shufflePlayers = true
 						options.shuffleHost = false
 						options.voteHistory = true
+                        options.expansionOptionEnabled = 13
 						if options.zoneType ~= 6 then
 							options.zoneType = 5
 						end

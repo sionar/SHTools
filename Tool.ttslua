@@ -315,9 +315,14 @@ function gambleCoroutine()
     local allObjs = getAllObjects()
 	local tmpObj
     local gambleResult
+    local cardMemory = false
+    local tmpPos, tmpRot, params, card
+
     for _, tmpObj in ipairs(allObjs) do
-        tmpPos = tmpObj.getPosition()
         if tmpObj.getName() ~= '' and tmpObj.getName() == gambleTable[player]  then
+            cardMemory = true
+            tmpPos = tmpObj.getPosition()
+            tmpRot = tmpObj.getRotation()
             tmpObj.setPositionSmooth(pos1)
             tmpObj.setRotationSmooth(rotDown)
             sleep(2)
@@ -331,9 +336,14 @@ function gambleCoroutine()
     end
     if (deckTable[1].description == "Liberal Policy" and option == 1) or (deckTable[1].description == "Fascist Policy" and option == 0) then
         broadcastString = broadcastString .. "won!"
-        local params = {index = 1}
-        local card = abilityDeck.takeObject(params)
-        giveObjectToPlayer(card, player, {forward = 16.5, right = 0, up = 0}, rotDown)
+        if cardMemory then
+            params = {index = 1, position = tmpPos, rotation = tmpRot}
+            card = abilityDeck.takeObject(params)
+        else
+            params = {index = 1}
+            card = abilityDeck.takeObject(params)
+            giveObjectToPlayer(card, player, {forward = 16.5, right = 0, up = 0}, rotDown)
+        end
         gambleTable[player] = card.getName()
         gambleResult = 'w'
     else
@@ -1355,7 +1365,7 @@ function efInputFunc(obj, color, input, stillEditing)
                     tmpString = string.sub(tmpString, 1, tmpEndIndex-1)
                 end
 
-                if string.match(string.lower(tmpString), string.lower(input)) and input ~= '' then
+                if string.match(string.lower(tmpString), string.lower(input)) and input ~= '' and tmpString ~= '[000000]Death[-]' then
                     efName = tmpString
                     break
                 else

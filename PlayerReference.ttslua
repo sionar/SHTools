@@ -27,8 +27,9 @@ PLAYERS =
 {
 	'Astuart007',
 	'BigFrostie',
-	'Familiar',
+	'Bless',
 	'Bornis',
+	'BrianDRT',
 	'Brittany',
 	'Brokenhope Magoo',
 	'Broubison',
@@ -40,6 +41,7 @@ PLAYERS =
 	'GG77R6',
 	'Ghost',
 	'Ikigai',
+	'King of Stardew',
 	'Lightning McQueen',
 	'Lost Savage',
 	'Manaphy',
@@ -51,6 +53,7 @@ PLAYERS =
 	'Severyn',
 	'Sionar',
 	'Tetarus',
+	'Thebluebunny',
 	'Yincrash',
 }
 
@@ -78,11 +81,11 @@ function onLoad(saveString)
 	   click_function = 'drawBoxes',
 	   label = 'Highlight\nPlayers',
 	   function_owner = self,
-	   position = {1.5, 0.2, 0.8},
+	   position = {1.62, 0.2, 0.8},
 	   rotation = {0, 0, 0},
-	   width = 300,
-	   height = 100,
-	   font_size = 50
+	   width = 200,
+	   height = 200,
+	   font_size = 40
 	}
 	self.createButton(buttonParam)
 
