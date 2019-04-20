@@ -6,12 +6,12 @@ Player Reference
 
 
 ------------------Constants
-START_POS = {x = -115, y = 1.1, z = 40.5}
-START_POS_12P = {x = -115, y = 1.1, z = 40.5}
-X_RADIUS = -1.792
+START_POS = {x = -115, y = 1.1, z = 44.5}
+START_POS_12P = {x = -115, y = 1.1, z = 44.5}
+X_RADIUS = -1.434
 Z_RADIUS = 1
 X_WIDTH = 10
-Z_WIDTH = 4
+Z_WIDTH = 5
 X_SEG_LENGTH = -1 * X_RADIUS / (X_WIDTH / 2)
 Z_SEG_LENGTH = Z_RADIUS / (Z_WIDTH / 2)
 X_C = {}
@@ -55,6 +55,7 @@ PLAYERS =
 	'Tetarus',
 	'Thebluebunny',
 	'Yincrash',
+	'Zechbell'
 }
 
 

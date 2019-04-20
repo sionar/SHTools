@@ -51,6 +51,7 @@ PACKING_LIST = {
    'Ability Drafter',
    'Players',
    'Player Effects',
+   'Potions',
    'Darthvader Effect Deck',
    'Player Reference',
    'Rounds Until Armageddon',

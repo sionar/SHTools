@@ -121,7 +121,7 @@ PLAYERS =
     {name = '[000000]Bless[-]',                                     desc = '[FFFFFF]All dead players are no longer dead. Each ressurected player may play Assassin on the player who killed them.[-]'},
     {name = '[000000]Bornis[-]',                                    desc = '[FF4040][Reveal this ability before voting.] [FFFFFF]Hitler Territory is active for the rest of the game.[-]'},
     {name = '[000000]BrianDRT[-]',                                  desc = '[FFFFFF]Each other player (including dead players) reveals one unused ability for the duration of this ability. Take one of those abilities. You may play it.[-]'},
-    {name = '[000000]Brittany[-]',                                  desc = '[FFFFFF]At the end of the game, you win as long as you do not die.[-]'},
+    {name = '[000000]Brittany[-]',                                  desc = '[FFFFFF]At the end of the game, you win as long as you are not dead.[-]'},
     {name = '[000000]Brokenhope Magoo[-]',                          desc = '[FF4040][Reveal this ability before voting.] [DAA520]Target another player. [FFFFFF]You switch seats with that player for three rounds.[-]'},
     {name = '[000000]Broubison[-]',                                 desc = '[FFFFFF]Every liberal policy becomes a fascist policy. Every fascist policy becomes a liberal policy. Discard any extra policies that would cause a team to win the game. Remove all used presidential power tiles. Reshuffle the deck.[-]'},
     {name = '[000000]Coo Person[-]',                                desc = '[FF4040]Cannot be copied or affected. [FFFFFF]Choose another player. That player draws any ability from the ability deck. That player gains the [00FFFF]Blessed [FFFFFF]effect. You gain the [00FFFF]Banished [FFFFFF]effect and die.[-]'},
@@ -147,6 +147,7 @@ PLAYERS =
     {name = '[000000]Thebluebunny[-]',                              desc = '[FF4040][Before Hitler Territory,] [DAA520]target three other players. [FFFFFF]They replace a random unused ability with the Sloth ability.[-]'},
     {name = '[000000]Sloth[-]',                                     desc = '[FFFFFF]This ability does nothing.[-]'},
     {name = '[000000]Yincrash[-]',                                  desc = '[FFFFFF]Draw ten random abilities from the ability deck and choose one. You may play it. If you lose this game, keep this ability in your hand for the next game.[-]'},
+    {name = '[000000]Zechbell[-]',                                  desc = '[DAA520]Target two players. [FFFFFF]Those players draws a random [00FFFFFF]Potion [FFFFFF]effect from the potion deck and place it concealed in front of them. They may look at them. They gain the effects of the potion. [FF4040]Each player may not have more than one potion placed in front of them.[-]'},
     {name = '[000000]The World[-]',                                 desc = '[FF4040]Cannot be copied or affected. [FFFFFF]Speak one sentence. That sentence immediately becomes the reality. [FF4040]Once this ability is played, it disappears forever.[-]'},
 }
 
@@ -159,7 +160,16 @@ PLAYER_EFFECTS =
     {name = '[00FFFF]Quick[-]',                                     desc = '[FFFFFF]You may play all of your abilities. All of your abilities may be played in response to an ability being revealed.[-]'},
     {name = '[00FFFF]Quiet[-]',                                     desc = '[FFFFFF]This effect cannot be removed. You cannot speak or communicate.[-]'},
     {name = '[00FFFF]Unlawful[-]',                                  desc = '[FFFFFF]You may play all of your abilities. You ignore all bracketed text on abilities, except on abilities that must be revealed before voting.[-]'},
-
+    {name = '[FF1493]Potion of Shapeshifting[-]',                   desc = '[FFFFFF]You are now a member of the opposite party.'},
+    {name = '[FF1493]Potion of Truth[-]',                           desc = '[FFFFFF]You cannot lie.[-]'},
+    {name = '[FF1493]Potion of Lies[-]',                            desc = '[FFFFFF]You cannot tell the truth.[-]'},
+    {name = '[FF1493]Potion of Flames[-]',                          desc = '[FFFFFF]You must discard a liberal policy when you are in government.[-]'},
+    {name = '[FF1493]Potion of Ice[-]',                             desc = '[FFFFFF]You must discard a fascist policy when you are in government.[-]'},
+    {name = '[FF1493]Potion of Inquisition[-]',                     desc = '[FFFFFF]All of your sentences must be questions that begin with who, what, where, when and why or how.[-]'},
+    {name = '[FF1493]Potion of Savagery[-]',                        desc = '[FFFFFF]At the end of the game, you win if you killed another player.[-]'},
+    {name = '[FF1493]Potion of Sorrow[-]',                          desc = '[FFFFFF]At the end of the game, you win if you are dead.[-][-]'},
+    {name = '[FF1493]Potion of Cowardice[-]',                       desc = '[FFFFFF]At the end of the game, you win as long as you are not dead.[-]'},
+    {name = '[FF1493]Potion of Vengeance[-]',                       desc = '[FFFFFF]At the end of the game, you win if two players who are on your team are dead.[-]'},
 }
 
 
