@@ -147,7 +147,7 @@ PLAYERS =
     {name = '[000000]Thebluebunny[-]',                              desc = '[FF4040][Before Hitler Territory,] [DAA520]target three other players. [FFFFFF]They replace a random unused ability with the Sloth ability.[-]'},
     {name = '[000000]Sloth[-]',                                     desc = '[FFFFFF]This ability does nothing.[-]'},
     {name = '[000000]Yincrash[-]',                                  desc = '[FFFFFF]Draw ten random abilities from the ability deck and choose one. You may play it. If you lose this game, keep this ability in your hand for the next game.[-]'},
-    {name = '[000000]Zechbell[-]',                                  desc = '[DAA520]Target two players. [FFFFFF]Those players draws a random [00FFFFFF]Potion [FFFFFF]effect from the potion deck and place it concealed in front of them. They may look at them. They gain the effects of the potion. [FF4040]Each player may not have more than one potion placed in front of them.[-]'},
+    {name = '[000000]Zechbell[-]',                                  desc = '[DAA520]Target two players. [FFFFFF]Those players draws a random [00FFFFFF]Potion [FFFFFF]effect from the potion deck and place it concealed in front of them. They look at them and gain the effects of the potion. [FF4040]Each player may not have more than one potion placed in front of them.[-]'},
     {name = '[000000]The World[-]',                                 desc = '[FF4040]Cannot be copied or affected. [FFFFFF]Speak one sentence. That sentence immediately becomes the reality. [FF4040]Once this ability is played, it disappears forever.[-]'},
 }
 

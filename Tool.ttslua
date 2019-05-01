@@ -734,6 +734,44 @@ function giveEFCoroutine()
             end
         end
         broadcastToAll('The Desperado cards have been dealt to ' .. colorString(player) .. '.', {1,1,1})
+    elseif option == 4 then
+        for i = 1,size do
+            if deckTable[i].name ~= 'Card' then
+                tmpString = deckTable[i].name
+            else
+                tmpString = deckTable[i].description
+                tmpStartIndex, tmpEndIndex = string.find(tmpString, '\n')
+                tmpString = string.sub(tmpString, 1, tmpEndIndex)
+            end
+            if string.match(tmpString, 'Potion') then
+                found = 1
+                break
+            end
+
+        end
+        if found == 0 then
+            broadcastToAll('ERROR: Potion effect cards not found in effects deck.', {1,0,0})
+            clearValues()
+            mainMenu()
+            return 1
+        end
+
+        for i = size,1,-1 do
+            if deckTable[i].name ~= 'Card' then
+                tmpString = deckTable[i].name
+            else
+                tmpString = deckTable[i].description
+                tmpStartIndex, tmpEndIndex = string.find(tmpString, '\n')
+                tmpString = string.sub(tmpString, 1, tmpEndIndex)
+            end
+            if string.match(tmpString, 'Potion') then
+                params = {index = i-1}
+                card = effectDeck.takeObject(params)
+                giveObjectToPlayer(card, player, {forward = 16.5, right = 0, up = 0}, {x = 0, y = 180, z = 180})
+                sleep(0.1)
+            end
+        end
+        broadcastToAll('The Potion effect cards have been dealt to ' .. colorString(player) .. '.', {1,1,1})
     else
         for i = size,1,-1 do
             if deckTable[i].name ~= 'Card' then
@@ -893,10 +931,16 @@ function lock()
     mainMenu()
 end
 
-function opt0()  option = 0   refreshButtons()    end
-function opt1()  option = 1   refreshButtons()    end
-function opt2()  option = 2   refreshButtons()    end
-function opt3()  option = 3   refreshButtons()    end
+function opt(clickedButton, playerColor, index)
+    option = index
+    refreshButtons()
+end
+
+for k = 0,4 do
+    _G['opt' .. k] = function(obj, col)
+        opt(obj, col, k)
+    end
+end
 
 function getIndex(flag, size, table, string1, string2)
     for i = 1,size,1 do
@@ -1339,8 +1383,15 @@ function giveEfMenu()
     end
     self.createButton(buttonParam)
 
+    local buttonParam = {click_function = 'opt4', label = "Potions", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {0,0.1,0.7}, rotation = {0,0,0}, width = 800, height = 200, font_size = 80}
+    if option == 4 then
+        buttonParam.font_color = stringColorToRGB('Red')
+    end
+    self.createButton(buttonParam)
+
     local inputParam = {input_function = 'efInputFunc', function_owner = self, color = stringColorToRGB('White'), function_owner = self, font_color = stringColorToRGB('Black'), function_owner = self,
-        position = {0,0.1,0.7}, rotation = {0,0,0}, width = 800, height = 103, font_size = 80, alignment = 3, validation = 1, tab = 1, label = 'Enter effect name', value = efName}
+        position = {0,0.1,1.1}, rotation = {0,0,0}, width = 800, height = 103, font_size = 80, alignment = 3, validation = 1, tab = 1, label = 'Enter effect name', value = efName}
     self.createInput(inputParam)
 
     createLabelButton()
@@ -1373,7 +1424,7 @@ function efInputFunc(obj, color, input, stillEditing)
                 end
             end
         end
-        option = 4
+        option = 5
         return 1
     end
 end

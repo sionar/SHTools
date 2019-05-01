@@ -9,7 +9,6 @@ BOX_NAME = 'SH Expansion Box + Players'
 PACKING_LIST_PLAYERS = {
     'Players',
     'Player Effects',
-    'Potions',
     'Darthvader Effect Deck',
     'Player Reference',
     'Rounds Until Armageddon',
