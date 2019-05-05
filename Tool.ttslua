@@ -582,17 +582,11 @@ function giveEFCoroutine()
 
     if option == 0 then
         for i = 1,size do
-            if deckTable[i].name ~= 'Card' then
-                tmpString = deckTable[i].name
-            else
-                tmpString = deckTable[i].description
-                tmpStartIndex, tmpEndIndex = string.find(tmpString, '\n')
-                tmpString = string.sub(tmpString, 1, tmpEndIndex)
-            end
-            if string.match(tmpString, 'Poisoned Drink 1') then
+            tmpString = deckTable[i].name
+            if string.match(tmpString, 'Drink 1') then
                 found = 1
                 break
-            elseif string.match(tmpString, 'Poisoned Drink 2') then
+            elseif string.match(tmpString, 'Drink 2') then
                 found = 2
                 break
             end
@@ -605,14 +599,8 @@ function giveEFCoroutine()
         end
 
         for i = size,1,-1 do
-            if deckTable[i].name ~= 'Card' then
-                tmpString = deckTable[i].name
-            else
-                tmpString = deckTable[i].description
-                tmpStartIndex, tmpEndIndex = string.find(tmpString, '\n')
-                tmpString = string.sub(tmpString, 1, tmpEndIndex)
-            end
-            if string.match(tmpString, 'Poisoned Drink ' .. found) or string.match(tmpString, 'Water ' .. found) then
+            tmpString = deckTable[i].name
+            if string.match(tmpString, 'Drink ' .. found) then
                 params = {index = i-1}
                 card = effectDeck.takeObject(params)
                 giveObjectToPlayer(card, player, {forward = 16.5, right = 0, up = 0}, {x = 0, y = 180, z = 180})
@@ -622,13 +610,7 @@ function giveEFCoroutine()
         broadcastToAll('The Poisoner effect cards have been dealt to ' .. colorString(player) .. '.', {1,1,1})
     elseif option == 1 then
         for i = 1,size do
-            if deckTable[i].name ~= 'Card' then
-                tmpString = deckTable[i].name
-            else
-                tmpString = deckTable[i].description
-                tmpStartIndex, tmpEndIndex = string.find(tmpString, '\n')
-                tmpString = string.sub(tmpString, 1, tmpEndIndex)
-            end
+            tmpString = deckTable[i].name
             if string.match(tmpString, 'Inspected 1') then
                 found = 1
                 break
@@ -644,13 +626,7 @@ function giveEFCoroutine()
             return 1
         end
         for i = size,1,-1 do
-            if deckTable[i].name ~= 'Card' then
-                tmpString = deckTable[i].name
-            else
-                tmpString = deckTable[i].description
-                tmpStartIndex, tmpEndIndex = string.find(tmpString, '\n')
-                tmpString = string.sub(tmpString, 1, tmpEndIndex)
-            end
+            tmpString = deckTable[i].name
             if string.match(tmpString, 'Inspected ' .. found) then
                 params = {index = i-1}
                 card = effectDeck.takeObject(params)
@@ -661,18 +637,11 @@ function giveEFCoroutine()
         broadcastToAll('The Detective effect cards have been dealt to ' .. colorString(player) .. '.', {1,1,1})
     elseif option == 2 then
         for i = 1,size do
-            if deckTable[i].name ~= 'Card' then
-                tmpString = deckTable[i].name
-            else
-                tmpString = deckTable[i].description
-                tmpStartIndex, tmpEndIndex = string.find(tmpString, '\n')
-                tmpString = string.sub(tmpString, 1, tmpEndIndex)
-            end
+            tmpString = deckTable[i].name
             if string.match(tmpString, 'Artifact') then
                 found = 1
                 break
             end
-
         end
         if found == 0 then
             broadcastToAll('ERROR: Artifact effect cards not found in effects deck.', {1,0,0})
@@ -682,13 +651,7 @@ function giveEFCoroutine()
         end
 
         for i = size,1,-1 do
-            if deckTable[i].name ~= 'Card' then
-                tmpString = deckTable[i].name
-            else
-                tmpString = deckTable[i].description
-                tmpStartIndex, tmpEndIndex = string.find(tmpString, '\n')
-                tmpString = string.sub(tmpString, 1, tmpEndIndex)
-            end
+            tmpString = deckTable[i].name
             if string.match(tmpString, 'Artifact') then
                 params = {index = i-1}
                 card = effectDeck.takeObject(params)
@@ -699,13 +662,7 @@ function giveEFCoroutine()
         broadcastToAll('The Artifact effect cards have been dealt to ' .. colorString(player) .. '.', {1,1,1})
     elseif option == 3 then
         for i = 1,size do
-            if deckTable[i].name ~= 'Card' then
-                tmpString = deckTable[i].name
-            else
-                tmpString = deckTable[i].description
-                tmpStartIndex, tmpEndIndex = string.find(tmpString, '\n')
-                tmpString = string.sub(tmpString, 1, tmpEndIndex)
-            end
+            tmpString = deckTable[i].name
             if string.match(tmpString, 'Life') then
                 found = 1
                 break
@@ -719,13 +676,7 @@ function giveEFCoroutine()
         end
 
         for i = size,1,-1 do
-            if deckTable[i].name ~= 'Card' then
-                tmpString = deckTable[i].name
-            else
-                tmpString = deckTable[i].description
-                tmpStartIndex, tmpEndIndex = string.find(tmpString, '\n')
-                tmpString = string.sub(tmpString, 1, tmpEndIndex)
-            end
+            tmpString = deckTable[i].name
             if string.match(tmpString, 'Life') or string.match(tmpString, 'Death') and not string.match(tmpString, 'Sentence') then
                 params = {index = i-1}
                 card = effectDeck.takeObject(params)
@@ -736,18 +687,11 @@ function giveEFCoroutine()
         broadcastToAll('The Desperado cards have been dealt to ' .. colorString(player) .. '.', {1,1,1})
     elseif option == 4 then
         for i = 1,size do
-            if deckTable[i].name ~= 'Card' then
-                tmpString = deckTable[i].name
-            else
-                tmpString = deckTable[i].description
-                tmpStartIndex, tmpEndIndex = string.find(tmpString, '\n')
-                tmpString = string.sub(tmpString, 1, tmpEndIndex)
-            end
+            tmpString = deckTable[i].name
             if string.match(tmpString, 'Potion') then
                 found = 1
                 break
             end
-
         end
         if found == 0 then
             broadcastToAll('ERROR: Potion effect cards not found in effects deck.', {1,0,0})
@@ -755,15 +699,8 @@ function giveEFCoroutine()
             mainMenu()
             return 1
         end
-
         for i = size,1,-1 do
-            if deckTable[i].name ~= 'Card' then
-                tmpString = deckTable[i].name
-            else
-                tmpString = deckTable[i].description
-                tmpStartIndex, tmpEndIndex = string.find(tmpString, '\n')
-                tmpString = string.sub(tmpString, 1, tmpEndIndex)
-            end
+            tmpString = deckTable[i].name
             if string.match(tmpString, 'Potion') then
                 params = {index = i-1}
                 card = effectDeck.takeObject(params)
@@ -774,13 +711,7 @@ function giveEFCoroutine()
         broadcastToAll('The Potion effect cards have been dealt to ' .. colorString(player) .. '.', {1,1,1})
     else
         for i = size,1,-1 do
-            if deckTable[i].name ~= 'Card' then
-                tmpString = deckTable[i].name
-            else
-                tmpString = deckTable[i].description
-                tmpStartIndex, tmpEndIndex = string.find(tmpString, '\n')
-                tmpString = string.sub(tmpString, 1, tmpEndIndex-1)
-            end
+            tmpString = deckTable[i].name
             if tmpString == efName then
                 found = i
                 params = {index = i-1, flip = true}

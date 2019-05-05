@@ -1,0 +1,204 @@
+--[[
+Secret Hitler Expansion
+Made by Sionar
+--]]
+
+
+------------------Constants
+VERSION = '1.0.2'
+START_POS = {x = 100, y = 1.1, z = -52}
+X_POS = {}
+Z_POS = {}
+POS_START = -1.1
+POS_INC = POS_START * -2 / 4
+BOX_SIZE = 280
+for i = 1,5 do
+    X_POS[i] = POS_START + (i-1) * POS_INC
+    Z_POS[i] = POS_START + (i-1) * POS_INC
+end
+
+BOOK =
+{
+    'Martyr for\na lib',
+    'Revised\nconflict',
+    'Fascist plays\nfifth lib',
+    '\"What is this\nweeb shit?\"',
+    'Liberal sweep',
+    'Fascist sweep',
+    'Spelunker into\na lib policy',
+    'Ability gets\nfizzled',
+    'Player kills\nteammate',
+    '\"Host\nadvantage\"',
+    'Messiah gets\nplayed',
+    'Veto spam into\ntopdeck lib',
+    '\"Would I do\nX as X?\"',
+    'Scion for\nConfirmed',
+    'Harbinger\nHacked',
+    'Misvote on\nlast play',
+    'Claimed card\ngets stolen',
+    'Liberal policies\ndoubled ditched',
+    'Topdeck into\nHitler Territory',
+    'Fas fas\nconflict',
+    'Two lib\nclaim at\nreshuffle',
+    'Fascist uses\nSpy liberally',
+    'First president\nplays Swindler',
+    'Lib narc\nor spys\na lib',
+    'Too many\nlibs claimed',
+    'Three fascist\npolicies played\nin a row',
+    'Soulmate\npuppeteered',
+    'Sab gets\nsabbed',
+    'Fascists lose\nwith Confirmed\nin hand',
+    'Gravekeeper\nfor roles',
+    'Swindler gets\nnegated',
+    'Gambler fails\nwith one\nlib in deck',
+    'Five+ players\ndead',
+    'Top tier\ncard gets\nstolen',
+    'Round one\nconflict',
+    'Inspected\nconflicts\ninspector',
+    'Player joins\na conflict',
+    'Player shoots\nteammate',
+    'Successful\nAnarchist',
+    'Four lib\n or fas inspect\n with Detective',
+    'Elitist or\nNaysayer two\nlibs away',
+    'Magician\nbullet',
+    'All fascists\nouted',
+    'Four+ players\ncard contest',
+    'Hitler plays\nDesperado',
+    'Martyr\n+\nSoulmate',
+    'Visionary\ngets\nJestered',
+    'Scout\nused to\nreshuffle',
+    'Senator\ninto bullet',
+    'Bullet gets\nbandited',
+    'Mentor self\nfor one\nability',
+    'Lib gets\nall cards\nstolen',
+    'Draw two\nlibs with\nFisherman',
+    'Swindler gets\nMimiced',
+    'Fascists\ngain\nmajority',
+    'Post game\nlecture',
+    'Self proclaimed\nconfirmed lib',
+    'Topdeck corner',
+    'Mighty gets\nremoved',
+    'Wasted voting\nabilities',
+    'White tier\nability gets\ncopied or\nnegated'
+}
+
+
+
+------------------Variables
+phrase = {}
+selected = {}
+for i = 1,25 do
+    selected[i] = false
+end
+
+
+
+------------------Functions
+function onLoad(saveString)
+    if not (saveString == '') then
+        local save = JSON.decode(saveString)
+        phrase = save['p'] or phrase
+        selected = save['s'] or selected
+    end
+    refreshButtons()
+    setSquares()
+    moveBoard()
+    self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
+end
+
+function onSave()
+    local save = {}
+    save['p'] = phrase
+    save['s'] = selected
+    local saveString = JSON.encode(save)
+    return saveString
+end
+
+function moveBoard()
+    local global_name = Global.getVar('MOD_NAME')
+    if global_name == 'Secret Hitler: CE' then
+        self.setPositionSmooth(START_POS)
+        self.setLock(true)
+    end
+end
+
+
+function ij(clickedButton, playerColor, i, j)
+    local ind = (i - 1) * 5 + (j - 1) + 1
+    selected[ind] = not selected[ind]
+    if selected[ind] then
+        self.editButton({index= ind - 1, color= {1,0,0}, font_color = {1,1,1}})
+    else
+        self.editButton({index= ind - 1, color= {1,1,1}, font_color = {0,0,0}})
+    end
+end
+
+for i = 1,5 do
+    for j = 1,5 do
+        _G['ij' .. i .. j] =
+            function(obj, col)
+                ij(obj, col, i, j)
+            end
+    end
+end
+
+
+function refreshButtons()
+    self.clearButtons()
+
+    for i = 1,5 do
+        for j = 1,5 do
+            local buttonParam = {click_function = 'ij' .. i .. j, label = '', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
+                position = {X_POS[i],0.2,Z_POS[j]}, rotation = {0,0,0}, width = BOX_SIZE, height = BOX_SIZE, font_size = 35}
+            self.createButton(buttonParam)
+        end
+    end
+
+    local buttonParam = {click_function = 'shuffle', label = 'Expansion Bingo', color = {0,0,0,1}, font_color = stringColorToRGB('Blue'), function_owner = self,
+        position = {0,0.2,-1.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 120}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'shuffleSquares', label = 'Shuffle\nSquares', color = stringColorToRGB('Blue'), font_color = stringColorToRGB('White'), function_owner = self,
+        position = {0.5,0.2,1.6}, rotation = {0,0,0}, width = 300, height = 200, font_size = 60}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'clearSquares', label = 'Clear\nSquares', color = stringColorToRGB('Blue'), font_color = stringColorToRGB('White'), function_owner = self,
+        position = {-0.5,0.2,1.6}, rotation = {0,0,0}, width = 300, height = 200, font_size = 60}
+    self.createButton(buttonParam)
+
+end
+
+function nullFunc() end
+
+function setSquares()
+    for i = 0, 24 do
+        self.editButton({index = i, label = phrase[i+1], tooltip = phrase[i+1]})
+        if selected[i+1] then
+            self.editButton({index = i, color = {1,0,0}})
+        end
+    end
+    self.editButton({index = 12, label = 'Free\nSquare', tooltip = 'Free\nSquare', color = {1,0,0}, font_color = {1,1,1}})
+end
+
+function shuffleSquares()
+    local temp, randNum
+    clearSquares()
+    for i = 1, #BOOK do
+        phrase[i] = BOOK[i]
+    end
+
+    for i = #BOOK, 1, -1 do
+        randNum = math.random(1, i)
+        temp = phrase[randNum]
+        phrase[randNum] = phrase[i]
+        phrase[i] = temp
+    end
+    setSquares()
+end
+
+function clearSquares()
+    for i = 0, 24 do
+        selected[i+1] = false
+        self.editButton({index = i, color = {1,1,1}, font_color = {0,0,0}})
+    end
+end
