@@ -70,9 +70,9 @@ function onLoad(saveString)
     if global_name == 'Secret Hitler: CE' then
         local options = Global.getTable('options')
 		  if options.zoneType == 6 then
-			  self.setPositionSmooth(START_POS_12P)
+			  self.setPosition(START_POS_12P)
 		  else
-			  self.setPositionSmooth(START_POS)
+			  self.setPosition(START_POS)
 		  end
         self.setLock(true)
     end

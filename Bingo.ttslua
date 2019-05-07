@@ -5,7 +5,8 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.0.2'
+VERSION = '1.4.1'
+NAME = 'Expansion Bingo'
 START_POS = {x = 100, y = 1.1, z = -52}
 X_POS = {}
 Z_POS = {}
@@ -16,70 +17,127 @@ for i = 1,5 do
     X_POS[i] = POS_START + (i-1) * POS_INC
     Z_POS[i] = POS_START + (i-1) * POS_INC
 end
+SCALE = {2.5,1,2.5}
+COLOR = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
+COORD =
+{
+    White = {pos = {38.5, 1.06, -33}, rot = {0, 180, 0}},
+    Brown = {pos = {9.2, 1.06, -33}, rot = {0, 180, 0}},
+    Red = {pos = {-20.1, 1.06, -33}, rot = {0, 180, 0}},
+    Green = {pos = {-38.5, 1.06, 33}, rot = {0, 0, 0}},
+    Teal = {pos = {-9.2, 1.06, 33}, rot = {0, 0, 0}},
+    Blue = {pos = {20.1, 1.06, 33}, rot = {0, 0, 0}},
+    Orange = {pos = {-50, 1.06, -32.5}, rot = {0, 270, 0}},
+    Yellow = {pos = {-50, 1.06, 32.5}, rot = {0, 270, 0}},
+    Purple = {pos = {50, 1.06, 32.5}, rot = {0, 90, 0}},
+    Pink = {pos = {50, 1.06, -32.5}, rot = {0, 90, 0}},
+}
 
 BOOK =
 {
-    'Martyr for\na lib',
-    'Revised\nconflict',
-    'Fascist plays\nfifth lib',
-    '\"What is this\nweeb shit?\"',
-    'Liberal sweep',
-    'Fascist sweep',
-    'Spelunker into\na lib policy',
-    'Ability gets\nfizzled',
-    'Player kills\nteammate',
-    '\"Host\nadvantage\"',
-    'Messiah gets\nplayed',
-    'Veto spam into\ntopdeck lib',
-    '\"Would I do\nX as X?\"',
-    'Scion for\nConfirmed',
-    'Harbinger\nHacked',
-    'Misvote on\nlast play',
-    'Claimed card\ngets stolen',
-    'Liberal policies\ndoubled ditched',
-    'Topdeck into\nHitler Territory',
-    'Fas fas\nconflict',
-    'Two lib\nclaim at\nreshuffle',
-    'Fascist uses\nSpy liberally',
-    'First president\nplays Swindler',
-    'Lib narc\nor spys\na lib',
-    'Too many\nlibs claimed',
-    'Three fascist\npolicies played\nin a row',
-    'Soulmate\npuppeteered',
-    'Sab gets\nsabbed',
-    'Fascists lose\nwith Confirmed\nin hand',
-    'Gravekeeper\nfor roles',
-    'Swindler gets\nnegated',
-    'Gambler fails\nwith one\nlib in deck',
-    'Five+ players\ndead',
-    'Top tier\ncard gets\nstolen',
-    'Round one\nconflict',
-    'Inspected\nconflicts\ninspector',
-    'Player joins\na conflict',
-    'Player shoots\nteammate',
-    'Successful\nAnarchist',
-    'Four lib\n or fas inspect\n with Detective',
-    'Elitist or\nNaysayer two\nlibs away',
-    'Magician\nbullet',
-    'All fascists\nouted',
-    'Four+ players\ncard contest',
-    'Hitler plays\nDesperado',
-    'Martyr\n+\nSoulmate',
-    'Visionary\ngets\nJestered',
-    'Scout\nused to\nreshuffle',
-    'Senator\ninto bullet',
-    'Bullet gets\nbandited',
-    'Mentor self\nfor one\nability',
-    'Lib gets\nall cards\nstolen',
-    'Draw two\nlibs with\nFisherman',
-    'Swindler gets\nMimiced',
-    'Fascists\ngain\nmajority',
-    'Post game\nlecture',
-    'Self proclaimed\nconfirmed lib',
+    'Martyr for liberal',
+    'Revised conflict',
+    'Fascist plays fifth lib',
+    '"What is this weeb shit?"',
+    'Spelunker into lib policy',
+    'Ability gets fizzled',
+    'Player kills teammate',
+    '"Host advantage"',
+    'Messiah resurrects three+ players',
+    'Veto spam into topdeck lib',
+    '"Would I do X as X?"',
+    'Scion for Confirmed',
+    'Harbinger gets Hacked',
+    'Misvote on last play',
+    'Claimed card gets stolen',
+    'Liberal policies doubled ditched',
+    'Topdeck into Hitler Territory',
+    'Fas-fas conflict',
+    'Two lib claim at reshuffle',
+    'Fascist uses Spy liberally',
+    'First president plays Swindler',
+    'Lib Narcs or Spies a lib',
+    'Too many libs claimed',
+    'Three fas policies played in a row',
+    'Three lib policies played in a row',
+    'Soulmate Puppeteered',
+    'Sab/Hacker gets Sabbed/Hacked',
+    'Fascists lose with Confirmed in hand',
+    'Gravekeeper for roles',
+    'Swindler gets negated',
+    'Gambler fails with one lib in deck',
+    'Five+ players dead',
+    'Top tier card gets stolen',
+    'Round one conflict',
+    'Inspected lib conflicts inspector',
+    'Player joins a conflict',
+    'Successful Anarchist',
+    'Zero lib or fas inspect  with Detective',
+    'Elitist or Naysayer two libs away',
+    'Magician bullet',
+    'All fascists outed',
+    'Four+ players card contest',
+    'Hitler plays Desperado',
+    'Martyr Soulmate',
+    'Visionary gets Jestered',
+    'Scout used to reshuffle',
+    'Senator into bullet',
+    'Bullet gets bandited',
+    'Mentor self for one ability',
+    'Lib gets all cards stolen',
+    'Draw two libs with Fisherman',
+    'Swindler gets Mimiced',
+    'Fascists gain majority',
+    'Post game lecture',
+    'Self proclaimed confirmed lib',
     'Topdeck corner',
-    'Mighty gets\nremoved',
-    'Wasted voting\nabilities',
-    'White tier\nability gets\ncopied or\nnegated'
+    'Mighty gets removed',
+    'Voting abilities wasted',
+    'White tier ability gets copied or negated',
+    'Spy own inspect',
+    'Broker away four+ cards',
+    'Heated argument between libs',
+    'Deep undercover fascist',
+    'Fascist uses Confirmed liberally',
+    'Liberal plays Surgeon',
+    'Hitler comes out first',
+    'Peacemaker saves the game',
+    'Decider wins the game',
+    'Spiritualist saves the game',
+    'Gambler into top tier card',
+    'Disruptor causes topdeck',
+    'Informant changes election outcome',
+    'Questionable usage of Mimic',
+    'Broker gets Jestered',
+    'Collector forces topdeck',
+    'Ethereal gets Knighted',
+    'Confirmed player gets Mentored',
+    '"Nobody\'s coming out"',
+    '"Is this an all lib game?"',
+    'Decider decides a vote with lib pres',
+    'Hitler sniped with inspect',
+    'Game ends with zero conflicts',
+    'Conflict over ability claim',
+    'Everyone has "Not Hitler" except Hitler',
+    'Lib pres cannot play to a lib',
+    'Hitler elected right after Hitler Territory',
+    'Lib conflicts two+ fascists',
+    'Conflict over Reporter',
+    'Lib gives fas strong ability with Reporter',
+    'Lib Hacks or Sabs a lib',
+    'Hitler saved with Confirmed',
+    'Lib Avengers two fas',
+    'Player accidentally reveals cards',
+    '"I always play turn one Harbinger"',
+    'Player asks question instead of reading card',
+    'Player given two bullets',
+    'Fas plays a reactionary ability on a fascist',
+    'Player ruins perfect card count',
+    '"If you\'re Hitler you deserved it"',
+    'Game ends before Hitler Territory',
+    'Two or more Fascists dead',
+    '"Don\'t play to me, I have Pariah"',
+    'Player leaves right after game starts',
 }
 
 
@@ -90,8 +148,13 @@ selected = {}
 for i = 1,25 do
     selected[i] = false
 end
-
-
+player_id = nil
+selfColor = nil
+title = 'Expansion Bingo'
+player_name = nil
+tint = {0,0,0}
+direction = true
+timerID = nil
 
 ------------------Functions
 function onLoad(saveString)
@@ -99,38 +162,124 @@ function onLoad(saveString)
         local save = JSON.decode(saveString)
         phrase = save['p'] or phrase
         selected = save['s'] or selected
+        player_id = save['id']
+        selfColor = save['c']
+        title = save['t'] or title
+        tint = save['tint'] or tint
+        timerID = save['tid'] or timerID
     end
+    self.use_grid = false
+    self.use_snap_points = false
     refreshButtons()
     setSquares()
     moveBoard()
     self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
+    if player_id ~= nil then
+        checkStarted()
+    end
 end
 
 function onSave()
     local save = {}
     save['p'] = phrase
     save['s'] = selected
+    save['id'] = player_id
+    save['c'] = selfColor
+    save['t'] = title
+    save['tint'] = tint
+    save['tid'] = timerID
     local saveString = JSON.encode(save)
     return saveString
+end
+
+function checkStarted()
+    Wait.time(checkStartedTimer, 5)
+end
+
+function checkStartedTimer()
+    local started = Global.getVar('started')
+    if started then
+        relocateBoard()
+    else
+        checkStarted()
+    end
 end
 
 function moveBoard()
     local global_name = Global.getVar('MOD_NAME')
     if global_name == 'Secret Hitler: CE' then
-        self.setPositionSmooth(START_POS)
-        self.setLock(true)
+        if player_id == nil then
+            local tab = getAllObjects()
+            local foundTab = {}
+            for _, v in pairs(tab) do
+                if string.match(v.getName(), NAME) then
+                    table.insert(foundTab,1,v)
+                end
+            end
+            self.setPositionSmooth({START_POS['x']  + (#foundTab-1) * 30, START_POS['y'], START_POS['z']})
+            self.setLock(true)
+        end
     end
 end
 
+function giveBoard(clickedButton, playerColor, index)
+    if Player[playerColor].admin then
+        local color = COLOR[index]
+        if not Player[color].seated then
+            broadcastToColor('ERROR: Player not seated.', playerColor, {1,0,0})
+        else
+            self.setPositionSmooth(COORD[color].pos)
+            self.setRotationSmooth(COORD[color].rot)
+            self.setScale(SCALE)
+            player_id = Player[color].steam_id
+            player_name = Player[color].steam_name
+            title = player_name .. '\'s Bingo Board'
+            self.setName(title)
+            self.editButton({index= 25, label = title})
+            for i = 29,38 do
+                self.removeButton(i)
+            end
+            selfColor = color
+            shuffleSquares()
+            checkStarted()
+        end
+    end
+end
+
+function relocateBoard()
+    local players = getSeatedPlayers()
+    local found = false
+    for k,v in pairs(players) do
+        if Player[v].steam_id == player_id then
+            found = true
+            selfColor = v
+            player_name = Player[v].steam_name
+            break
+        end
+    end
+    if found then
+        self.setPositionSmooth(COORD[selfColor].pos)
+        self.setRotationSmooth(COORD[selfColor].rot)
+    else
+        self.destruct()
+    end
+end
+
+for k = 1,10 do
+    _G['giveBoard' .. k] = function(obj, col)
+        giveBoard(obj, col, k)
+    end
+end
 
 function ij(clickedButton, playerColor, i, j)
     local ind = (i - 1) * 5 + (j - 1) + 1
     selected[ind] = not selected[ind]
     if selected[ind] then
-        self.editButton({index= ind - 1, color= {1,0,0}, font_color = {1,1,1}})
+        self.editButton({index= ind - 1, color= {i/5,0.5,j/5}, font_color = {1,1,1}})
     else
         self.editButton({index= ind - 1, color= {1,1,1}, font_color = {0,0,0}})
     end
+    checkBingo(i, j)
 end
 
 for i = 1,5 do
@@ -142,42 +291,71 @@ for i = 1,5 do
     end
 end
 
+function checkBingo(i, j)
+    local indices = {}
+    local strings = {}
+    local gotBingo = false
+    local buttonTable = self.getButtons()
+    local type
 
-function refreshButtons()
-    self.clearButtons()
-
-    for i = 1,5 do
-        for j = 1,5 do
-            local buttonParam = {click_function = 'ij' .. i .. j, label = '', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
-                position = {X_POS[i],0.2,Z_POS[j]}, rotation = {0,0,0}, width = BOX_SIZE, height = BOX_SIZE, font_size = 35}
-            self.createButton(buttonParam)
-        end
+    suspendTint()
+    if selected[5*(i-1) + 1] and selected[5*(i-1) + 2] and selected[5*(i-1) + 3] and selected[5*(i-1) + 4] and selected[5*(i-1) + 5] then
+        gotBingo = true
+        indices = {5*(i-1) + 1, 5*(i-1) + 2, 5*(i-1) + 3, 5*(i-1) + 4, 5*(i-1) + 5}
+        type = 'column'
+    elseif selected[5*0 + j] and selected[5*1 + j] and selected[5*2 + j] and selected[5*3 + j] and selected[5*4 + j] then
+        gotBingo = true
+        indices = {5*0 + j, 5*1 + j, 5*2 + j, 5*3 + j, 5*4 + j}
+        type = 'row'
     end
 
-    local buttonParam = {click_function = 'shuffle', label = 'Expansion Bingo', color = {0,0,0,1}, font_color = stringColorToRGB('Blue'), function_owner = self,
-        position = {0,0.2,-1.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 120}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'shuffleSquares', label = 'Shuffle\nSquares', color = stringColorToRGB('Blue'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0.5,0.2,1.6}, rotation = {0,0,0}, width = 300, height = 200, font_size = 60}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'clearSquares', label = 'Clear\nSquares', color = stringColorToRGB('Blue'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-0.5,0.2,1.6}, rotation = {0,0,0}, width = 300, height = 200, font_size = 60}
-    self.createButton(buttonParam)
-
+    local square = (i-1) * 5 + j
+    if (square == 1 or square == 7 or square == 13 or square == 19 or square == 25) and selected[1] and selected[7] and selected[13] and selected[19] and selected[25] then
+        gotBingo = true
+        indices = {1, 7, 13, 19, 25}
+        type = 'd1'
+    end
+    if (square == 5 or square == 9 or square == 13 or square == 17 or square == 21) and selected[5] and selected[9] and selected[13] and selected[17] and selected[21] then
+        gotBingo = true
+        indices = {5, 9, 13, 17, 21}
+        type = 'd2'
+    end
+    if gotBingo then
+        if title == 'Expansion Bingo' then
+            broadcastToAll('Thats a bingo!', {1,1,1})
+        else
+            broadcastToAll(player_name.. ' got a bingo!', stringColorToRGB(selfColor))
+        end
+        printToAll('Squares:', {1,1,1})
+        for i = 1,5 do
+            strings[i] = string.gsub(phrase[indices[i]], '\n', ' ')
+            printToAll(strings[i], buttonTable[indices[i]].color)
+        end
+        changeTint(i, j, type)
+    end
 end
 
 function nullFunc() end
 
 function setSquares()
+    local x,y
+    phrase[13] = 'Free Square'
     for i = 0, 24 do
-        self.editButton({index = i, label = phrase[i+1], tooltip = phrase[i+1]})
+        self.editButton({index = i, label = format(phrase[i+1]), tooltip = format(phrase[i+1])})
         if selected[i+1] then
-            self.editButton({index = i, color = {1,0,0}})
+            x = math.ceil((i+1)/5)/5
+            y = (i%5 + 1)/5
+            self.editButton({index = i, color = {x,0.5,y}, font_color = {1,1,1}})
         end
     end
-    self.editButton({index = 12, label = 'Free\nSquare', tooltip = 'Free\nSquare', color = {1,0,0}, font_color = {1,1,1}})
+    self.editButton({index = 12, color = {0.6,0.5,0.6}, font_color = {1,1,1}})
+    selected[13] = true
+end
+
+function shuffleSquaresFunc(clickedButton, playerColor)
+    if Player[playerColor].admin then
+        shuffleSquares()
+    end
 end
 
 function shuffleSquares()
@@ -193,12 +371,164 @@ function shuffleSquares()
         phrase[randNum] = phrase[i]
         phrase[i] = temp
     end
+    phrase[13] = 'Free\nSquare'
     setSquares()
+    suspendTint()
 end
 
 function clearSquares()
+    suspendTint()
     for i = 0, 24 do
         selected[i+1] = false
         self.editButton({index = i, color = {1,1,1}, font_color = {0,0,0}})
+    end
+end
+
+function toggleLock()
+    if player_id ~= nil then
+        if self.getLock() then
+            self.setLock(false)
+        else
+            self.setLock(true)
+            self.setPositionSmooth(COORD[selfColor].pos)
+            self.setRotationSmooth(COORD[selfColor].rot)
+        end
+    end
+end
+
+function format(string)
+    local lineMax = 14
+    local result
+    local lineLen = 0
+    local output = ''
+
+    for word in string.gmatch(string, '%g+') do
+        if lineLen + string.len(word) + 1 > lineMax then
+            output = output .. '\n' .. word
+            lineLen = string.len(word)
+        else
+            if lineLen == 0 then
+                output = output .. word
+                lineLen = lineLen + string.len(word)
+            else
+                output = output .. ' ' .. word
+                lineLen = lineLen + 1 + string.len(word)
+            end
+        end
+    end
+    return output
+end
+
+function refreshButtons()
+    self.clearButtons()
+
+    for i = 1,5 do
+        for j = 1,5 do
+            local buttonParam = {click_function = 'ij' .. i .. j, label = '', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
+                position = {X_POS[i],0.2,Z_POS[j]}, rotation = {0,0,0}, width = BOX_SIZE, height = BOX_SIZE, font_size = 35}
+            self.createButton(buttonParam)
+        end
+    end
+
+    local buttonParam = {click_function = 'nullFunc', label = title, color = {0,0,0,1}, font_color = stringColorToRGB('Blue'), function_owner = self,
+        position = {0,0.2,-1.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 120}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'clearSquares', label = 'Clear\nSquares', color = stringColorToRGB('Blue'), font_color = stringColorToRGB('White'), function_owner = self,
+        position = {-0.8,0.2,1.6}, rotation = {0,0,0}, width = 300, height = 200, font_size = 60}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'shuffleSquaresFunc', label = 'Shuffle\nSquares', color = stringColorToRGB('Blue'), font_color = stringColorToRGB('White'), function_owner = self,
+        position = {0,0.2,1.6}, rotation = {0,0,0}, width = 300, height = 200, font_size = 60}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'toggleLock', label = 'Toggle\nLock', color = stringColorToRGB('Blue'), font_color = stringColorToRGB('White'), function_owner = self,
+        position = {0.8,0.2,1.6}, rotation = {0,0,0}, width = 300, height = 200, font_size = 60}
+    self.createButton(buttonParam)
+
+    if player_id == nil then
+        local inc = -0.2
+        for i = 1,10 do
+            local buttonParam = {click_function = 'giveBoard'..i, color = stringColorToRGB(COLOR[i]), function_owner = self,
+                position = {-1.7,0.2,1.6+(i-1)*inc}, rotation = {0,0,0}, width = 100, height = 100, font_size = 60, tooltip = 'Give board to ' .. COLOR[i]}
+            self.createButton(buttonParam)
+        end
+    end
+end
+
+function changeTint(i, j, type)
+    tint = {0,0.5,0}
+    if type == 'd2' then
+        tint[1] = 1
+    end
+    direction = true
+    timerID = Wait.time(function() colorTint(i,j,type) end, 0.01, -1)
+end
+
+function colorTint(i, j, type)
+    if type == 'row' then
+        if direction then
+            tint[1] = tint[1] + 0.01
+            if tint[1] >= 1 then
+                direction = not direction
+            end
+        else
+            tint[1] = tint[1] - 0.01
+            if tint[1] <= 0 then
+                direction = not direction
+            end
+        end
+        self.setColorTint({tint[1], 0.5, j/5})
+    elseif type == 'column' then
+        if direction then
+            tint[3] = tint[3] + 0.01
+            if tint[3] >= 1 then
+                direction = not direction
+            end
+        else
+            tint[3] = tint[3] - 0.01
+            if tint[3] <= 0 then
+                direction = not direction
+            end
+        end
+        self.setColorTint({i/5, 0.5, tint[3]})
+    elseif type == 'd1' then
+        if direction then
+            tint[1] = tint[1] + 0.01
+            tint[3] = tint[3] + 0.01
+            if tint[1] >= 1 then
+                direction = not direction
+            end
+        else
+            tint[1] = tint[1] - 0.01
+            tint[3] = tint[3] - 0.01
+            if tint[1] <= 0 then
+                direction = not direction
+            end
+        end
+        self.setColorTint({tint[1], 0.5, tint[3]})
+    elseif type == 'd2' then
+        if direction then
+            tint[1] = tint[1] + 0.01
+            tint[3] = tint[3] - 0.01
+            if tint[1] >= 1 then
+                direction = not direction
+            end
+        else
+            tint[1] = tint[1] - 0.01
+            tint[3] = tint[3] + 0.01
+            if tint[1] <= 0 then
+                direction = not direction
+            end
+        end
+        self.setColorTint({tint[1], 0.5, tint[3]})
+    end
+end
+
+function suspendTint()
+    if timerID then
+        Wait.stop(timerID)
+        self.setColorTint({0,0,0})
+        timerID = nil
     end
 end
