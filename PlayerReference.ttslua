@@ -135,7 +135,7 @@ function drawBoxes()
 		local allObjects = getAllObjects()
 		for k,v in pairs(allObjects) do
 			for i = 1, #PLAYERS do
-				if string.match(v.getName(), PLAYERS[i]) then
+				if string.match(v.getName(), PLAYERS[i]) and not string.match(v.getName(), 'Bingo') then
 					addBox(i)
 				end
 			end
