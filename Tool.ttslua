@@ -13,11 +13,11 @@ EFFECT_ZONE_GUID = '374a16'
 ABILITY_ZONE_GUID = 'eea120'
 LIBERALPARTY_CARD_GUID = 'a73564'
 FASCISTPARTY_CARD_GUID = 'e4d489'
-PLAYER_BUTTON_POS_10P = {{-1.4,0.1,0.7}, {-1.4,0.1,1.1}, {-2.0,0.1,1.1}, {-2.0,0.1,0.7}, {-2,0.1,0.3}, {-2,0.1,-0.1}, {-2,0.1,-0.5}, {-1.4,0.1,-0.5}, {-1.4,0.1,-0.1}, {-1.4,0.1,0.3}}
-TARGET_BUTTON_POS_10P = {{0.3,0.1,0.7}, {0.3,0.1,1.1}, {-0.3,0.1,1.1}, {-0.3,0.1,0.7}, {-0.3,0.1,0.3}, {-0.3,0.1,-0.1}, {-0.3,0.1,-0.5}, {0.3,0.1,-0.5}, {0.3,0.1,-0.1}, {0.3,0.1,0.3}}
-PLAYER_BUTTON_POS_12P = {{-2.12,0.1,0.6},{-2.26,0.1,0.3},{-2.26,0.1,0},{-2.26,0.1,-0.3},{-2.12,0.1,-0.6},{-1.7,0.1,-0.6},{-1.28,0.1,-0.6},{-1.14,0.1,-0.3},{-1.14,0.1,0},{-1.14,0.1,0.3},{-1.28,0.1,0.6},{-1.7,0.1,0.6}}
-TARGET_BUTTON_POS_12P = {{-0.42,0.1,0.6},{-0.56,0.1,0.3},{-0.56,0.1,0},{-0.56,0.1,-0.3},{-0.42,0.1,-0.6},{0,0.1,-0.6},{0.42,0.1,-0.6},{0.56,0.1,-0.3},{0.56,0.1,0},{0.56,0.1,0.3},{0.42,0.1,0.6},{0,0.1,0.6}}
-GIVE_TOOL_BUTTON_POS = {{1,0.1,0.9}, {0,0.1,0.9}, {-1,0.1,0.9}, {-1.7,0.1,0.3}, {-1.7,0.1,-0.3}, {-1,0.1,-0.9}, {0,0.1,-0.9}, {1,0.1,-0.9}, {1.7,0.1,-0.3}, {1.7,0.1,0.3}}
+PLAYER_BUTTON_POS_10P = {{-1.4,0.2,0.7}, {-1.4,0.2,1.1}, {-2.0,0.2,1.1}, {-2.0,0.2,0.7}, {-2,0.2,0.3}, {-2,0.2,-0.1}, {-2,0.2,-0.5}, {-1.4,0.2,-0.5}, {-1.4,0.2,-0.1}, {-1.4,0.2,0.3}}
+TARGET_BUTTON_POS_10P = {{0.3,0.2,0.7}, {0.3,0.2,1.1}, {-0.3,0.2,1.1}, {-0.3,0.2,0.7}, {-0.3,0.2,0.3}, {-0.3,0.2,-0.1}, {-0.3,0.2,-0.5}, {0.3,0.2,-0.5}, {0.3,0.2,-0.1}, {0.3,0.2,0.3}}
+PLAYER_BUTTON_POS_12P = {{-2.12,0.2,0.6},{-2.26,0.2,0.3},{-2.26,0.2,0},{-2.26,0.2,-0.3},{-2.12,0.2,-0.6},{-1.7,0.2,-0.6},{-1.28,0.2,-0.6},{-1.14,0.2,-0.3},{-1.14,0.2,0},{-1.14,0.2,0.3},{-1.28,0.2,0.6},{-1.7,0.2,0.6}}
+TARGET_BUTTON_POS_12P = {{-0.42,0.2,0.6},{-0.56,0.2,0.3},{-0.56,0.2,0},{-0.56,0.2,-0.3},{-0.42,0.2,-0.6},{0,0.2,-0.6},{0.42,0.2,-0.6},{0.56,0.2,-0.3},{0.56,0.2,0},{0.56,0.2,0.3},{0.42,0.2,0.6},{0,0.2,0.6}}
+GIVE_TOOL_BUTTON_POS = {{1,0.2,0.9}, {0,0.2,0.9}, {-1,0.2,0.9}, {-1.7,0.2,0.3}, {-1.7,0.2,-0.3}, {-1,0.2,-0.9}, {0,0.2,-0.9}, {1,0.2,-0.9}, {1.7,0.2,-0.3}, {1.7,0.2,0.3}}
 MAROON_DRAW_POS = {-9, 1.5, -49}
 TAN_DRAW_POS = {20.30, 1.5, -49}
 GREY_PLAYABLE_COLORS = {'Tan', 'Maroon'}
@@ -1032,78 +1032,78 @@ function mainMenu()
     self.clearInputs()
 
     local buttonParam = {click_function = 'drawMenu', label = "Policy\nDraw", color = {1,1,1}, function_owner = self,
-        position = {-1.7,0.1,-0.85}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
+        position = {-1.7,0.2,-0.85}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'sdMenu', label = "Detective", color = {1,1,1}, function_owner = self,
-        position = {-1.7,0.1,-0.25}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
+        position = {-1.7,0.2,-0.25}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'spyMenu', label = "Spy", color = {1,1,1}, function_owner = self,
-        position = {-1.7,0.1,0.35}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
+        position = {-1.7,0.2,0.35}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'inspMenu', label = "Inspect", color = {1,1,1}, function_owner = self,
-        position = {-1.7,0.1,0.95}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
+        position = {-1.7,0.2,0.95}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'spelunMenu', label = "Spelunker", color = {1,1,1}, function_owner = self,
-        position = {-0.575,0.1,-0.85}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
+        position = {-0.575,0.2,-0.85}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'gambleMenu', label = "Gambler", color = {1,1,1}, function_owner = self,
-        position = {-0.575,0.1,-0.25}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
+        position = {-0.575,0.2,-0.25}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'fisherMenu', label = "Fisherman", color = {1,1,1}, function_owner = self,
-        position = {-0.575,0.1,0.35}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
+        position = {-0.575,0.2,0.35}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'martyrMenu', label = "Martyr", color = {1,1,1}, function_owner = self,
-        position = {-0.575,0.1,0.95}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
+        position = {-0.575,0.2,0.95}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'reshufMenu', label = "Reshuffle", color = {1,1,1}, function_owner = self,
-        position = {0.575,0.1,-0.85}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
+        position = {0.575,0.2,-0.85}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'abDrawMenu', label = "Ability\nDraw", color = {1,1,1}, function_owner = self,
-        position = {0.575,0.1,-0.25}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
+        position = {0.575,0.2,-0.25}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'giveEfMenu', label = "Deal\nEffect Cards", color = {1,1,1}, function_owner = self,
-        position = {0.575,0.1,0.35}, rotation = {0,0,0}, width = 500, height = 275, font_size = 80}
+        position = {0.575,0.2,0.35}, rotation = {0,0,0}, width = 500, height = 275, font_size = 80}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'givepMenu', label = "Give\nParty Card", color = {1,1,1}, function_owner = self,
-        position = {0.575,0.1,0.95}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
+        position = {0.575,0.2,0.95}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'promStart', function_owner = self, label = '☆', color = {0,0,0,0.8}, font_color = stringColorToRGB('Green'),
-        position = {1.9,0.1,-1.2}, width = 100, height = 100, font_size = 80, tooltip = 'Toggle Promoted Only'}
+        position = {1.9,0.2,-1.2}, width = 100, height = 100, font_size = 80, tooltip = 'Toggle Promoted Only'}
     if promOnly == true then
         buttonParam.label = '★'
     end
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'givetMenu', function_owner = self, label = '☆', color = {0,0,0,0.8}, font_color = stringColorToRGB('Red'),
-        position = {2.2,0.1,-1.2}, width = 100, height = 100, font_size = 80, tooltip = 'Give Tool to:'}
+        position = {2.2,0.2,-1.2}, width = 100, height = 100, font_size = 80, tooltip = 'Give Tool to:'}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'shufStart', label = "Shuffle\nDeck", color = {1,1,1}, function_owner = self,
-        position = {1.7,0.1,-0.85}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
+        position = {1.7,0.2,-0.85}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'passedStart', label = "Vote\nPassed", color = {1,1,1}, function_owner = self,
-        position = {1.7,0.1,-0.25}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
+        position = {1.7,0.2,-0.25}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'lockStart', label = "Toggle Lock\nDecks", color = {1,1,1}, function_owner = self,
-        position = {1.7,0.1,0.35}, rotation = {0,0,0}, width = 500, height = 275, font_size = 80}
+        position = {1.7,0.2,0.35}, rotation = {0,0,0}, width = 500, height = 275, font_size = 80}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'randMenu', label = 'Random\nColor', color = {1,1,1}, function_owner = self,
-        position = {1.7,0.1,0.95}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
+        position = {1.7,0.2,0.95}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
     self.createButton(buttonParam)
 end
 
@@ -1113,19 +1113,19 @@ function abDrawMenu()
     state = 14
 
     local buttonParam = {click_function = 'nulFunc', label = "Draw", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0,0.1,-1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 150}
+        position = {0,0.2,-1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 150}
     self.createButton(buttonParam)
 
     local inputParam = {input_function = 'drawInput', label = drawNum, color = {0,0,0}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0,0.1,-0.5}, rotation = {0,0,0}, width = 300, height = 200, font_size = 150, alignment = 3, validation = 2}
+        position = {0,0.2,-0.5}, rotation = {0,0,0}, width = 300, height = 200, font_size = 150, alignment = 3, validation = 2}
     self.createInput(inputParam)
 
     local buttonParam = {click_function = 'decAbDraw', label = "-", color = stringColorToRGB('White'), function_owner = self,
-        position = {-0.25,0.1,0}, rotation = {0,0,0}, width = 250, height = 100, font_size = 150}
+        position = {-0.25,0.2,0}, rotation = {0,0,0}, width = 250, height = 100, font_size = 150}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'incAbDraw', label = "+", color = stringColorToRGB('White'), function_owner = self,
-        position = {0.25,0.1,0}, rotation = {0,0,0}, width = 250, height = 100, font_size = 150}
+        position = {0.25,0.2,0}, rotation = {0,0,0}, width = 250, height = 100, font_size = 150}
     self.createButton(buttonParam)
 
     createLabelButton()
@@ -1140,19 +1140,19 @@ function drawMenu()
     state = 1
 
     local buttonParam = {click_function = 'nulFunc', label = "Draw", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0,0.1,-1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 150}
+        position = {0,0.2,-1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 150}
     self.createButton(buttonParam)
 
     local inputParam = {input_function = 'drawInput', label = drawNum, color = {0,0,0}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0,0.1,-0.5}, rotation = {0,0,0}, width = 300, height = 200, font_size = 150, alignment = 3, validation = 2}
+        position = {0,0.2,-0.5}, rotation = {0,0,0}, width = 300, height = 200, font_size = 150, alignment = 3, validation = 2}
     self.createInput(inputParam)
 
     local buttonParam = {click_function = 'decDraw', label = "-", color = stringColorToRGB('White'), function_owner = self,
-        position = {-0.25,0.1,0}, rotation = {0,0,0}, width = 250, height = 100, font_size = 150}
+        position = {-0.25,0.2,0}, rotation = {0,0,0}, width = 250, height = 100, font_size = 150}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'incDraw', label = "+", color = stringColorToRGB('White'), function_owner = self,
-        position = {0.25,0.1,0}, rotation = {0,0,0}, width = 250, height = 100, font_size = 150}
+        position = {0.25,0.2,0}, rotation = {0,0,0}, width = 250, height = 100, font_size = 150}
     self.createButton(buttonParam)
 
     createLabelButton()
@@ -1208,7 +1208,7 @@ function spelunMenu()
     state = 5
 
     local buttonParam = {click_function = 'opt0', label = "Top Card", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0,0.1,-0.3}, rotation = {0,0,0}, width = 500, height = 300}
+        position = {0,0.2,-0.3}, rotation = {0,0,0}, width = 500, height = 300}
     if option == 0 then
         buttonParam.font_size = 150
     else
@@ -1217,7 +1217,7 @@ function spelunMenu()
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'opt1', label = "Second Card", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0,0.1,0.3}, rotation = {0,0,0}, width = 500, height = 300}
+        position = {0,0.2,0.3}, rotation = {0,0,0}, width = 500, height = 300}
     if option == 0 then
         buttonParam.font_size = 50
     else
@@ -1236,7 +1236,7 @@ function gambleMenu()
     state = 6
 
     local buttonParam = {click_function = 'opt0', label = "Fascist", color = {1,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0,0.1,-0.3}, rotation = {0,0,0}, width = 500, height = 300}
+        position = {0,0.2,-0.3}, rotation = {0,0,0}, width = 500, height = 300}
     if option == 0 then
         buttonParam.font_size = 150
     else
@@ -1245,7 +1245,7 @@ function gambleMenu()
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'opt1', label = "Liberal", color = {0,0,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0,0.1,0.3}, rotation = {0,0,0}, width = 500, height = 300}
+        position = {0,0.2,0.3}, rotation = {0,0,0}, width = 500, height = 300}
     if option == 0 then
         buttonParam.font_size = 50
     else
@@ -1287,42 +1287,42 @@ function giveEfMenu()
     state = 9
 
     local buttonParam = {click_function = 'opt0', label = "Poisoner", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0,0.1,-0.9}, rotation = {0,0,0}, width = 800, height = 200, font_size = 80}
+        position = {0,0.2,-0.9}, rotation = {0,0,0}, width = 800, height = 200, font_size = 80}
     if option == 0 then
         buttonParam.font_color = stringColorToRGB('Red')
     end
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'opt1', label = "Detective", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0,0.1,-0.5}, rotation = {0,0,0}, width = 800, height = 200, font_size = 80}
+        position = {0,0.2,-0.5}, rotation = {0,0,0}, width = 800, height = 200, font_size = 80}
     if option == 1 then
         buttonParam.font_color = stringColorToRGB('Red')
     end
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'opt2', label = "Artifacts", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0,0.1,-0.1}, rotation = {0,0,0}, width = 800, height = 200, font_size = 80}
+        position = {0,0.2,-0.1}, rotation = {0,0,0}, width = 800, height = 200, font_size = 80}
     if option == 2 then
         buttonParam.font_color = stringColorToRGB('Red')
     end
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'opt3', label = "Desperado", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0,0.1,0.3}, rotation = {0,0,0}, width = 800, height = 200, font_size = 80}
+        position = {0,0.2,0.3}, rotation = {0,0,0}, width = 800, height = 200, font_size = 80}
     if option == 3 then
         buttonParam.font_color = stringColorToRGB('Red')
     end
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'opt4', label = "Potions", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0,0.1,0.7}, rotation = {0,0,0}, width = 800, height = 200, font_size = 80}
+        position = {0,0.2,0.7}, rotation = {0,0,0}, width = 800, height = 200, font_size = 80}
     if option == 4 then
         buttonParam.font_color = stringColorToRGB('Red')
     end
     self.createButton(buttonParam)
 
     local inputParam = {input_function = 'efInputFunc', function_owner = self, color = stringColorToRGB('White'), function_owner = self, font_color = stringColorToRGB('Black'), function_owner = self,
-        position = {0,0.1,1.1}, rotation = {0,0,0}, width = 800, height = 103, font_size = 80, alignment = 3, validation = 1, tab = 1, label = 'Enter effect name', value = efName}
+        position = {0,0.2,1.1}, rotation = {0,0,0}, width = 800, height = 103, font_size = 80, alignment = 3, validation = 1, tab = 1, label = 'Enter effect name', value = efName}
     self.createInput(inputParam)
 
     createLabelButton()
@@ -1380,7 +1380,7 @@ function givetMenu()
     end
 
     local buttonParam = {click_function = 'returnFunc', label = "Cancel", color = {1,1,1,0.8}, function_owner = self,
-        position = {0,0.1,0}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+        position = {0,0.2,0}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
     self.createButton(buttonParam)
 end
 
@@ -1404,11 +1404,11 @@ function randMenu()
     createReturnButton()
 
     local buttonParam = {click_function = 'randSelAll', label = "Select All", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0,0.1,-0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+        position = {0,0.2,-0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'randDeselAll', label = "Deselect All", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0,0.1,0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+        position = {0,0.2,0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
     self.createButton(buttonParam)
 end
 
@@ -1433,7 +1433,7 @@ end
 
 function createStartButton()
     local buttonParam = {label = "Start", color = {1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
-        position = {1.7,0.1,-0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 150}
+        position = {1.7,0.2,-0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 150}
     if     state == 1 then          buttonParam.click_function = 'drawStart'
     elseif state == 2 then          buttonParam.click_function = 'sdStart'
     elseif state == 3 then          buttonParam.click_function = 'spyStart'
@@ -1453,7 +1453,7 @@ end
 
 function createReturnButton()
     local buttonParam = {click_function = 'returnFunc', label = "Cancel", color = {1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
-        position = {1.7,0.1,0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 150}
+        position = {1.7,0.2,0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 150}
     self.createButton(buttonParam)
 end
 
@@ -1496,7 +1496,7 @@ function createTargetButtons()
 
     if state ~= 8 then
         local buttonParam = {click_function = 'nulFunc', label = "Inspected", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-            position = {0,0.1,-1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 150}
+            position = {0,0.2,-1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 150}
         self.createButton(buttonParam)
     end
 
@@ -1561,7 +1561,7 @@ end
 
 function createLabelButton()
     local buttonParam = {click_function = 'nulFunc', color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-            position = {-1.7,0.1,-1}, rotation = {0,0,0}, width = 1, height = 1, font_size = 150}
+            position = {-1.7,0.2,-1}, rotation = {0,0,0}, width = 1, height = 1, font_size = 150}
     if      state == 1 then         buttonParam.label = "Player"
     elseif  state == 2 then         buttonParam.label = "Detective"
     elseif  state == 3 then         buttonParam.label = "Spy"
@@ -1581,7 +1581,7 @@ end
 
 function createLibFasButtons()
     local buttonParam = {click_function = 'opt0', label = "Liberal", color = {0,0,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0,0.1,-0.3}, rotation = {0,0,0}, width = 500, height = 300}
+        position = {0,0.2,-0.3}, rotation = {0,0,0}, width = 500, height = 300}
     if option == 0 then
         buttonParam.font_size = 150
     else
@@ -1590,7 +1590,7 @@ function createLibFasButtons()
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'opt1', label = "Fascist", color = {1,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0,0.1,0.3}, rotation = {0,0,0}, width = 500, height = 300}
+        position = {0,0.2,0.3}, rotation = {0,0,0}, width = 500, height = 300}
     if option == 0 then
         buttonParam.font_size = 50
     else

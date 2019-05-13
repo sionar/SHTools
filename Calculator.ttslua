@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.3.3'
+VERSION = '1.3.4'
 COL = {0.5, 1, 1.5, 2}
 ROW = {-1, -0.6, -0.2, 0.2, 0.6, 1}
 START_POS = {125, 1.1, -29}
@@ -86,56 +86,56 @@ function refreshButtons()
     self.clearInputs()
 
     local buttonParam = {click_function = 'nullFunc', label = 'Fas', color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-1.7,0.1,-1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 100}
+        position = {-1.7,0.2,-1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = 'Lib', color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-0.5,0.1,-1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 100}
+        position = {-0.5,0.2,-1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 100}
     self.createButton(buttonParam)
 
     local inputParam = {input_function = 'fasInput', color = stringColorToRGB('Red'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-1.7,0.1,-0.7}, rotation = {0,0,0}, width = 500, height = 174, font_size = 150, value = fas, alignment = 3, validation = 2, tab = 2}
+        position = {-1.7,0.2,-0.7}, rotation = {0,0,0}, width = 500, height = 174, font_size = 150, value = fas, alignment = 3, validation = 2, tab = 2}
     self.createInput(inputParam)
 
     local inputParam = {input_function = 'libInput', color = stringColorToRGB('Blue'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-0.5,0.1,-0.7}, rotation = {0,0,0}, width = 500, height = 174, font_size = 150, value = lib, alignment = 3, validation = 2, tab = 2}
+        position = {-0.5,0.2,-0.7}, rotation = {0,0,0}, width = 500, height = 174, font_size = 150, value = lib, alignment = 3, validation = 2, tab = 2}
     self.createInput(inputParam)
 
     local buttonParam = {click_function = 'decFas', label = '-', color = stringColorToRGB('White'), function_owner = self,
-        position = {-1.95,0.1,-0.25}, rotation = {0,0,0}, width = 250, height = 100, font_size = 150}
+        position = {-1.95,0.2,-0.25}, rotation = {0,0,0}, width = 250, height = 100, font_size = 150}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'incFas', label = '+', color = stringColorToRGB('White'), function_owner = self,
-        position = {-1.45,0.1,-0.25}, rotation = {0,0,0}, width = 250, height = 100, font_size = 150}
+        position = {-1.45,0.2,-0.25}, rotation = {0,0,0}, width = 250, height = 100, font_size = 150}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'decLib', label = '-', color = stringColorToRGB('White'), function_owner = self,
-        position = {-0.75,0.1,-0.25}, rotation = {0,0,0}, width = 250, height = 100, font_size = 150}
+        position = {-0.75,0.2,-0.25}, rotation = {0,0,0}, width = 250, height = 100, font_size = 150}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'incLib', label = '+', color = stringColorToRGB('White'), function_owner = self,
-        position = {-0.25,0.1,-0.25}, rotation = {0,0,0}, width = 250, height = 100, font_size = 150}
+        position = {-0.25,0.2,-0.25}, rotation = {0,0,0}, width = 250, height = 100, font_size = 150}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = 'Draw:', color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-1.9,0.1,0.25}, rotation = {0,0,0}, width = 0, height = 0, font_size = 100}
+        position = {-1.9,0.2,0.25}, rotation = {0,0,0}, width = 0, height = 0, font_size = 100}
     self.createButton(buttonParam)
 
     local inputParam = {input_function = 'drawInput', color = stringColorToRGB('Purple'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-1.4,0.1,0.25}, rotation = {0,0,0}, width = 150, height = 123, font_size = 100, value = draw, alignment = 3, validation = 2, tab = 2}
+        position = {-1.4,0.2,0.25}, rotation = {0,0,0}, width = 150, height = 123, font_size = 100, value = draw, alignment = 3, validation = 2, tab = 2}
     self.createInput(inputParam)
 
     local buttonParam = {click_function = 'resetFunc', label = 'Reset', color = stringColorToRGB('White'), function_owner = self,
-        position = {-0.5,0.1,0.25}, rotation = {0,0,0}, width = 500, height = 200, font_size = 100}
+        position = {-0.5,0.2,0.25}, rotation = {0,0,0}, width = 500, height = 200, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'calcValues', label = 'Calc', color = stringColorToRGB('Green'), function_owner = self,
-        position = {-1.1,0.1,0.9}, rotation = {0,0,0}, width = 1100, height = 300, font_size = 150, tooltip = 'Type !calc [0000FF]Lib [FF0000]Fas [FF00FF]Draw [FFFFFF]in chat to calculate stats.'}
+        position = {-1.1,0.2,0.9}, rotation = {0,0,0}, width = 1100, height = 300, font_size = 150, tooltip = 'Type !calc [0000FF]Lib [FF0000]Fas [FF00FF]Draw [FFFFFF]in chat to calculate stats.'}
     self.createButton(buttonParam)
 
     for i = 1,6 do
         local buttonParam = {click_function = 'nullFunc', label = nameLabels[i], color = {0,0,0,1}, function_owner = self,
-            position = {COL[1],0.1,ROW[i]}, rotation = {0,0,0}, width = 0, height = 0, font_size = 80}
+            position = {COL[1],0.2,ROW[i]}, rotation = {0,0,0}, width = 0, height = 0, font_size = 80}
         if i == 1 then
             if valLabels[i] == nil then
                 buttonParam.font_color = {1, 1, 1}
@@ -149,18 +149,18 @@ function refreshButtons()
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'nullFunc', label = valLabels[i], color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-            position = {COL[2],0.1,ROW[i]}, rotation = {0,0,0}, width = 0, height = 0, font_size = 80}
+            position = {COL[2],0.2,ROW[i]}, rotation = {0,0,0}, width = 0, height = 0, font_size = 80}
         self.createButton(buttonParam)
     end
 
     for i = 7,12 do
         local buttonParam = {click_function = 'nullFunc', label = nameLabels[i], color = {0,0,0,1}, function_owner = self,
-            position = {COL[3],0.1,ROW[i-6]}, rotation = {0,0,0}, width = 0, height = 0, font_size = 80}
+            position = {COL[3],0.2,ROW[i-6]}, rotation = {0,0,0}, width = 0, height = 0, font_size = 80}
         buttonParam.font_color = {(draw-i+2)/draw, 0, (i-2)/draw}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'nullFunc', label = valLabels[i], color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-            position = {COL[4],0.1,ROW[i-6]}, rotation = {0,0,0}, width = 0, height = 0, font_size = 80}
+            position = {COL[4],0.2,ROW[i-6]}, rotation = {0,0,0}, width = 0, height = 0, font_size = 80}
         self.createButton(buttonParam)
     end
 end

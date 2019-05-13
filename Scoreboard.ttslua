@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.8.1'
+VERSION = '1.8.2'
 DEBUG = false
 COLOR_TABLE = {'White', 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple', 'Pink', 'Teal', 'Brown'}
 BUTT_W = 1
@@ -857,51 +857,51 @@ function mainMenu()
     self.clearInputs()
     state = 0
     local buttonParam = {click_function = 'nullFunc', label = "Name", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {COL[1],0.1,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 80}
+        position = {COL[1],0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 80}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = "Games\nPlayed", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {COL[2],0.1,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
+        position = {COL[2],0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = "Fas\nWinrate", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {COL[3],0.1,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
+        position = {COL[3],0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = "Hitler\nWinrate", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {COL[4],0.1,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
+        position = {COL[4],0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = "F+H\nWinrate", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {COL[5],0.1,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
+        position = {COL[5],0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = "Lib\nWinrate", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {COL[6],0.1,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
+        position = {COL[6],0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = "Total\nWinrate", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {COL[7],0.1,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
+        position = {COL[7],0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'updateStart', label = "Update\nPlayers", color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
-        position = {-1.6,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = '!up'}
+        position = {-1.6,0.2,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = '!up'}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'refreshMisc', label = "Misc\nStats", color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
-        position = {-0.96,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = 'Type !s2 in chat to open up this page'}
+        position = {-0.96,0.2,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = 'Type !s2 in chat to open up this page'}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'recLButtonFunc', label = "Record\nLib Win", color = {0,0,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0.32,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = '!rl'}
+        position = {0.32,0.2,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = '!rl'}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'recFButtonFunc', label = "Record\nFas Win", color = {1,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0.96,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = '!rf'}
+        position = {0.96,0.2,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = '!rf'}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'adminMenu', label = "Admin", color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
-        position = {1.6,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50}
+        position = {1.6,0.2,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50}
     self.createButton(buttonParam)
 
     local name_size
@@ -913,31 +913,31 @@ function mainMenu()
         end
 
         local buttonParam = {click_function = 'nullFunc', label = Player[COLOR_TABLE[i]].steam_name, color = BUTT_B_COLOR, font_color = stringColorToRGB(COLOR_TABLE[i]), function_owner = self,
-            position = {COL[1],0.1,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = name_size}
+            position = {COL[1],0.2,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = name_size}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'nullFunc', label = gamesPlayed[i], color = BUTT_B_COLOR, font_color = stringColorToRGB(COLOR_TABLE[i]), function_owner = self,
-            position = {COL[2],0.1,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
+            position = {COL[2],0.2,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'nullFunc', label = fasWR[i], color = BUTT_B_COLOR, font_color = stringColorToRGB(COLOR_TABLE[i]), function_owner = self,
-            position = {COL[3],0.1,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
+            position = {COL[3],0.2,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'nullFunc', label = hitWR[i], color = BUTT_B_COLOR, font_color = stringColorToRGB(COLOR_TABLE[i]), function_owner = self,
-            position = {COL[4],0.1,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
+            position = {COL[4],0.2,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'nullFunc', label = fhWR[i], color = BUTT_B_COLOR, font_color = stringColorToRGB(COLOR_TABLE[i]), function_owner = self,
-            position = {COL[5],0.1,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
+            position = {COL[5],0.2,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'nullFunc', label = libWR[i], color = BUTT_B_COLOR, font_color = stringColorToRGB(COLOR_TABLE[i]), function_owner = self,
-            position = {COL[6],0.1,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
+            position = {COL[6],0.2,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'nullFunc', label = totWR[i], color = BUTT_B_COLOR, font_color = stringColorToRGB(COLOR_TABLE[i]), function_owner = self,
-            position = {COL[7],0.1,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
+            position = {COL[7],0.2,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
         self.createButton(buttonParam)
     end
 end
@@ -953,39 +953,39 @@ function miscMenu()
     ratesDisp = {}
 
     local buttonParam = {click_function = 'nullFunc', label = "Name", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {COL[1],0.1,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 80}
+        position = {COL[1],0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 80}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = "Liberal\nRating", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {COL[2],0.1,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
+        position = {COL[2],0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = "Fascist\nRating", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {COL[3],0.1,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
+        position = {COL[3],0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = "Gamble\nAttempts", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {COL[4],0.1,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
+        position = {COL[4],0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = "Gamble\nSuccess", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {COL[5],0.1,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
+        position = {COL[5],0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = "Total Games\nRecorded", color = BUTT_B_COLOR, font_color = stringColorToRGB('Green'), function_owner = self,
-        position = {COL[7],0.1,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
+        position = {COL[7],0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = lWins+fWins, color = BUTT_B_COLOR, font_color = stringColorToRGB('Green'), function_owner = self,
-        position = {COL[7],0.1,ROW[2]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 100}
+        position = {COL[7],0.2,ROW[2]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = "Fascist\nWinrate", color = BUTT_B_COLOR, font_color = stringColorToRGB('Green'), function_owner = self,
-        position = {COL[7],0.1,ROW[4]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
+        position = {COL[7],0.2,ROW[4]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = round(fWins/(lWins+fWins)*100).."%", color = BUTT_B_COLOR, font_color = stringColorToRGB('Green'), function_owner = self,
-        position = {COL[7],0.1,ROW[5]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 100}
+        position = {COL[7],0.2,ROW[5]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 100}
     self.createButton(buttonParam)
 
     for i = 1,10 do
@@ -995,23 +995,23 @@ function miscMenu()
             name_size = 50
         end
         local buttonParam = {click_function = 'nullFunc', label = Player[COLOR_TABLE[i]].steam_name, color = BUTT_B_COLOR, font_color = stringColorToRGB(COLOR_TABLE[i]), function_owner = self,
-            position = {COL[1],0.1,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = name_size}
+            position = {COL[1],0.2,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = name_size}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'nullFunc', label = lrat[i], color = BUTT_B_COLOR, font_color = stringColorToRGB(COLOR_TABLE[i]), function_owner = self,
-            position = {COL[2],0.1,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
+            position = {COL[2],0.2,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'nullFunc', label = frat[i], font_color = stringColorToRGB(COLOR_TABLE[i]), function_owner = self,
-            position = {COL[3],0.1,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
+            position = {COL[3],0.2,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'nullFunc', label = gnum[i], color = BUTT_B_COLOR, font_color = stringColorToRGB(COLOR_TABLE[i]), function_owner = self,
-            position = {COL[4],0.1,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
+            position = {COL[4],0.2,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'nullFunc', label = gwr[i], font_color = stringColorToRGB(COLOR_TABLE[i]), function_owner = self,
-            position = {COL[5],0.1,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
+            position = {COL[5],0.2,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
         self.createButton(buttonParam)
     end
 
@@ -1020,27 +1020,27 @@ end
 
 function createMiscButtons()
     local buttonParam = {click_function = 'refreshStart', label = "Main\nStats", color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
-        position = {-1.6,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = 'Type !s1 in chat to open up this page'}
+        position = {-1.6,0.2,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = 'Type !s1 in chat to open up this page'}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'refreshMisc', label = "Misc\nStats", color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
-        position = {-0.96,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = 'Type !s2 in chat to open up this page'}
+        position = {-0.96,0.2,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = 'Type !s2 in chat to open up this page'}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'overStart', label = "Overall\nLeader\nBoard", color = stringColorToRGB('Purple'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-0.32,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = 'Type !s3 in chat to open up this page'}
+        position = {-0.32,0.2,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = 'Type !s3 in chat to open up this page'}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'libStart', label = "Liberal\nLeader\nBoard", color = {0,0,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0.32,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = 'Type !s4 in chat to open up this page'}
+        position = {0.32,0.2,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = 'Type !s4 in chat to open up this page'}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'fasStart', label = "Fascist\nLeader\nBoard", color = {1,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0.96,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = 'Type !s5 in chat to open up this page'}
+        position = {0.96,0.2,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = 'Type !s5 in chat to open up this page'}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'lookupMenu', label = "Lookup\nPlayer", color = stringColorToRGB('Green'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {1.6,0.1,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = 'Type !lu [FF0000]player [FFFFFF]in chat to\nlook up stats as a spectator.'}
+        position = {1.6,0.2,1.4}, rotation = {0,0,0}, width = 250, height = 200, font_size = 50, tooltip = 'Type !lu [FF0000]player [FFFFFF]in chat to\nlook up stats as a spectator.'}
     self.createButton(buttonParam)
 end
 
@@ -1070,15 +1070,15 @@ function overMenu()
     self.clearInputs()
 
     local buttonParam = {click_function = 'nullFunc', label = "Name", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {COL[2],0.1,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
+        position = {COL[2],0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = "Overall\nGames Played", color = BUTT_B_COLOR, font_color = stringColorToRGB('Purple'), function_owner = self,
-        position = {COL[3]+0.2,0.1,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 40}
+        position = {COL[3]+0.2,0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 40}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = "Overall\nWin Rate", color = BUTT_B_COLOR, font_color = stringColorToRGB('Purple'), function_owner = self,
-        position = {COL[4]+0.2,0.1,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 40}
+        position = {COL[4]+0.2,0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 40}
     self.createButton(buttonParam)
 
     createLeaderValueButtons()
@@ -1091,15 +1091,15 @@ function libMenu()
     self.clearInputs()
 
     local buttonParam = {click_function = 'nullFunc', label = "Name", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {COL[2],0.1,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
+        position = {COL[2],0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = "Liberal\nGames Played", color = BUTT_B_COLOR, font_color = stringColorToRGB('Blue'), function_owner = self,
-        position = {COL[3]+0.2,0.1,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 40}
+        position = {COL[3]+0.2,0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 40}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = "Liberal\nWin Rate", color = BUTT_B_COLOR, font_color = stringColorToRGB('Blue'), function_owner = self,
-        position = {COL[4]+0.2,0.1,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 40}
+        position = {COL[4]+0.2,0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 40}
     self.createButton(buttonParam)
 
     createLeaderValueButtons()
@@ -1112,15 +1112,15 @@ function fasMenu()
     self.clearInputs()
 
     local buttonParam = {click_function = 'nullFunc', label = "Name", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {COL[2],0.1,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
+        position = {COL[2],0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = "Fascist\nGames Played", color = BUTT_B_COLOR, font_color = stringColorToRGB('Red'), function_owner = self,
-        position = {COL[3]+0.2,0.1,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 40}
+        position = {COL[3]+0.2,0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 40}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = "Fascist\nWin Rate", color = BUTT_B_COLOR, font_color = stringColorToRGB('Red'), function_owner = self,
-        position = {COL[4]+0.2,0.1,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 40}
+        position = {COL[4]+0.2,0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 40}
     self.createButton(buttonParam)
 
     createLeaderValueButtons()
@@ -1131,38 +1131,38 @@ end
 function createLeaderValueButtons()
     for i = 1,10 do
         local buttonParam = {click_function = 'nullFunc', label = startRank -1 + i..".", color = BUTT_B_COLOR, font_color = stringColorToRGB(COLOR_TABLE[i]), function_owner = self,
-            position = {COL[1],0.1,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
+            position = {COL[1],0.2,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'nullFunc', label = namesDisp[i], color = BUTT_B_COLOR, font_color = stringColorToRGB(COLOR_TABLE[i]), function_owner = self,
-            position = {COL[2],0.1,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 40}
+            position = {COL[2],0.2,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 40}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'nullFunc', label = gamesDisp[i], color = BUTT_B_COLOR, font_color = stringColorToRGB(COLOR_TABLE[i]), function_owner = self,
-            position = {COL[3]+0.2,0.1,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
+            position = {COL[3]+0.2,0.2,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'nullFunc', label = ratesDisp[i], color = BUTT_B_COLOR, font_color = stringColorToRGB(COLOR_TABLE[i]), function_owner = self,
-            position = {COL[4]+0.2,0.1,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
+            position = {COL[4]+0.2,0.2,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 50}
         self.createButton(buttonParam)
     end
 end
 
 function createMinButtons()
     local buttonParam = {click_function = 'nullFunc', label = "Starting\nRank", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {1.2,0.1,-1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 50}
+        position = {1.2,0.2,-1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 50}
     self.createButton(buttonParam)
 
     local inputParam = {input_function = 'rankUpdate', color = stringColorToRGB('White'), function_owner = self, font_color = stringColorToRGB('Black'), function_owner = self,
-        position = {1.2,0.1,-0.75}, rotation = {0,0,0}, width = 400, height = 124, font_size = 100, value = startRank, alignment = 3, validation = 2, tab = 1}
+        position = {1.2,0.2,-0.75}, rotation = {0,0,0}, width = 400, height = 124, font_size = 100, value = startRank, alignment = 3, validation = 2, tab = 1}
     self.createInput(inputParam)
 
     local buttonParam = {click_function = 'nullFunc', label = "Minimum\n# Games", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {1.2,0.1,0}, rotation = {0,0,0}, width = 0, height = 0, font_size = 50}
+        position = {1.2,0.2,0}, rotation = {0,0,0}, width = 0, height = 0, font_size = 50}
     self.createButton(buttonParam)
 
     local inputParam = {input_function = 'minUpdate', color = stringColorToRGB('White'), function_owner = self, font_color = stringColorToRGB('Black'), function_owner = self,
-        position = {1.2,0.1,0.25}, rotation = {0,0,0}, width = 400, height = 124, font_size = 100, value = minGames, alignment = 3, validation = 2, tab = 1}
+        position = {1.2,0.2,0.25}, rotation = {0,0,0}, width = 400, height = 124, font_size = 100, value = minGames, alignment = 3, validation = 2, tab = 1}
     self.createInput(inputParam)
 end
 
@@ -1190,23 +1190,23 @@ function lookupMenu()
     self.clearInputs()
 
     local buttonParam = {click_function = 'nullFunc', label = "Steam Name", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-1,0.1,-1.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 50}
+        position = {-1,0.2,-1.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 50}
     self.createButton(buttonParam)
 
     local inputParam = {input_function = 'nullFunc', color = stringColorToRGB('White'), function_owner = self, font_color = stringColorToRGB('Black'),
-        position = {-1,0.1,-1.2}, rotation = {0,0,0}, width = 600, height = 150, font_size = 60, alignment = 2, validation = 1, tab = 1}
+        position = {-1,0.2,-1.2}, rotation = {0,0,0}, width = 600, height = 150, font_size = 60, alignment = 2, validation = 1, tab = 1}
     self.createInput(inputParam)
 
     local buttonParam = {click_function = 'nullFunc', label = "Steam ID", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {1,0.1,-1.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 50}
+        position = {1,0.2,-1.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 50}
     self.createButton(buttonParam)
 
     local inputParam = {input_function = 'nullFunc', color = stringColorToRGB('White'), function_owner = self, font_color = stringColorToRGB('Black'),
-        position = {1,0.1,-1.2}, rotation = {0,0,0}, width = 600, height = 150, font_size = 60, alignment = 2, validation = 2, tab = 1}
+        position = {1,0.2,-1.2}, rotation = {0,0,0}, width = 600, height = 150, font_size = 60, alignment = 2, validation = 2, tab = 1}
     self.createInput(inputParam)
 
     local buttonParam = {click_function = 'lookupStart', label = "Lookup", stringColorToRGB('White'), font_color = stringColorToRGB('Black'), function_owner = self,
-        position = {0,0.1,-1.2}, rotation = {0,0,0}, width = 300, height = 200, font_size = 80, tooltip = 'Use !lu player in chat to\nlook up stats as a spectator.'}
+        position = {0,0.2,-1.2}, rotation = {0,0,0}, width = 300, height = 200, font_size = 80, tooltip = 'Use !lu player in chat to\nlook up stats as a spectator.'}
     self.createButton(buttonParam)
 
     createMiscButtons()
@@ -1234,7 +1234,7 @@ function lookupStart()
         displayPlayerStats(key)
     else
         local buttonParam = {click_function = 'nullFunc', label = 'Player not found', color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-            position = {0,0.1,-0.8}, rotation = {0,0,0}, width = 0, height = 0, font_size = 80}
+            position = {0,0.2,-0.8}, rotation = {0,0,0}, width = 0, height = 0, font_size = 80}
         self.createButton(buttonParam)
     end
 end
@@ -1257,72 +1257,72 @@ end
 
 function displayPlayerStats(id)
     local buttonParam = {click_function = 'nullFunc', label = db[id].sn, color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0,0.1,-0.8}, rotation = {0,0,0}, width = 0, height = 0, font_size = 100}
+        position = {0,0.2,-0.8}, rotation = {0,0,0}, width = 0, height = 0, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = 'Games Played: ' .. db[id].lg + db[id].fg + db[id].hg, color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-0.8,0.1,-0.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
+        position = {-0.8,0.2,-0.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = 'Games Won: ' .. db[id].lw + db[id].fw + db[id].hw, color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-0.8,0.1,-0.3}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
+        position = {-0.8,0.2,-0.3}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = 'Overall Win Rate: ' .. round((db[id].fw+db[id].hw+db[id].lw)/(db[id].fg + db[id].hg + db[id].lg) * 100) .. '%', color = BUTT_B_COLOR, font_color = stringColorToRGB('Purple'), function_owner = self,
-        position = {-0.8,0.1,-0.1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
+        position = {-0.8,0.2,-0.1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = '% of Games as Liberal: ' .. round((db[id].lg)/(db[id].fg + db[id].hg + db[id].lg) * 100) .. '%', color = BUTT_B_COLOR, font_color = stringColorToRGB('Blue'), function_owner = self,
-        position = {-0.8,0.1,0.1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
+        position = {-0.8,0.2,0.2}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
     self.createButton(buttonParam)
 
 
     local buttonParam = {click_function = 'nullFunc', label = 'Liberal Games Played: ' .. db[id].lg, color = BUTT_B_COLOR, font_color = stringColorToRGB('Blue'), function_owner = self,
-        position = {-0.8,0.1,0.3}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
+        position = {-0.8,0.2,0.3}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = 'Liberal Games Won: ' .. db[id].lw, color = BUTT_B_COLOR, font_color = stringColorToRGB('Blue'), function_owner = self,
-        position = {-0.8,0.1,0.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
+        position = {-0.8,0.2,0.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = 'Liberal Win Rate: ' .. round(db[id].lw/db[id].lg * 100) .. '%', color = BUTT_B_COLOR, font_color = stringColorToRGB('Blue'), function_owner = self,
-        position = {-0.8,0.1,0.7}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
+        position = {-0.8,0.2,0.7}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = 'Liberal Rating: ' .. db[id].lr, color = BUTT_B_COLOR, font_color = stringColorToRGB('Blue'), function_owner = self,
-        position = {-0.8,0.1,0.9}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
+        position = {-0.8,0.2,0.9}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = 'Fascist Games Played: ' .. db[id].fg, color = BUTT_B_COLOR, font_color = stringColorToRGB('Yellow'), function_owner = self,
-        position = {0.8,0.1,-0.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
+        position = {0.8,0.2,-0.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = 'Fascist Games Won: ' .. db[id].fw, color = BUTT_B_COLOR, font_color = stringColorToRGB('Yellow'), function_owner = self,
-        position = {0.8,0.1,-0.3}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
+        position = {0.8,0.2,-0.3}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = 'Fascist Win Rate: ' .. round(db[id].fw/db[id].fg * 100) .. '%', color = BUTT_B_COLOR, font_color = stringColorToRGB('Yellow'), function_owner = self,
-        position = {0.8,0.1,-0.1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
+        position = {0.8,0.2,-0.1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = 'Fas+Hit Win Rate: ' .. round((db[id].hw+db[id].fw)/(db[id].hg + db[id].fg) * 100) .. '%', color = BUTT_B_COLOR, font_color = stringColorToRGB('Orange'), function_owner = self,
-        position = {0.8,0.1,0.1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
+        position = {0.8,0.2,0.1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = 'Hitler Games Played: ' .. db[id].hg, color = BUTT_B_COLOR, font_color = stringColorToRGB('Red'), function_owner = self,
-        position = {0.8,0.1,0.3}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
+        position = {0.8,0.2,0.3}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = 'Hitler Games Won: ' .. db[id].hw, color = BUTT_B_COLOR, font_color = stringColorToRGB('Red'), function_owner = self,
-        position = {0.8,0.1,0.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
+        position = {0.8,0.2,0.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = 'Hitler Win Rate: ' .. round(db[id].hw/db[id].hg * 100) .. '%', color = BUTT_B_COLOR, font_color = stringColorToRGB('Red'), function_owner = self,
-        position = {0.8,0.1,0.7}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
+        position = {0.8,0.2,0.7}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = 'Fascist Rating: ' .. db[id].fr, color = BUTT_B_COLOR, font_color = stringColorToRGB('Red'), function_owner = self,
-        position = {0.8,0.1,0.9}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
+        position = {0.8,0.2,0.9}, rotation = {0,0,0}, width = 0, height = 0, font_size = 60}
     self.createButton(buttonParam)
 end
 
@@ -1332,27 +1332,27 @@ function adminMenu(clickedObject, playerColor)
         self.clearInputs()
 
         local buttonParam = {click_function = 'nullFunc', label = "Admin Menu", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-            position = {0,0.1,-1.3}, rotation = {0,0,0}, width = 0, height = 0, font_size = 120}
+            position = {0,0.2,-1.3}, rotation = {0,0,0}, width = 0, height = 0, font_size = 120}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'saveloadMenu', label = "Save/Load\nData", color = stringColorToRGB('White'), function_owner = self,
-            position = {-0.7,0.1,-0.4}, rotation = {0,0,0}, width = 500, height = 300, font_size = 80}
+            position = {-0.7,0.2,-0.4}, rotation = {0,0,0}, width = 500, height = 300, font_size = 80}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'importFunc', label = "Load Data From\nOther Board", color = stringColorToRGB('White'), function_owner = self,
-            position = {0.7,0.1,-0.4}, rotation = {0,0,0}, width = 500, height = 300, font_size = 65}
+            position = {0.7,0.2,-0.4}, rotation = {0,0,0}, width = 500, height = 300, font_size = 65}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'resMenu', label = "Reset\nScores", color = stringColorToRGB('White'), function_owner = self,
-            position = {-0.7,0.1,0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 80}
+            position = {-0.7,0.2,0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 80}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'passMenu', label = "Manage\nPassword", color = stringColorToRGB('White'), function_owner = self,
-            position = {0.7,0.1,0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 80}
+            position = {0.7,0.2,0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 80}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'refreshStart', label = "Cancel", color = stringColorToRGB('White'), function_owner = self,
-            position = {0.7,0.1,1}, rotation = {0,0,0}, width = 500, height = 300, font_size = 80}
+            position = {0.7,0.2,1}, rotation = {0,0,0}, width = 500, height = 300, font_size = 80}
         self.createButton(buttonParam)
     else
         broadcastToColor("Only promoted players can access this menu.", playerColor, {1,0,0})
@@ -1365,59 +1365,59 @@ function saveloadMenu(clickedObject, playerColor)
         self.clearInputs()
 
         local buttonParam = {click_function = 'nullFunc', label = "Save or Load Current Data", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-            position = {0,0.1,-1.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 100}
+            position = {0,0.2,-1.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 100}
         self.createButton(buttonParam)
 
         local inputParam = {input_function = 'nullFunc', color = stringColorToRGB('Red'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
-            position = {-0.8,0.1,-1}, rotation = {0,0,0}, width = 600, height = 110, font_size = 80, value = saveNames[1], alignment = 3, validation = 1, tab = 2}
+            position = {-0.8,0.2,-1}, rotation = {0,0,0}, width = 600, height = 110, font_size = 80, value = saveNames[1], alignment = 3, validation = 1, tab = 2}
         self.createInput(inputParam)
 
         local inputParam = {input_function = 'nullFunc', color = stringColorToRGB('Blue'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
-            position = {0.8,0.1,-1}, rotation = {0,0,0}, width = 600, height = 110, font_size = 80, value = saveNames[2], alignment = 3, validation = 1, tab = 2}
+            position = {0.8,0.2,-1}, rotation = {0,0,0}, width = 600, height = 110, font_size = 80, value = saveNames[2], alignment = 3, validation = 1, tab = 2}
         self.createInput(inputParam)
 
         local inputParam = {input_function = 'nullFunc', color = stringColorToRGB('Green'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
-            position = {-0.8,0.1,0.2}, rotation = {0,0,0}, width = 600, height = 110, font_size = 80, value = saveNames[3], alignment = 3, validation = 1, tab = 2}
+            position = {-0.8,0.2,0.2}, rotation = {0,0,0}, width = 600, height = 110, font_size = 80, value = saveNames[3], alignment = 3, validation = 1, tab = 2}
         self.createInput(inputParam)
 
         local inputParam = {input_function = 'nullFunc', color = stringColorToRGB('Orange'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
-            position = {0.8,0.1,0.2}, rotation = {0,0,0}, width = 600, height = 110, font_size = 80, value = saveNames[4], alignment = 3, validation = 1, tab = 2}
+            position = {0.8,0.2,0.2}, rotation = {0,0,0}, width = 600, height = 110, font_size = 80, value = saveNames[4], alignment = 3, validation = 1, tab = 2}
         self.createInput(inputParam)
 
         local buttonParam = {click_function = 'saveDB1', label = "Save", color = stringColorToRGB('Red'), font_color = stringColorToRGB('White'), function_owner = self,
-            position = {-1.1,0.1,-0.6}, rotation = {0,0,0}, width = 300, height = 200, font_size = 80}
+            position = {-1.1,0.2,-0.6}, rotation = {0,0,0}, width = 300, height = 200, font_size = 80}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'saveDB2', label = "Save", color = stringColorToRGB('Blue'), font_color = stringColorToRGB('White'), function_owner = self,
-            position = {0.5,0.1,-0.6}, rotation = {0,0,0}, width = 300, height = 200, font_size = 80}
+            position = {0.5,0.2,-0.6}, rotation = {0,0,0}, width = 300, height = 200, font_size = 80}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'saveDB3', label = "Save", color = stringColorToRGB('Green'), font_color = stringColorToRGB('White'), function_owner = self,
-            position = {-1.1,0.1,0.6}, rotation = {0,0,0}, width = 300, height = 200, font_size = 80}
+            position = {-1.1,0.2,0.6}, rotation = {0,0,0}, width = 300, height = 200, font_size = 80}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'saveDB4', label = "Save", color = stringColorToRGB('Orange'), font_color = stringColorToRGB('White'), function_owner = self,
-            position = {0.5,0.1,0.6}, rotation = {0,0,0}, width = 300, height = 200, font_size = 80}
+            position = {0.5,0.2,0.6}, rotation = {0,0,0}, width = 300, height = 200, font_size = 80}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'loadDB1', label = "Load", color = stringColorToRGB('Red'), font_color = stringColorToRGB('White'), function_owner = self,
-            position = {-0.5,0.1,-0.6}, rotation = {0,0,0}, width = 300, height = 200, font_size = 80}
+            position = {-0.5,0.2,-0.6}, rotation = {0,0,0}, width = 300, height = 200, font_size = 80}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'loadDB2', label = "Load", color = stringColorToRGB('Blue'), font_color = stringColorToRGB('White'), function_owner = self,
-            position = {1.1,0.1,-0.6}, rotation = {0,0,0}, width = 300, height = 200, font_size = 80}
+            position = {1.1,0.2,-0.6}, rotation = {0,0,0}, width = 300, height = 200, font_size = 80}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'loadDB3', label = "Load", color = stringColorToRGB('Green'), font_color = stringColorToRGB('White'), function_owner = self,
-            position = {-0.5,0.1,0.6}, rotation = {0,0,0}, width = 300, height = 200, font_size = 80}
+            position = {-0.5,0.2,0.6}, rotation = {0,0,0}, width = 300, height = 200, font_size = 80}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'loadDB4', label = "Load", color = stringColorToRGB('Orange'), font_color = stringColorToRGB('White'), function_owner = self,
-            position = {1.1,0.1,0.6}, rotation = {0,0,0}, width = 300, height = 200, font_size = 80}
+            position = {1.1,0.2,0.6}, rotation = {0,0,0}, width = 300, height = 200, font_size = 80}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'adminMenu', label = "Cancel", color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
-            position = {0,0.1,1.4}, rotation = {0,0,0}, width = 500, height = 200, font_size = 80}
+            position = {0,0.2,1.4}, rotation = {0,0,0}, width = 500, height = 200, font_size = 80}
         self.createButton(buttonParam)
     else
         broadcastToColor("Only promoted players can use the admin functions.", playerColor, {1,0,0})
@@ -1430,19 +1430,19 @@ function resMenu(clickedObject, playerColor)
         self.clearInputs()
 
         local buttonParam = {click_function = 'nullFunc', label = "Enter your password:", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-            position = {0,0.1,-1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 120}
+            position = {0,0.2,-1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 120}
         self.createButton(buttonParam)
 
         local inputParam = {input_function = 'nullFunc', color = stringColorToRGB('White'), function_owner = self, font_color = stringColorToRGB('Black'), function_owner = self,
-            position = {0,0.1,-0.5}, rotation = {0,0,0}, width = 1000, height = 150, font_size = 100, value = fas, alignment = 3, validation = 4, tab = 2}
+            position = {0,0.2,-0.5}, rotation = {0,0,0}, width = 1000, height = 150, font_size = 100, value = fas, alignment = 3, validation = 4, tab = 2}
         self.createInput(inputParam)
 
         local buttonParam = {click_function = 'checkPass', label = "Reset\nScores", color = stringColorToRGB('White'), function_owner = self,
-            position = {0,0.1,0.2}, rotation = {0,0,0}, width = 700, height = 300, font_size = 120}
+            position = {0,0.2,0.2}, rotation = {0,0,0}, width = 700, height = 300, font_size = 120}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'adminMenu', label = "Cancel", color = stringColorToRGB('White'), function_owner = self,
-            position = {0,0.1,0.9}, rotation = {0,0,0}, width = 700, height = 300, font_size = 120}
+            position = {0,0.2,0.9}, rotation = {0,0,0}, width = 700, height = 300, font_size = 120}
         self.createButton(buttonParam)
     else
         broadcastToColor("Only promoted players can use the admin functions.", playerColor, {1,0,0})
@@ -1455,23 +1455,23 @@ function passMenu(clickedObject, playerColor)
         self.clearInputs()
 
         local buttonParam = {click_function = 'nullFunc', label = "Set your password:", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-            position = {0,0.1,-1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 120}
+            position = {0,0.2,-1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 120}
         self.createButton(buttonParam)
 
         local inputParam = {input_function = 'nullFunc', color = stringColorToRGB('White'), function_owner = self, font_color = stringColorToRGB('Black'), function_owner = self,
-            position = {0,0.1,-0.7}, rotation = {0,0,0}, width = 1000, height = 150, font_size = 100, value = fas, alignment = 3, validation = 4, tab = 2}
+            position = {0,0.2,-0.7}, rotation = {0,0,0}, width = 1000, height = 150, font_size = 100, value = fas, alignment = 3, validation = 4, tab = 2}
         self.createInput(inputParam)
 
         local buttonParam = {click_function = 'storePass', label = "Store Password", color = stringColorToRGB('White'), function_owner = self,
-            position = {0,0.1,-0.2}, rotation = {0,0,0}, width = 800, height = 200, font_size = 80}
+            position = {0,0.2,-0.2}, rotation = {0,0,0}, width = 800, height = 200, font_size = 80}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'clearPass', label = "Clear Password", color = stringColorToRGB('White'), function_owner = self,
-            position = {0,0.1,0.3}, rotation = {0,0,0}, width = 800, height = 200, font_size = 80}
+            position = {0,0.2,0.3}, rotation = {0,0,0}, width = 800, height = 200, font_size = 80}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'adminMenu', label = "Cancel", color = stringColorToRGB('White'), function_owner = self,
-            position = {0,0.1,0.8}, rotation = {0,0,0}, width = 800, height = 200, font_size = 80}
+            position = {0,0.2,0.8}, rotation = {0,0,0}, width = 800, height = 200, font_size = 80}
         self.createButton(buttonParam)
     else
         broadcastToColor("Only the host can access this menu.", playerColor, {1,0,0})

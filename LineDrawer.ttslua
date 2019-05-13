@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.5.0'
+VERSION = '1.5.1'
 COLOR_TABLE = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 LINE_HEIGHT = 1
 LINE_SPACING = 1
@@ -13,10 +13,10 @@ HEIGHT_SPACING = 0.05
 DEFAULT_LINE_COLOR = 'Red'
 
 X_OFF = 1.2
-PLAYER1_POS = {{-1.4+X_OFF*0,0.1,0.7}, {-1.4+X_OFF*0,0.1,1.1}, {-2.0+X_OFF*0,0.1,1.1}, {-2.0+X_OFF*0,0.1,0.7}, {-2.0+X_OFF*0,0.1,0.3}, {-2.0+X_OFF*0,0.1,-0.1}, {-2.0+X_OFF*0,0.1,-0.5}, {-1.4+X_OFF*0,0.1,-0.5}, {-1.4+X_OFF*0,0.1,-0.1}, {-1.4+X_OFF*0,0.1,0.3}}
-PLAYER2_POS = {{-1.4+X_OFF*1,0.1,0.7}, {-1.4+X_OFF*1,0.1,1.1}, {-2.0+X_OFF*1,0.1,1.1}, {-2.0+X_OFF*1,0.1,0.7}, {-2.0+X_OFF*1,0.1,0.3}, {-2.0+X_OFF*1,0.1,-0.1}, {-2.0+X_OFF*1,0.1,-0.5}, {-1.4+X_OFF*1,0.1,-0.5}, {-1.4+X_OFF*1,0.1,-0.1}, {-1.4+X_OFF*1,0.1,0.3}}
-COLOR_POS = {{-1.4+X_OFF*2,0.1,0.7}, {-1.4+X_OFF*2,0.1,1.1}, {-2.0+X_OFF*2,0.1,1.1}, {-2.0+X_OFF*2,0.1,0.7}, {-2.0+X_OFF*2,0.1,0.3}, {-2.0+X_OFF*2,0.1,-0.1}, {-2.0+X_OFF*2,0.1,-0.5}, {-1.4+X_OFF*2,0.1,-0.5}, {-1.4+X_OFF*2,0.1,-0.1}, {-1.4+X_OFF*2,0.1,0.3}}
-GIVE_TOOL_BUTTON_POS = {{1,0.1,0.9}, {0,0.1,0.9}, {-1,0.1,0.9}, {-1.7,0.1,0.3}, {-1.7,0.1,-0.3}, {-1,0.1,-0.9}, {0,0.1,-0.9}, {1,0.1,-0.9}, {1.7,0.1,-0.3}, {1.7,0.1,0.3}}
+PLAYER1_POS = {{-1.4+X_OFF*0,0.2,0.7}, {-1.4+X_OFF*0,0.2,1.1}, {-2.0+X_OFF*0,0.2,1.1}, {-2.0+X_OFF*0,0.2,0.7}, {-2.0+X_OFF*0,0.2,0.3}, {-2.0+X_OFF*0,0.2,-0.1}, {-2.0+X_OFF*0,0.2,-0.5}, {-1.4+X_OFF*0,0.2,-0.5}, {-1.4+X_OFF*0,0.2,-0.1}, {-1.4+X_OFF*0,0.2,0.3}}
+PLAYER2_POS = {{-1.4+X_OFF*1,0.2,0.7}, {-1.4+X_OFF*1,0.2,1.1}, {-2.0+X_OFF*1,0.2,1.1}, {-2.0+X_OFF*1,0.2,0.7}, {-2.0+X_OFF*1,0.2,0.3}, {-2.0+X_OFF*1,0.2,-0.1}, {-2.0+X_OFF*1,0.2,-0.5}, {-1.4+X_OFF*1,0.2,-0.5}, {-1.4+X_OFF*1,0.2,-0.1}, {-1.4+X_OFF*1,0.2,0.3}}
+COLOR_POS = {{-1.4+X_OFF*2,0.2,0.7}, {-1.4+X_OFF*2,0.2,1.1}, {-2.0+X_OFF*2,0.2,1.1}, {-2.0+X_OFF*2,0.2,0.7}, {-2.0+X_OFF*2,0.2,0.3}, {-2.0+X_OFF*2,0.2,-0.1}, {-2.0+X_OFF*2,0.2,-0.5}, {-1.4+X_OFF*2,0.2,-0.5}, {-1.4+X_OFF*2,0.2,-0.1}, {-1.4+X_OFF*2,0.2,0.3}}
+GIVE_TOOL_BUTTON_POS = {{1,0.2,0.9}, {0,0.2,0.9}, {-1,0.2,0.9}, {-1.7,0.2,0.3}, {-1.7,0.2,-0.3}, {-1,0.2,-0.9}, {0,0.2,-0.9}, {1,0.2,-0.9}, {1.7,0.2,-0.3}, {1.7,0.2,0.3}}
 
 POINTS =
 {
@@ -407,15 +407,15 @@ end
 
 function createLabels()
     local buttonParam = {label = 'Player 1', click_function = 'nulFunc', color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-            position = {-1.7,0.1,-1}, rotation = {0,0,0}, width = 1, height = 1, font_size = 120}
+            position = {-1.7,0.2,-1}, rotation = {0,0,0}, width = 1, height = 1, font_size = 120}
     self.createButton(buttonParam)
 
     local buttonParam = {label = 'Player 2', click_function = 'nulFunc', color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-            position = {-0.5,0.1,-1}, rotation = {0,0,0}, width = 1, height = 1, font_size = 120}
+            position = {-0.5,0.2,-1}, rotation = {0,0,0}, width = 1, height = 1, font_size = 120}
     self.createButton(buttonParam)
 
     local buttonParam = {label = 'Color', click_function = 'nulFunc', color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-            position = {0.7,0.1,-1}, rotation = {0,0,0}, width = 1, height = 1, font_size = 120}
+            position = {0.7,0.2,-1}, rotation = {0,0,0}, width = 1, height = 1, font_size = 120}
     self.createButton(buttonParam)
 end
 
@@ -532,37 +532,37 @@ end
 
 function createActionButtons()
     local buttonParam = {click_function = 'drawLineFunc', label = "Draw\nLine", color = {1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
-        position = {1.9,0.1,-0.5}, rotation = {0,0,0}, width = 500, height = 250, font_size = 80}
+        position = {1.9,0.2,-0.5}, rotation = {0,0,0}, width = 500, height = 250, font_size = 80}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'remLineFunc', label = "Remove\nLine", color = {1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
-        position = {1.9,0.1,0}, rotation = {0,0,0}, width = 500, height = 250, font_size = 80}
+        position = {1.9,0.2,0}, rotation = {0,0,0}, width = 500, height = 250, font_size = 80}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'clearLinesFunc', label = "Clear\nAll Lines", color = {1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
-        position = {1.9,0.1,0.5}, rotation = {0,0,0}, width = 500, height = 250, font_size = 80}
+        position = {1.9,0.2,0.5}, rotation = {0,0,0}, width = 500, height = 250, font_size = 80}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'importFunc', label = 'Import from\nNotetaker', color = {1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
-        position = {1.9,0.1,1}, rotation = {0,0,0}, width = 500, height = 250, font_size = 80}
+        position = {1.9,0.2,1}, rotation = {0,0,0}, width = 500, height = 250, font_size = 80}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'styleStart', function_owner = self, label = '☆', color = {0,0,0,0.8}, font_color = stringColorToRGB('Blue'),
-        position = {1.6,0.1,-1.2}, width = 100, height = 100, font_size = 80, tooltip = 'Toggle Line Style'}
+        position = {1.6,0.2,-1.2}, width = 100, height = 100, font_size = 80, tooltip = 'Toggle Line Style'}
     if style == 'block' then
         buttonParam.label = '★'
     end
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'promStart', function_owner = self, label = '☆', color = {0,0,0,0.8}, font_color = stringColorToRGB('Green'),
-        position = {1.9,0.1,-1.2}, width = 100, height = 100, font_size = 80, tooltip = 'Toggle Promoted Only'}
+        position = {1.9,0.2,-1.2}, width = 100, height = 100, font_size = 80, tooltip = 'Toggle Promoted Only'}
     if promOnly == true then
         buttonParam.label = '★'
     end
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'givetMenu', function_owner = self, label = '☆', color = {0,0,0,0.8}, font_color = stringColorToRGB('Red'),
-        position = {2.2,0.1,-1.2}, width = 100, height = 100, font_size = 80, tooltip = 'Give Line\nDrawer to:'}
+        position = {2.2,0.2,-1.2}, width = 100, height = 100, font_size = 80, tooltip = 'Give Line\nDrawer to:'}
     self.createButton(buttonParam)
 end
 
@@ -576,7 +576,7 @@ function givetMenu()
     end
 
     local buttonParam = {click_function = 'returnFunc', label = "Cancel", color = {1,1,1,0.8}, function_owner = self,
-        position = {0,0.1,0}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+        position = {0,0.2,0}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
     self.createButton(buttonParam)
 end
 

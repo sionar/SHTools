@@ -169,31 +169,31 @@ function refreshText()
     self.clearInputs()
 
     local buttonParam = {click_function = 'nullFunc', function_owner = self, label = title[page], color = {0,0,0,1}, font_color = stringColorToRGB('Red'),
-        position = {0,0.1,-1.3}, width = 0, height = 0, font_size = 100}
+        position = {0,0.2,-1.3}, width = 0, height = 0, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', function_owner = self, label = rulebook[page], color = {0,0,0,1}, font_color = stringColorToRGB('White'),
-        position = {0,0.1,0}, width = 0, height = 0, font_size = 50, alignment = 2}
+        position = {0,0.2,0}, width = 0, height = 0, font_size = 50, alignment = 2}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'firstPage', function_owner = self, label = '[b]⇤[/b]', color = {0,0,0,0.8}, font_color = stringColorToRGB('Red'),
-        position = {-0.9,0.1,1.1}, width = 250, height = 200, font_size = 120, tooltip = 'First Page [Numpad 8]'}
+        position = {-0.9,0.2,1.1}, width = 250, height = 200, font_size = 120, tooltip = 'First Page [Numpad 8]'}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'prevPage', function_owner = self, label = '[b]←[/b]', color = {0,0,0,0.8}, font_color = stringColorToRGB('Red'),
-        position = {-0.3,0.1,1.1}, width = 250, height = 200, font_size = 100, tooltip = 'Previous Page [Numpad 4]'}
+        position = {-0.3,0.2,1.1}, width = 250, height = 200, font_size = 100, tooltip = 'Previous Page [Numpad 4]'}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nextPage', function_owner = self, label = '[b]→[/b]', color = {0,0,0,0.8}, font_color = stringColorToRGB('Red'),
-        position = {0.3,0.1,1.1}, width = 250, height = 200, font_size = 100, tooltip = 'Next Page [Numpad 6]'}
+        position = {0.3,0.2,1.1}, width = 250, height = 200, font_size = 100, tooltip = 'Next Page [Numpad 6]'}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'lastPage', function_owner = self, label = '[b]⇥[/b]', color = {0,0,0,0.8}, font_color = stringColorToRGB('Red'),
-        position = {0.9,0.1,1.1}, width = 250, height = 200, font_size = 120, tooltip = 'Last Page [Numpad 2]'}
+        position = {0.9,0.2,1.1}, width = 250, height = 200, font_size = 120, tooltip = 'Last Page [Numpad 2]'}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'givetMenu', function_owner = self, label = '☆', color = {0,0,0,0.8}, font_color = stringColorToRGB('Red'),
-        position = {1.5,0.1,-1.5}, width = 100, height = 100, font_size = 80, tooltip = 'Give Rulebook to:'}
+        position = {1.5,0.2,-1.5}, width = 100, height = 100, font_size = 80, tooltip = 'Give Rulebook to:'}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', function_owner = self, label = CREDITS, color = {0,0,0,1}, font_color = stringColorToRGB('White'),
@@ -263,47 +263,47 @@ function givetMenu()
     state = 11
 
     local buttonParam = {click_function = 'giveTool6', label = "Green", color = stringColorToRGB('Green'), function_owner = self,
-        position = {-1,0.1,-0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+        position = {-1,0.2,-0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'giveTool7', label = "Teal", color = stringColorToRGB('Teal'), function_owner = self,
-        position = {0,0.1,-0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+        position = {0,0.2,-0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'giveTool8', label = "Blue", color = stringColorToRGB('Blue'), function_owner = self,
-        position = {1,0.1,-0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+        position = {1,0.2,-0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'giveTool3', label = "Red", color = stringColorToRGB('Red'), function_owner = self,
-        position = {-1,0.1,0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+        position = {-1,0.2,0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'giveTool2', label = "Brown", color = stringColorToRGB('Brown'), function_owner = self,
-        position = {0,0.1,0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+        position = {0,0.2,0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'giveTool1', label = "White", color = stringColorToRGB('White'), function_owner = self,
-        position = {1,0.1,0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+        position = {1,0.2,0.9}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'giveTool5', label = "Yellow", color = stringColorToRGB('Yellow'), function_owner = self,
-        position = {-1.2,0.1,-0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+        position = {-1.2,0.2,-0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'giveTool4', label = "Orange", color = stringColorToRGB('Orange'), function_owner = self,
-        position = {-1.2,0.1,0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+        position = {-1.2,0.2,0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'giveTool9', label = "Purple", color = stringColorToRGB('Purple'), function_owner = self,
-        position = {1.2,0.1,-0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+        position = {1.2,0.2,-0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'giveTool10', label = "Pink", color = stringColorToRGB('Pink'), function_owner = self,
-        position = {1.2,0.1,0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+        position = {1.2,0.2,0.3}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'moveBoard', label = "Cancel", color = {1,1,1,0.8}, function_owner = self,
-        position = {0,0.1,0}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
+        position = {0,0.2,0}, rotation = {0,0,0}, width = 500, height = 300, font_size = 100}
     self.createButton(buttonParam)
 end
 

@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.0.0'
+VERSION = '1.0.1'
 BUTTON_W = 420
 BUTTON_H = 300
 BUTTON_SPACING = 0.9
@@ -131,27 +131,27 @@ function refreshButtons()
     local timeLabel
 
     local buttonParam = {click_function = 'nullFunc', function_owner = self, label = '0:00', color = {0,0,0,1}, font_color = stringColorToRGB('Red'),
-        position = {0,0.1,-0.2}, width = 0, height = 0, font_size = 800}
+        position = {0,0.2,-0.2}, width = 0, height = 0, font_size = 800}
     self.createButton(buttonParam)
 
 
     local buttonParam = {click_function = 'time30s', function_owner = self, label = '30s', color = {0,0,0,1}, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
-            position = {COL[1],0.1,BUTTON_Z}, width = BUTTON_W, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Start the timer at 30 seconds.'}
+            position = {COL[1],0.2,BUTTON_Z}, width = BUTTON_W, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Start the timer at 30 seconds.'}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'time2m', function_owner = self, label = '2m', color = {0,0,0,1}, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
-            position = {COL[2],0.1,BUTTON_Z}, width = BUTTON_W, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Start the timer at 2 minutes.'}
+            position = {COL[2],0.2,BUTTON_Z}, width = BUTTON_W, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Start the timer at 2 minutes.'}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'time3m', function_owner = self, label = '3m', color = {0,0,0,1}, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
-            position = {COL[3],0.1,BUTTON_Z}, width = BUTTON_W, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Start the timer at 3 minutes.'}
+            position = {COL[3],0.2,BUTTON_Z}, width = BUTTON_W, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Start the timer at 3 minutes.'}
     self.createButton(buttonParam)
 
     local inputParam = {input_function = 'timeCustom', function_owner = self, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
-        position = {COL[4],0.1,BUTTON_Z}, rotation = {0,0,0}, width = BUTTON_W, height = FONT_SIZE + 23, font_size = FONT_SIZE, value = 0, alignment = 3, validation = 2, tab = 1, tooltip = 'Start the timer at a custom number of seconds.'}
+        position = {COL[4],0.2,BUTTON_Z}, rotation = {0,0,0}, width = BUTTON_W, height = FONT_SIZE + 23, font_size = FONT_SIZE, value = 0, alignment = 3, validation = 2, tab = 1, tooltip = 'Start the timer at a custom number of seconds.'}
     self.createInput(inputParam)
 
     local buttonParam = {click_function = 'pauseFunc', function_owner = self, label = 'Pause', color = {0,0,0,1}, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
-            position = {COL[5],0.1,BUTTON_Z}, width = BUTTON_W, height = BUTTON_H, font_size = 150, tooltip = 'Pause or start the timer.'}
+            position = {COL[5],0.2,BUTTON_Z}, width = BUTTON_W, height = BUTTON_H, font_size = 150, tooltip = 'Pause or start the timer.'}
     self.createButton(buttonParam)
 end

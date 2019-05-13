@@ -5,7 +5,7 @@ Made by Sionar, with code borrowed from Lost Savage and Markimus
 
 
 ------------------Constants
-VERSION = '1.2.5'
+VERSION = '1.2.6'
 COLOR_ORDER = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLOR_RGB = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]'}
 ABILITY_ZONE_GUID = 'eea120'
@@ -616,11 +616,11 @@ function refreshButtons()
     self.clearButtons()
 
     local buttonParam = {click_function = 'nullFunc', label = 'Shuffle Players', color = {1,1,1}, function_owner = self,
-        position = {-0.3,0.1,-0.9}, rotation = {0,0,0}, width = 0, height = 0, font_size = 100, font_color = {1,1,1}}
+        position = {-0.3,0.2,-0.9}, rotation = {0,0,0}, width = 0, height = 0, font_size = 100, font_color = {1,1,1}}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'toggleShuffle', label = 'X', color = {1,1,1}, function_owner = self,
-        position = {0.8,0.1,-0.9}, rotation = {0,0,0}, width = 200, height = 200, font_size = 100, tooltip = 'Shuffle ON'}
+        position = {0.8,0.2,-0.9}, rotation = {0,0,0}, width = 200, height = 200, font_size = 100, tooltip = 'Shuffle ON'}
     if not shufToggle then
         buttonParam.tooltip = 'Shuffle OFF'
         buttonParam.label = ''
@@ -628,11 +628,11 @@ function refreshButtons()
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'nullFunc', label = 'Synchronous Draft', color = {1,1,1}, function_owner = self,
-        position = {-0.3,0.1,-0.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 100, font_color = {1,1,1}}
+        position = {-0.3,0.2,-0.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 100, font_color = {1,1,1}}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'toggleSync', label = 'X', color = {1,1,1}, function_owner = self,
-        position = {0.8,0.1,-0.5}, rotation = {0,0,0}, width = 200, height = 200, font_size = 100, tooltip = 'Synchronous Draft'}
+        position = {0.8,0.2,-0.5}, rotation = {0,0,0}, width = 200, height = 200, font_size = 100, tooltip = 'Synchronous Draft'}
     if not syncDraft then
         buttonParam.tooltip = 'Asynchronous Draft'
         buttonParam.label = ''
@@ -640,7 +640,7 @@ function refreshButtons()
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'setupStart', label = 'Start\nDraft', color = {1,1,1}, function_owner = self,
-        position = {0,0.1,0.4}, rotation = {0,0,0}, width = 1000, height = 500, font_size = 100}
+        position = {0,0.2,0.4}, rotation = {0,0,0}, width = 1000, height = 500, font_size = 100}
     self.createButton(buttonParam)
 
     self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
