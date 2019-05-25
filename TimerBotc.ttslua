@@ -76,15 +76,15 @@ end
 
 function time3m()
     suspendTint()
-    self.editButton({index = 0, label = '2:00', font_color = stringColorToRGB('Blue')})
-    time = 120
+    self.editButton({index = 0, label = '3:00', font_color = stringColorToRGB('Blue')})
+    time = 180
     startTimer()
 end
 
 function time6m()
     suspendTint()
-    self.editButton({index = 0, label = '3:00', font_color = stringColorToRGB('Blue')})
-    time = 180
+    self.editButton({index = 0, label = '6:00', font_color = stringColorToRGB('Blue')})
+    time = 360
     startTimer()
 end
 
@@ -92,9 +92,9 @@ function timeCustom(obj, player_clicker_color, input_value, selected)
     if not selected then
         suspendTint()
         if input_value == '' then
-            input_value = 10
+            input_value = 1
         end
-        time = tonumber(input_value)
+        time = tonumber(input_value) * 60
         if time <= 0 then
             time = 10
         end
