@@ -92,9 +92,9 @@ function timeCustom(obj, player_clicker_color, input_value, selected)
     if not selected then
         suspendTint()
         if input_value == '' then
-            input_value = 10
+            input_value = 1
         end
-        time = tonumber(input_value)
+        time = tonumber(input_value) * 60
         if time <= 0 then
             time = 10
         end
@@ -173,11 +173,11 @@ function refreshButtons()
             position = {COL[1],0.2,BUTTON_Z}, width = BUTTON_W, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Start the timer at 30 seconds.'}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'time3m', function_owner = self, label = '3m', color = {0,0,0,1}, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
+    local buttonParam = {click_function = 'time3m', function_owner = self, label = '2m', color = {0,0,0,1}, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
             position = {COL[2],0.2,BUTTON_Z}, width = BUTTON_W, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Start the timer at 3 minutes.'}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'time6m', function_owner = self, label = '6m', color = {0,0,0,1}, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
+    local buttonParam = {click_function = 'time6m', function_owner = self, label = '3m', color = {0,0,0,1}, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
             position = {COL[3],0.2,BUTTON_Z}, width = BUTTON_W, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Start the timer at 6 minutes.'}
     self.createButton(buttonParam)
 
