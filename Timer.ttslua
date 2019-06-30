@@ -174,11 +174,11 @@ function refreshButtons()
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'time3m', function_owner = self, label = '2m', color = {0,0,0,1}, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
-            position = {COL[2],0.2,BUTTON_Z}, width = BUTTON_W, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Start the timer at 3 minutes.'}
+            position = {COL[2],0.2,BUTTON_Z}, width = BUTTON_W, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Start the timer at 2 minutes.'}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'time6m', function_owner = self, label = '3m', color = {0,0,0,1}, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
-            position = {COL[3],0.2,BUTTON_Z}, width = BUTTON_W, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Start the timer at 6 minutes.'}
+            position = {COL[3],0.2,BUTTON_Z}, width = BUTTON_W, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Start the timer at 3 minutes.'}
     self.createButton(buttonParam)
 
     local inputParam = {input_function = 'timeCustom', function_owner = self, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),

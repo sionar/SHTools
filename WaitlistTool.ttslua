@@ -5,8 +5,9 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.2.2'
+VERSION = '1.2.3'
 START_POS = {x = 100, y = 1.1, z = 42}
+START_POS_BOTC = {x = -100, y = 1.1, z = 0}
 COLOR_TABLE = {'White', 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple', 'Pink', 'Teal', 'Brown'}
 ROW_S = -1
 ROW_W = 0.25
@@ -76,6 +77,9 @@ function moveBoard()
     local global_name = Global.getVar('MOD_NAME')
     if global_name == 'Secret Hitler: CE' then
         self.setPositionSmooth(START_POS)
+        self.setLock(true)
+    elseif global_name == 'Blood on the Clocktower Scripted' then
+        self.setPositionSmooth(START_POS_BOTC)
         self.setLock(true)
     end
 end
@@ -824,4 +828,11 @@ function refreshButtons()
             position = {COLUMN[7],0.2,ROW[i]}, width = BUTTON_SIZE, height = BUTTON_SIZE, font_size = 80, tooltip = 'Remove from the Waitlist'}
         self.createButton(buttonParam)
     end
+end
+
+function printTable()
+    for k,v in pairs(tab) do
+        print('key = ' .. k .. ' , value = ' .. v)
+    end
+
 end

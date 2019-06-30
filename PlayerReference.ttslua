@@ -6,12 +6,12 @@ Player Reference
 
 
 ------------------Constants
-START_POS = {x = -115, y = 1.1, z = 44.5}
-START_POS_12P = {x = -115, y = 1.1, z = 44.5}
-X_RADIUS = -1.434
+START_POS = {x = -115, y = 1.1, z = 48.5}
+START_POS_12P = {x = -115, y = 1.1, z = 48.5}
+X_RADIUS = -1.2
 Z_RADIUS = 1
 X_WIDTH = 10
-Z_WIDTH = 5
+Z_WIDTH = 6
 X_SEG_LENGTH = -1 * X_RADIUS / (X_WIDTH / 2)
 Z_SEG_LENGTH = Z_RADIUS / (Z_WIDTH / 2)
 X_C = {}
@@ -33,14 +33,17 @@ PLAYERS =
 	'Brittany',
 	'Brokenhope Magoo',
 	'Broubison',
+	'Catsandicecream',
 	'Coo Person',
 	'Craig',
+	'Cressie',
 	'Darthvader',
 	'Dastina',
 	'Ducktales',
 	'GG77R6',
 	'Ghost',
 	'Ikigai',
+	'Kaz088',
 	'King of Stardew',
 	'Lightning McQueen',
 	'Lost Savage',
@@ -54,8 +57,8 @@ PLAYERS =
 	'Sionar',
 	'Tetarus',
 	'Thebluebunny',
-	'Yincrash',
-	'Zechbell'
+	'Wolflord2',
+	'Zechbell',
 }
 
 
@@ -82,11 +85,11 @@ function onLoad(saveString)
 	   click_function = 'drawBoxes',
 	   label = 'Highlight\nPlayers',
 	   function_owner = self,
-	   position = {1.62, 0.2, 0.8},
+	   position = {1.05, 0.3, 0.2},
 	   rotation = {0, 0, 0},
-	   width = 200,
-	   height = 200,
-	   font_size = 40
+	   width = 150,
+	   height = 100,
+	   font_size = 30
 	}
 	self.createButton(buttonParam)
 
