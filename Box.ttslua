@@ -103,18 +103,22 @@ function setupExpansion()
 						end
 
 						local options = Global.getTable('options')
+                        options.autoNotate = true
+                        options.gameType = 2
+                        options.fascistCards = 12
+                        options.liberalCards = 5
 						options.expansionAmount = 3
-						options.expansionOptionEnabled = 5
+                        options.expansionOptionEnabled = 13
 						options.policySafety = false
 						options.shufflePlayers = true
 						options.shuffleHost = false
 						options.voteHistory = true
-                        options.expansionOptionEnabled = 13
 						if options.zoneType ~= 6 then
 							options.zoneType = 5
 						end
 						Global.setTable('options', options)
 						Global.call('refreshExpansionButtons')
+                        Global.call('settingsPannelMakeButtons')
 						if options.zoneType ~= 6 then
 							Global.call('refreshHiddenZones')
 						end
