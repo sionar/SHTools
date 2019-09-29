@@ -7,8 +7,7 @@ Made by Sionar
 ------------------Constants
 VERSION = '1.2.3'
 START_POS = {x = 100, y = 1.1, z = 42}
-START_POS_BOTC = {x = -100, y = 1.1, z = 0}
-START_POS_BOTC_EX = {x = 58, y = 1.1, z = 105}
+START_POS_BOTC = {x = 50, y = 1.15, z = 85}
 COLOR_TABLE = {'White', 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple', 'Pink', 'Teal', 'Brown'}
 ROW_S = -1
 ROW_W = 0.25
@@ -39,7 +38,6 @@ function onLoad(saveString)
     refreshButtons()
     seatedList = getSeatedList()
     Wait.time(TimerRefresh, 1, -1)
---    broadcastToAll(LOGIN_MSG, stringColorToRGB('White'))
     for k,v in pairs(Player.getPlayers()) do
         v.print(LOGIN_MSG)
         if v.admin then
@@ -80,11 +78,8 @@ function moveBoard()
     if global_name == 'Secret Hitler: CE' then
         self.setPositionSmooth(START_POS)
         self.setLock(true)
-    elseif global_name == 'Blood on the Clocktower Scripted' then
+    elseif global_name == 'Blood on the Clocktower' then
         self.setPositionSmooth(START_POS_BOTC)
-        self.setLock(true)
-    elseif global_name == 'Blood on the Clocktower Ex' then
-        self.setPositionSmooth(START_POS_BOTC_EX)
         self.setLock(true)
     end
 end

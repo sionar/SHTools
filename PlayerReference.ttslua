@@ -28,6 +28,7 @@ PLAYERS =
 	'Astuart007',
 	'BigFrostie',
 	'Bless',
+	'Blooming',
 	'Bornis',
 	'BrianDRT',
 	'Brittany',
@@ -44,8 +45,9 @@ PLAYERS =
 	'GG77R6',
 	'Ghost',
 	'Ikigai',
+	'Katy',
 	'Kaz088',
-	'King of Stardew',
+	'Lambda',
 	'Lightning McQueen',
 	'Lost Savage',
 	'Manaphy',
@@ -88,9 +90,10 @@ function onLoad(saveString)
 	   function_owner = self,
 	   position = {1.05, 0.3, 0.2},
 	   rotation = {0, 0, 0},
-	   width = 150,
-	   height = 100,
-	   font_size = 30
+	   width = 600,
+	   height = 400,
+	   font_size = 120,
+	   scale = {0.25,0.25,0.25}
 	}
 	self.createButton(buttonParam)
 
