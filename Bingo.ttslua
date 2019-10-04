@@ -5,14 +5,14 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.4.2'
+VERSION = '1.5.0'
 NAME = 'Expansion Bingo'
 START_POS = {x = 100, y = 1.1, z = -52}
 X_POS = {}
 Z_POS = {}
 POS_START = -1.1
 POS_INC = POS_START * -2 / 4
-BOX_SIZE = 280
+BOX_SIZE = 1000
 for i = 1,5 do
     X_POS[i] = POS_START + (i-1) * POS_INC
     Z_POS[i] = POS_START + (i-1) * POS_INC
@@ -426,32 +426,32 @@ function refreshButtons()
     for i = 1,5 do
         for j = 1,5 do
             local buttonParam = {click_function = 'ij' .. i .. j, label = '', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
-                position = {X_POS[i],0.2,Z_POS[j]}, rotation = {0,0,0}, width = BOX_SIZE, height = BOX_SIZE, font_size = 35}
+                position = {X_POS[i],0.2,Z_POS[j]}, rotation = {0,0,0}, width = BOX_SIZE, height = BOX_SIZE, font_size = 140, scale = {0.25,0.25,0.25}}
             self.createButton(buttonParam)
         end
     end
 
     local buttonParam = {click_function = 'nullFunc', label = title, color = {0,0,0,1}, font_color = stringColorToRGB('Blue'), function_owner = self,
-        position = {0,0.2,-1.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 120}
+        position = {0,0.2,-1.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 480, scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'clearSquares', label = 'Clear\nSquares', color = stringColorToRGB('Blue'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-0.8,0.2,1.6}, rotation = {0,0,0}, width = 300, height = 200, font_size = 60}
+        position = {-0.8,0.2,1.6}, rotation = {0,0,0}, width = 1200, height = 800, font_size = 240, scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'shuffleSquaresFunc', label = 'Shuffle\nSquares', color = stringColorToRGB('Blue'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0,0.2,1.6}, rotation = {0,0,0}, width = 300, height = 200, font_size = 60}
+        position = {0,0.2,1.6}, rotation = {0,0,0}, width = 1200, height = 800, font_size = 240, scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'toggleLock', label = 'Toggle\nLock', color = stringColorToRGB('Blue'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0.8,0.2,1.6}, rotation = {0,0,0}, width = 300, height = 200, font_size = 60}
+        position = {0.8,0.2,1.6}, rotation = {0,0,0}, width = 1200, height = 800, font_size = 240, scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
     if player_id == nil then
         local inc = -0.2
         for i = 1,10 do
             local buttonParam = {click_function = 'giveBoard'..i, color = stringColorToRGB(COLOR[i]), function_owner = self,
-                position = {-1.7,0.2,1.6+(i-1)*inc}, rotation = {0,0,0}, width = 100, height = 100, font_size = 60, tooltip = 'Give board to ' .. COLOR[i]}
+                position = {-1.7,0.2,1.6+(i-1)*inc}, rotation = {0,0,0}, width = 350, height = 350, tooltip = 'Give board to ' .. COLOR[i], scale = {0.25,0.25,0.25}}
             self.createButton(buttonParam)
         end
     end
