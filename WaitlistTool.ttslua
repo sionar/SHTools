@@ -5,13 +5,13 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.2.3'
+VERSION = '1.2.7'
 START_POS = {x = 100, y = 1.1, z = 42}
 START_POS_BOTC = {x = 50, y = 1.15, z = 85}
 COLOR_TABLE = {'White', 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple', 'Pink', 'Teal', 'Brown'}
 ROW_S = -1
 ROW_W = 0.25
-BUTTON_SIZE = 100
+BUTTON_SIZE = 400
 COLUMN = {-0.9, 0, 0.5, 0.7, 0.9, 1.1, 1.3}
 ROW = {ROW_S + 0 * ROW_W, ROW_S + 1 * ROW_W, ROW_S + 2 * ROW_W, ROW_S + 3 * ROW_W, ROW_S + 4 * ROW_W, ROW_S + 5 * ROW_W, ROW_S + 6 * ROW_W, ROW_S + 7 * ROW_W, ROW_S + 8 * ROW_W, ROW_S + 9 * ROW_W, ROW_S + 10 * ROW_W}
 LOGIN_MSG = '[000000]-------------------------\n[FFFFFF]Waitlist Commands:\n[FFD700]!j [000000]or [FFD700]!join [FFFFFF]-- Join the waitlist.\n[FFD700]!l [000000]or [FFD700]!leave [FFFFFF]-- Leave the waitlist.\n[FFD700]!s [DDA0DD]Color [000000]or [FFD700]!sit [DDA0DD]Color [FFFFFF]-- Sit down at a color.\n[FFD700]!n [000000]or [FFD700]!nudge [FFFFFF]-- Nudge the player at the top of the waitlist.\n[FFD700]!h [000000]or [FFD700]!help [FFFFFF]-- Brings up this text\n[000000]-------------------------'
@@ -24,6 +24,8 @@ nudgeBlock = false
 maxPlayers = 10
 waitlist = {}
 seatedList = {}
+creationTime = 0
+timeElapsed = 0
 
 
 ------------------Save Load
@@ -32,20 +34,35 @@ function onLoad(saveString)
         local save = JSON.decode(saveString)
         waitlist = save['w']
         annouMsg = save['am']
+        timeElapsed = save['t']
     end
+    Wait.time(checkDupes,1)
+    creationTime = os.time()
     moveBoard()
     pruneWaitlist()
     refreshButtons()
     seatedList = getSeatedList()
     Wait.time(TimerRefresh, 1, -1)
-    for k,v in pairs(Player.getPlayers()) do
-        v.print(LOGIN_MSG)
-        if v.admin then
-            v.print(ADMIN_MSG)
+    self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
+end
+
+function checkDupes()
+    local allObj = getAllObjects()
+    local found = false
+    local otherTimeElapsed
+
+    for k,v in pairs(allObj) do
+        if v.getName() == 'Waitlist Tool' and v.getGUID() ~= self.getGUID() then
+            found = true
+            otherTimeElapsed = v.getVar('timeElapsed')
+            if timeElapsed < otherTimeElapsed then
+                self.destruct()
+            end
         end
     end
-    broadcastToAll(annouMsg, stringColorToRGB('Green'))
-    self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
+    if not found then
+        printStartMsg()
+    end
 end
 
 function TimerRefresh()
@@ -53,6 +70,16 @@ function TimerRefresh()
         local timeLabel = getWaitTime(i)
         self.editButton({index=(i-1)*7 + 2, label = timeLabel})
     end
+end
+
+function printStartMsg()
+    for k,v in pairs(Player.getPlayers()) do
+        v.print(LOGIN_MSG)
+        if v.admin then
+            v.print(ADMIN_MSG)
+        end
+    end
+    broadcastToAll(annouMsg, stringColorToRGB('Green'))
 end
 
 function getWaitTime(entryNum)
@@ -65,16 +92,17 @@ function getWaitTime(entryNum)
 end
 
 function onSave()
+    timeElapsed = os.time() - creationTime
     local save = {}
     save['w'] = waitlist
     save['am'] = annouMsg
+    save['t'] = timeElapsed
     local saveString = JSON.encode(save)
     return saveString
 end
 
 function moveBoard()
     local global_name = Global.getVar('MOD_NAME')
-    print(global_name)
     if global_name == 'Secret Hitler: CE' then
         self.setPositionSmooth(START_POS)
         self.setLock(true)
@@ -158,7 +186,6 @@ function onPlayerConnect(player)
     player.broadcast(LOGIN_MSG)
     player.broadcast(annouMsg,stringColorToRGB('Green'))
     refreshButtons()
-
 end
 
 function onPlayerDisconnect(player)
@@ -793,39 +820,39 @@ function refreshButtons()
     local timeLabel
 
     local buttonParam = {click_function = 'nullFunc', function_owner = self, label = 'Waitlist', color = {0,0,0,1}, font_color = stringColorToRGB('Blue'),
-        position = {0,0.2,-1.3}, width = 0, height = 0, font_size = 100}
+        position = {0,0.2,-1.3}, width = 0, height = 0, font_size = 400, scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
     for i = 1,#waitlist do
         local buttonParam = {click_function = 'move'..i, function_owner = self, label = getPlayerBySteamID(waitlist[i].id).steam_name, color = {0,0,0,1}, font_color = stringColorToRGB('White'),
-            position = {COLUMN[1],0.2,ROW[i]}, width = 700, height = BUTTON_SIZE, font_size = 80, tooltip = 'Seat player'}
+            position = {COLUMN[1],0.2,ROW[i]}, width = 2800, height = BUTTON_SIZE, font_size = 320, tooltip = 'Seat player', scale = {0.25,0.25,0.25}}
             if string.len(buttonParam.label) > 15 then
-               buttonParam.font_size = 40
+               buttonParam.font_size = 160
             end
         self.createButton(buttonParam)
 
         timeLabel = getWaitTime(i)
         local buttonParam = {click_function = 'nullFunc', function_owner = self, label = timeLabel, color = {0,0,0,1}, font_color = stringColorToRGB('Grey'),
-            position = {COLUMN[2],0.2,ROW[i]}, width = 0, height = 0, font_size = 80}
+            position = {COLUMN[2],0.2,ROW[i]}, width = 0, height = 0, font_size = 320, scale = {0.25,0.25,0.25}}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'vip'..i, function_owner = self, label = '⇪', color = {0,0,0,1}, font_color = stringColorToRGB('Blue'),
-            position = {COLUMN[3],0.2,ROW[i]}, width = BUTTON_SIZE, height = BUTTON_SIZE, font_size = 100, tooltip = 'Move to the top of the Waitlist'}
+            position = {COLUMN[3],0.2,ROW[i]}, width = BUTTON_SIZE, height = BUTTON_SIZE, font_size = 400, tooltip = 'Move to the top of the Waitlist', scale = {0.25,0.25,0.25}}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'up'..i, function_owner = self, label = '⇧', color = {0,0,0,1}, font_color = stringColorToRGB('Green'),
-            position = {COLUMN[4],0.2,ROW[i]}, width = BUTTON_SIZE, height = BUTTON_SIZE, font_size = 100, tooltip = 'Move up the Waitlist'}
+            position = {COLUMN[4],0.2,ROW[i]}, width = BUTTON_SIZE, height = BUTTON_SIZE, font_size = 400, tooltip = 'Move up the Waitlist', scale = {0.25,0.25,0.25}}
         self.createButton(buttonParam)
         local buttonParam = {click_function = 'down'..i, function_owner = self, label = '⇩', color = {0,0,0,1}, font_color = stringColorToRGB('Yellow'),
-            position = {COLUMN[5],0.2,ROW[i]}, width = BUTTON_SIZE, height = BUTTON_SIZE, font_size = 100, tooltip = 'Move down the Waitlist'}
+            position = {COLUMN[5],0.2,ROW[i]}, width = BUTTON_SIZE, height = BUTTON_SIZE, font_size = 400, tooltip = 'Move down the Waitlist', scale = {0.25,0.25,0.25}}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'bump'..i, function_owner = self, label = '⇪', color = {0,0,0,1}, font_color = stringColorToRGB('Orange'),
-            position = {COLUMN[6],0.2,ROW[i]-0.02}, rotation = {0, 180, 0}, width = BUTTON_SIZE, height = BUTTON_SIZE, font_size = 100, tooltip = 'Move to the bottom of the Waitlist'}
+            position = {COLUMN[6],0.2,ROW[i]-0.02}, rotation = {0, 180, 0}, width = BUTTON_SIZE, height = BUTTON_SIZE, font_size = 400, tooltip = 'Move to the bottom of the Waitlist', scale = {0.25,0.25,0.25}}
         self.createButton(buttonParam)
 
         local buttonParam = {click_function = 'remove'..i, function_owner = self, label = '✕', color = {0,0,0,1}, font_color = stringColorToRGB('Red'),
-            position = {COLUMN[7],0.2,ROW[i]}, width = BUTTON_SIZE, height = BUTTON_SIZE, font_size = 80, tooltip = 'Remove from the Waitlist'}
+            position = {COLUMN[7],0.2,ROW[i]}, width = BUTTON_SIZE, height = BUTTON_SIZE, font_size = 320, tooltip = 'Remove from the Waitlist', scale = {0.25,0.25,0.25}}
         self.createButton(buttonParam)
     end
 end
