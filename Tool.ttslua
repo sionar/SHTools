@@ -6,7 +6,7 @@ Made by Sionar
 
 ------------------Constants
 COLOR_TABLE = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Tan', 'Maroon'}
-COLOR_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Tan = '[D2B48C]', Maroon = '800000'}
+COLOR_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Tan = '[D2B48C]', Maroon = '[800000]'}
 DRAW_ZONE_GUID = '6463d3'
 DISCARD_ZONE_GUID = 'b9bd6e'
 EFFECT_ZONE_GUID = '374a16'

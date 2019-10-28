@@ -305,10 +305,10 @@ end
 
 function dealCoroutine()
     local params = {}
-    params[1] = {position = POS[1], rotation = FACE_DOWN_ROT, callback_function = function(obj) takeCallback(obj) end,}
-    params[2] = {position = POS[2], rotation = FACE_DOWN_ROT, callback_function = function(obj) takeCallback(obj) end,}
-    params[3] = {position = POS[3], rotation = FACE_DOWN_ROT, callback_function = function(obj) takeCallback(obj) end,}
-    params[4] = {position = POS[4], rotation = FACE_DOWN_ROT, callback_function = function(obj) takeCallback(obj) end,}
+    params[1] = {position = POS[1], rotation = FACE_DOWN_ROT}
+    params[2] = {position = POS[2], rotation = FACE_DOWN_ROT}
+    params[3] = {position = POS[3], rotation = FACE_DOWN_ROT}
+    params[4] = {position = POS[4], rotation = FACE_DOWN_ROT}
 
     local objParam = {
         type = "DeckCustom",
@@ -418,10 +418,6 @@ function dealCoroutine()
     end
 
     return 1
-end
-
-function takeCallback(obj)
-    obj.setState(2)
 end
 
 function checkSync()
