@@ -20,16 +20,16 @@ GIVE_TOOL_BUTTON_POS = {{1,0.2,0.9}, {0,0.2,0.9}, {-1,0.2,0.9}, {-1.7,0.2,0.3}, 
 
 POINTS =
 {
-    White = {29.3, LINE_HEIGHT, -26},
-    Brown = {0, LINE_HEIGHT, -26},
-    Red = {-29.3-0.5, LINE_HEIGHT, -26},
-    Orange = {-44, LINE_HEIGHT, -11.73},
-    Yellow = {-44, LINE_HEIGHT, 11.73+0.5},
-    Green = {-29.3, LINE_HEIGHT, 26},
-    Teal = {0, LINE_HEIGHT, 26},
-    Blue = {29.3+0.5, LINE_HEIGHT, 26},
-    Purple = {44, LINE_HEIGHT, 11.73},
-    Pink = {44, LINE_HEIGHT, -11.73-0.5},
+    White = Vector(29.3, LINE_HEIGHT, -26),
+    Brown = Vector(0, LINE_HEIGHT, -26),
+    Red = Vector(-29.3-0.5, LINE_HEIGHT, -26),
+    Orange = Vector(-44, LINE_HEIGHT, -11.73),
+    Yellow = Vector(-44, LINE_HEIGHT, 11.73+0.5),
+    Green = Vector(-29.3, LINE_HEIGHT, 26),
+    Teal = Vector(0, LINE_HEIGHT, 26),
+    Blue = Vector(29.3+0.5, LINE_HEIGHT, 26),
+    Purple = Vector(44, LINE_HEIGHT, 11.73),
+    Pink = Vector(44, LINE_HEIGHT, -11.73-0.5)
 }
 
 VALUE =
@@ -125,12 +125,12 @@ function addLineStraight(pColor1, pColor2, lColor)
     local point1 = POINTS[pColor1]
     local point2 = POINTS[pColor2]
     if (pColor1 == 'White' and pColor2 == 'Red') or (pColor1 == 'Red' and pColor2 == 'White') then
-        point1 = {point1[1],point1[2],point1[3]+0.5}
-        point2 = {point2[1],point2[2],point2[3]+0.5}
+        point1 = point1 + Vector(0, 0, 0.5)
+        point2 = point2 + Vector(0, 0, 0.5)
     end
     if (pColor1 == 'Green' and pColor2 == 'Blue') or (pColor1 == 'Blue' and pColor2 == 'Green') then
-        point1 = {point1[1],point1[2],point1[3]-0.5}
-        point2 = {point2[1],point2[2],point2[3]-0.5}
+        point1 = point1 - Vector(0, 0, 0.5)
+        point2 = point2 - Vector(0, 0, 0.5)
     end
     addSegment(pColor1, pColor2, point1, point2, lColor)
 end
@@ -630,8 +630,7 @@ function giveObjectToPlayer(object, playerColor, posAdd, rotAdd, ...)
         local greyPlayerHandGuids = Global.getTable('greyPlayerHandGuids')
 		local ph = getObjectFromGUID(greyPlayerHandGuids[playerColor])
 		if ph then
-			pos = ph.getPosition()
-			pos = {x = pos['x'], y = pos['y'], z = pos['z'] - 2.26}
+			pos = ph.getPosition() - Vector(0, 0, 2.26)
 			rot = ph.getRotation()
 			vForward = ph.getTransformForward()
 			vRight = ph.getTransformRight()
