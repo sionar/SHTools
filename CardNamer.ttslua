@@ -57,7 +57,7 @@ ABILITIES =
     {name = '[00BFFF]Anarchist[-]',         desc = '[FF4040][Right after an election fails with zero upvotes,] [FFFFFF]the election passes instead.\n[A0A0A0]-- OR --\n[FF4040][Right after an election passes with zero downvotes,] [FFFFFF]the election fails instead.[-]'},
     {name = '[-]Reporter[-]',               desc = '[FFFFFF]Look at the [3BC05E]policy deck [FFFFFF]then shuffle it. Draw three random abilities from the [934CE2]ability deck. [FFFFFF]Choose one ability and place it concealed in front of another [DAA520]target [FFFFFF]player. They may look at it and play it.[-]'},
     {name = '[-]Narcissist[-]',             desc = '[FF4040][When another player has the inspect power,] [FFFFFF]you must be inspected by that player. That player gives you an unused ability after the inspect.[-]'},
-    {name = '[-]Lunatic[-]',                desc = '[FF4040][Before Hitler Territory,] [FFFFFF]choose a direction. Each player (including dead players) except for you simultaneously gives an unused ability to the player next to them in that direction.[-]'},
+    {name = '[-]Lunatic[-]',                desc = '[FF4040][Before Hitler Territory,] [FFFFFF]choose a direction. Each player simultaneously gives an unused ability to the player next to them in that direction. You may play the ability given to you.[-]'},
     {name = '[-]Fisherman[-]',              desc = '[FF4040][When there are four or more tiles in the discard pile,] [FFFFFF]shuffle and draw three from the discard pile. You may place exactly two tiles into the [3BC05E]policy deck [FFFFFF]then shuffle the policy deck.[-]'},
     {name = '[-]Trickster[-]',              desc = '[FF4040][Reveal this ability before voting.] [FFFFFF]Move an unused [3BC05E]presidential power tile [FFFFFF]to an unoccupied non game-ending spot.\n[A0A0A0]-- OR --\n[FFFFFF]Swap the position of two unused [3BC05E]presidential power tiles.[-]'},
     {name = '[-]Magician[-]',               desc = '[FF4040][Right after a government is elected,] [FFFFFF]the chancellor draws policy tiles instead of the president. The chancellor gains the presidential power. If Dictator is active, the chancellor draws four tiles and the dictator receives two.[-]'},
@@ -111,8 +111,6 @@ EFFECTS =
     {name = '[6A5ACD]Artifact: Dagger of Compulsion[-]',            desc = '[20B09A][Reveal right after the player is elected as president.] [FFFFFF]The owner of the artifact becomes the president instead of you. You keep the presidential power unless Magician was played.[-]'},
     {name = '[000000]Life[-]',                                      desc = '[FFFFFF][-]'},
     {name = '[000000]Death[-]',                                     desc = '[FFFFFF][-]'},
-
-
 }
 
 PLAYERS =
@@ -148,9 +146,11 @@ PLAYERS =
     {name = '[000000]Negative Nancy[-]',                            desc = '[FFFFFF]You gain the [00FFFF]Quiet [FFFFFF]effect. Inspect each player\'s role. [FF0000]Look [FFFFFF]at each player\'s unused abilities.[-]'},
     {name = '[000000]Nikos[-]',                                     desc = '[FFFFFF]Choose a player. You may converse with them privately, even when either player is dead. You may play another ability.[-]'},
     {name = '[000000]Penshar[-]',                                   desc = '[DAA520]Target [FFFFFF]another player. That player and you both gain the [00FFFF]Quick [FFFFFF]effect.[-]'},
+    {name = '[000000]Perry[-]',                                     desc = '[FFFFFF]You may ignore any effects. You may nominate dead players to be chancellor. You are eligible for presidency even when you are dead.'},
     {name = '[000000]Piggy[-]',                                     desc = '[FFFFFF]Until Hitler Territory, once per round, you may shuffle and reveal the top ability of the [934CE2]ability deck. [FFFFFF]If you can play that ability, play it. Place the ability back into the ability deck.[-]'},
     {name = '[000000]Prinny[-]',                                    desc = '[FFFFFF]You gain the [00FFFF]Amnesic [FFFFFF]effect.[-]'},
     {name = '[000000]Rix[-]',                                       desc = '[FFFFFF]At the start of the twelth round after this one, all other players die unless you die.[-]'},
+    {name = '[000000]Rubio[-]',                                     desc = '[FF4040]Cannot be affected. [Right after you die,] [FFFFFF]play this ability. At the start of next game, before players discard their third ability, look at the [934CE2]ability deck [FFFFFF]and take one ability. You may play it.'},
     {name = '[000000]Severyn[-]',                                   desc = '[FF4040][Right after a player reveals an ability,] [FFFFFF]you use the ability instead.[-]'},
     {name = '[000000]Sionar[-]',                                    desc = '[FF4040]Cannot be copied. [DAA520]Target [FFFFFF]another player. That player must perform an action of your choice or die. If they are incapable of performing the action, then this ability has no effect.[-]'},
     {name = '[000000]Tetarus[-]',                                   desc = '[FFFFFF]Each time you correctly guess the next policy placed, gain two gold. Once per game, look at the [934CE2]ability deck [FFFFFF]and buy up to three abilities. The lowest tier of abilities cost one gold, and each tier increases in cost by one gold. Reveal the abilities that you bought. You may play them.[-]'},
