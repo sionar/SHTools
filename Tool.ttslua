@@ -92,10 +92,11 @@ function incAbDraw()
     abDrawMenu()
 end
 
-function piggyCall(clickedButton, playerColor)    --For calling ability draw from the Piggy card.
-    player = playerColor
+function piggyCall(params)    --For calling ability draw from the Piggy card.
+    player = params.player
     drawNum = 1
-    abDrawStart(_, playerColor)
+
+    abDrawStart(_, player)
 end
 
 function abDrawStart(clickedButton, playerColor)

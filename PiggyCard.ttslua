@@ -1,0 +1,22 @@
+TOOL_NAME = 'SH Expansion Tool'
+
+function onLoad()
+    local objects = getAllObjects()
+    tool = nil
+    for k,v in pairs(objects) do
+        if v.getName() == TOOL_NAME then
+            tool = v
+        end
+    end
+    local buttonParam = {click_function = 'piggyCall', label = "★", color = {1,1,1}, function_owner = self,
+        position = {0.8,0.4,1.2}, rotation = {0,0,0}, scale = {0.25,0.25,0.25}, width = 500, height = 500, font_size = 400}
+    self.createButton(buttonParam)
+end
+
+function piggyCall(clickedObject, playerColor)
+    if tool == nil then
+        return
+    end
+    local params = {player = playerColor}
+    tool.call('piggyCall', params)
+end
