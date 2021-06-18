@@ -324,19 +324,27 @@ function recWin(winningTeam)
     local lastFascistPlayed = Global.getVar('lastFascistPlayed')
     local roles = Global.getTable('roles')
     local payload = {}
-    local payloadJSON = ''
-
-    payload.players = {}
+    payload.winner = winningTeam
     for i,v in ipairs(sessionPlayers) do
-        table.insert(payload.players, {steam_name = v.nickname, steam_id = v.id, role = v.role})
+        payload["p_nick"..i] = v.nickname
+        payload["p_id"..i] = v.id
+        payload["p_role"..i] = v.role
     end
 
-    payload.game = {winner = winningTeam}
-    if winningTeam == 'fas' and lastFascistPlayed < 6 then
-        payload.game.winner = 'hitler'
-    end
-    payloadJSON = JSON.encode(payload)
-    WebRequest.post('https://shstats.teliot.dev/test.php', payloadJSON, recWinCallBack)
+
+    -- local payloadJSON = ''
+    --
+    -- payload.players = {}
+    -- for i,v in ipairs(sessionPlayers) do
+    --     table.insert(payload.players, {steam_name = v.nickname, steam_id = v.id, role = v.role})
+    -- end
+    --
+    -- payload.game = {winner = winningTeam}
+    -- if winningTeam == 'fas' and lastFascistPlayed < 6 then
+    --     payload.game.winner = 'hitler'
+    -- end
+    -- payloadJSON = JSON.encode(payload)
+    WebRequest.post('https://shstats.teliot.dev/test.php', payload, recWinCallBack)
 end
 
 function recWinCallback(response)
