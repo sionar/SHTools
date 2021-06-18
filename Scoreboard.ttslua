@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.9.0'
+VERSION = '2.0.0'
 DEBUG = false
 COLOR_TABLE = {'White', 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple', 'Pink', 'Teal', 'Brown'}
 BUTT_W = 0
@@ -230,7 +230,7 @@ function updateFunc()
     local players = Global.getTable('players')
     if players ~= nil then
         for k,v in pairs(players) do
-            entry = {id = Player[v].steam_id, role = roles[v]}
+            entry = {id = Player[v].steam_id, role = roles[v], nickname = Player[v].steam_name}
             table.insert(sessionPlayers,entry)
         end
     end
@@ -263,13 +263,14 @@ end
 function recLButtonFunc(clickedObject, playerColor)
     if Player[playerColor].admin then
         recLFunc()
+        recWin('lib')
     else
         broadcastToColor("Only promoted players can record the game.", playerColor, {1,0,0})
     end
 end
 
 function recLFunc()
-    if checkValid() then
+    if true then
         for k,v in pairs(sessionPlayers) do
             if v.role == 'liberal' then
                 db[v.id].lw = db[v.id].lw + 1
@@ -292,13 +293,14 @@ end
 function recFButtonFunc(clickedObject, playerColor)
     if Player[playerColor].admin then
         recFFunc()
+        recWin('fas')
     else
         broadcastToColor("Only promoted players can record the game.", playerColor, {1,0,0})
     end
 end
 
 function recFFunc()
-    if checkValid() then
+    if true then
         for k,v in pairs(sessionPlayers) do
             if v.role == 'liberal' then
                 db[v.id].lg = db[v.id].lg + 1
@@ -316,6 +318,29 @@ function recFFunc()
         onSave()
         refreshStart()
     end
+end
+
+function recWin(winningTeam)
+    local lastFascistPlayed = Global.getVar('lastFascistPlayed')
+    local roles = Global.getTable('roles')
+    local payload = {}
+    local payloadJSON = ''
+
+    payload.players = {}
+    for i,v in ipairs(sessionPlayers) do
+        table.insert(payload.players, {steam_name = v.nickname, steam_id = v.id, role = v.role})
+    end
+
+    payload.game = {winner = winningTeam}
+    if winningTeam == 'fas' and lastFascistPlayed < 6 then
+        payload.game.winner = 'hitler'
+    end
+    payloadJSON = JSON.encode(payload)
+    WebRequest.post('https://shstats.teliot.dev/test.php', payloadJSON, recWinCallBack)
+end
+
+function recWinCallback(response)
+
 end
 
 function updateRatings(winner)
