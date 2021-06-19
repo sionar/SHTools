@@ -339,16 +339,15 @@ function getScores()
     for i,v in ipairs(sessionPlayers) do
         query = query .. "id"..i.."="..v.id.."&"
     end
-    WebRequest.get('https://shstats.teliot.dev/search.php'..query, getScoresCallback)
+    WebRequest.get('https://shstats.teliot.dev/search.php'..query, function(req)
+        if req.is_done and not req.is_error then
+            local response = req.text
+
+        end
+
+    end)
 end
 
-function recWinCallback(response)
-
-end
-
-function getScoresCallback(response)
-
-end
 
 function updateRatings(winner)
     local libTeam = {}
