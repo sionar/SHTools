@@ -61,6 +61,7 @@ function onLoad(saveString)
     roles = Global.getTable('roles')
     recordCheck = false
     startTime = os.time()
+    updatePlayers()
     refreshStart()
     moveBoard()
     checkStarted()
@@ -125,7 +126,7 @@ function onChat(message, player)
         end
         return false
     elseif command == '!up' then
-        updateFunc()
+        updatePlayers()
         return false
     end
 end
@@ -137,7 +138,7 @@ end
 function checkStartedTimer()
     local started = Global.getVar('started')
     if started then
-        updateFunc()
+        updatePlayers()
     else
         checkStarted()
     end
@@ -205,13 +206,13 @@ end
 
 function updateStart(clickedObject, playerColor)
     if Player[playerColor].admin then
-        updateFunc()
+        updatePlayers()
     else
         broadcastToColor("Only promoted players can update the seated players.", playerColor, {1,0,0})
     end
 end
 
-function updateFunc()
+function updatePlayers()
     local entry = {}
     sessionPlayers = {}
     roles = Global.getTable('roles')
@@ -223,6 +224,7 @@ function updateFunc()
         end
     end
     broadcastToAll("Seated players updated.", {0,0,1})
+    getScores()
     refreshStart()
 end
 
@@ -259,7 +261,7 @@ end
 function recLFunc()
     if true then
         broadcastToAll("Liberal victory recorded.", {0,0,1})
-        recWin('lib')
+        recWin('liberal')
         refreshStart()
     end
 end
@@ -275,7 +277,7 @@ end
 function recFFunc()
     if true then
         broadcastToAll("Fascist victory recorded.", {1,0,0})
-        recWin('fas')
+        recWin('fascist')
         refreshStart()
     end
 end
@@ -290,7 +292,7 @@ function recWin(winningTeam)
         payload["p_id"..i] = tostring(v.id)
         payload["p_role"..i] = v.role
     end
-    WebRequest.post('https://shstats.teliot.dev/record.php', payload, function(request)
+    WebRequest.post('https://shstats.teliot.dev/record.php', payload, function(req)
 
 
     end)
@@ -301,8 +303,11 @@ function getScores()
     for i,v in ipairs(sessionPlayers) do
         query = query .. "id"..i.."="..v.id.."&"
     end
-    WebRequest.get('https://shstats.teliot.dev/search.php'..query, function(request)
+    WebRequest.get('https://shstats.teliot.dev/search.php'..query, function(req)
+        if req.is_done and not req.is_error then
+            local response = req.text
 
+        end
     end)
 end
 
