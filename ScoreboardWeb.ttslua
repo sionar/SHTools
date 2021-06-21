@@ -333,7 +333,7 @@ end
 
 function getStats()
     local query = "?gamestats=yes&"
-    if gameMode == 'vanilla' then
+    if gameType == 'vanilla' then
         query = query .. 'game_type=vanilla&'
     else
         query = query .. 'game_type=expansion&'
@@ -932,112 +932,119 @@ function lookupStart()
     local tab = self.getInputs()
     local steam_name = tab[1].value
     local steam_id = tab[2].value
-    local key = nil
 
     lookupMenu()
 
-    -- if steam_name ~= '' then
-    --     key = findPlayer(steam_name)
-    -- elseif steam_id ~= '' then
-    --     if db[steam_id] ~= nil then
-    --         key = steam_id
-    --     else
-    --         key = nil
-    --     end
-    -- end
-    --
-    -- if key ~= nil then
-    --     displayPlayerStats(key)
-    -- else
-    --     local buttonParam = {click_function = 'nullFunc', label = 'Player not found', color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-    --         position = {0,0.2,-0.8}, rotation = {0,0,0}, width = 0, height = 0, font_size = 320, scale = {0.25,0.25,0.25}}
-    --     self.createButton(buttonParam)
-    -- end
+
+    if steam_name ~= '' then
+        --placeholder
+    elseif steam_id ~= '' then
+        findPlayerById(steam_id)
+    end
 end
 
-function findPlayer(player_name)
-    -- local playersFound = 0
-    -- local key
-    -- for k,v in pairs(db) do
-    --     if string.match(string.lower(db[k].sn), string.lower(player_name)) then
-    --         playersFound = playersFound + 1
-    --         key = k
-    --     end
-    -- end
-    -- if(playersFound ~= 1) then
-    --     return nil
-    -- end
-    -- return key
+function findPlayerById(id)
+    local query = "?"
+    if gameType == 'vanilla' then
+        query = query .. 'game_type=vanilla&'
+    else
+        query = query .. 'game_type=expansion&'
+    end
+    query = query .. "steam_id="..id
+
+    WebRequest.get('https://beta.shstats.teliot.dev/search.php'..query, function(req)
+        if req.is_done and not req.is_error then
+            local response = req.text
+            local responseJSON = JSON.decode(response)
+            for k,v in pairs(responseJSON) do
+                stats[k] = v
+            end
+            displayPlayerStats(id)
+        end
+    end)
 end
+
 
 
 function displayPlayerStats(id)
-    local buttonParam = {click_function = 'nullFunc', label = 'placeholder', color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
+    local nn, gc, gw, lc, fc, hc, lw, fw, hw, lgr, owr, lwr, fwr, fhwr, hwr
+    nn = stats[id].nickname
+    gc = stats[id].games_count
+    gw = stats[id].games_won
+    lc = stats[id].liberal_count
+    fc = stats[id].fascist_count
+    hc = stats[id].hitler_count
+    lw = stats[id].liberal_wins
+    fw = stats[id].fascist_wins
+    hw = stats[id].hitler_wins
+
+
+    lgr = round(lc/gc * 100) .. "%"
+    owr = round(gw/gc * 100) .. "%"
+    lwr = round(lw/lc * 100) .. "%"
+    fwr = round(fw/fc * 100) .. "%"
+    fhwr = round((fw+hw)/(fc+hc) * 100) .. "%"
+    hwr = round(hw/hc * 100) .. "%"
+
+    local buttonParam = {click_function = 'nullFunc', label = nn, color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
         position = {0,0.2,-0.8}, rotation = {0,0,0}, width = 0, height = 0, font_size = 400, scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'nullFunc', label = 'placeholder', color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
+    local buttonParam = {click_function = 'nullFunc', label = 'Games Played: ' .. gc, color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
         position = {-0.8,0.2,-0.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 240, scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'nullFunc', label = 'Games Won: ' .. 'placeholder', color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
+    local buttonParam = {click_function = 'nullFunc', label = 'Games Won: ' .. gw, color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
         position = {-0.8,0.2,-0.3}, rotation = {0,0,0}, width = 0, height = 0, font_size = 240, scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'nullFunc', label = 'Overall Win Rate: ' .. 'placeholder' .. '%', color = BUTT_B_COLOR, font_color = stringColorToRGB('Purple'), function_owner = self,
+    local buttonParam = {click_function = 'nullFunc', label = 'Overall Win Rate: ' .. owr, color = BUTT_B_COLOR, font_color = stringColorToRGB('Purple'), function_owner = self,
         position = {-0.8,0.2,-0.1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 240, scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'nullFunc', label = '% of Games as Liberal: ' .. 'placeholder' .. '%', color = BUTT_B_COLOR, font_color = stringColorToRGB('Blue'), function_owner = self,
+    local buttonParam = {click_function = 'nullFunc', label = '% of Games as Liberal: ' .. lgr, color = BUTT_B_COLOR, font_color = stringColorToRGB('Blue'), function_owner = self,
         position = {-0.8,0.2,0.1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 240, scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
 
-    local buttonParam = {click_function = 'nullFunc', label = 'Liberal Games Played: ' .. 'placeholder', color = BUTT_B_COLOR, font_color = stringColorToRGB('Blue'), function_owner = self,
+    local buttonParam = {click_function = 'nullFunc', label = 'Liberal Games Played: ' .. lc, color = BUTT_B_COLOR, font_color = stringColorToRGB('Blue'), function_owner = self,
         position = {-0.8,0.2,0.3}, rotation = {0,0,0}, width = 0, height = 0, font_size = 240, scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'nullFunc', label = 'Liberal Games Won: ' .. 'placeholder', color = BUTT_B_COLOR, font_color = stringColorToRGB('Blue'), function_owner = self,
+    local buttonParam = {click_function = 'nullFunc', label = 'Liberal Games Won: ' .. lw, color = BUTT_B_COLOR, font_color = stringColorToRGB('Blue'), function_owner = self,
         position = {-0.8,0.2,0.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 240, scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'nullFunc', label = 'Liberal Win Rate: ' .. 'placeholder' .. '%', color = BUTT_B_COLOR, font_color = stringColorToRGB('Blue'), function_owner = self,
+    local buttonParam = {click_function = 'nullFunc', label = 'Liberal Win Rate: ' .. lwr, color = BUTT_B_COLOR, font_color = stringColorToRGB('Blue'), function_owner = self,
         position = {-0.8,0.2,0.7}, rotation = {0,0,0}, width = 0, height = 0, font_size = 240, scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'nullFunc', label = 'Liberal Rating: ' .. 'placeholder', color = BUTT_B_COLOR, font_color = stringColorToRGB('Blue'), function_owner = self,
-        position = {-0.8,0.2,0.9}, rotation = {0,0,0}, width = 0, height = 0, font_size = 240, scale = {0.25,0.25,0.25}}
-    self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'nullFunc', label = 'Fascist Games Played: ' .. 'placeholder', color = BUTT_B_COLOR, font_color = stringColorToRGB('Yellow'), function_owner = self,
+    local buttonParam = {click_function = 'nullFunc', label = 'Fascist Games Played: ' .. fc, color = BUTT_B_COLOR, font_color = stringColorToRGB('Yellow'), function_owner = self,
         position = {0.8,0.2,-0.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 240, scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'nullFunc', label = 'Fascist Games Won: ' .. 'placeholder', color = BUTT_B_COLOR, font_color = stringColorToRGB('Yellow'), function_owner = self,
+    local buttonParam = {click_function = 'nullFunc', label = 'Fascist Games Won: ' .. fw, color = BUTT_B_COLOR, font_color = stringColorToRGB('Yellow'), function_owner = self,
         position = {0.8,0.2,-0.3}, rotation = {0,0,0}, width = 0, height = 0, font_size = 240, scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'nullFunc', label = 'Fascist Win Rate: ' .. 'placeholder' .. '%', color = BUTT_B_COLOR, font_color = stringColorToRGB('Yellow'), function_owner = self,
+    local buttonParam = {click_function = 'nullFunc', label = 'Fascist Win Rate: ' .. fwr, color = BUTT_B_COLOR, font_color = stringColorToRGB('Yellow'), function_owner = self,
         position = {0.8,0.2,-0.1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 240, scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'nullFunc', label = 'Fas+Hit Win Rate: ' .. 'placeholder' .. '%', color = BUTT_B_COLOR, font_color = stringColorToRGB('Orange'), function_owner = self,
+    local buttonParam = {click_function = 'nullFunc', label = 'Fas+Hit Win Rate: ' .. fhwr, color = BUTT_B_COLOR, font_color = stringColorToRGB('Orange'), function_owner = self,
         position = {0.8,0.2,0.1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 240, scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'nullFunc', label = 'Hitler Games Played: ' .. 'placeholder', color = BUTT_B_COLOR, font_color = stringColorToRGB('Red'), function_owner = self,
+    local buttonParam = {click_function = 'nullFunc', label = 'Hitler Games Played: ' .. hc, color = BUTT_B_COLOR, font_color = stringColorToRGB('Red'), function_owner = self,
         position = {0.8,0.2,0.3}, rotation = {0,0,0}, width = 0, height = 0, font_size = 240, scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'nullFunc', label = 'Hitler Games Won: ' .. 'placeholder', color = BUTT_B_COLOR, font_color = stringColorToRGB('Red'), function_owner = self,
+    local buttonParam = {click_function = 'nullFunc', label = 'Hitler Games Won: ' .. hw, color = BUTT_B_COLOR, font_color = stringColorToRGB('Red'), function_owner = self,
         position = {0.8,0.2,0.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 240, scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'nullFunc', label = 'Hitler Win Rate: ' .. 'placeholder' .. '%', color = BUTT_B_COLOR, font_color = stringColorToRGB('Red'), function_owner = self,
+    local buttonParam = {click_function = 'nullFunc', label = 'Hitler Win Rate: ' .. hwr, color = BUTT_B_COLOR, font_color = stringColorToRGB('Red'), function_owner = self,
         position = {0.8,0.2,0.7}, rotation = {0,0,0}, width = 0, height = 0, font_size = 240, scale = {0.25,0.25,0.25}}
-    self.createButton(buttonParam)
-
-    local buttonParam = {click_function = 'nullFunc', label = 'Fascist Rating: ' .. 'placeholder', color = BUTT_B_COLOR, font_color = stringColorToRGB('Red'), function_owner = self,
-        position = {0.8,0.2,0.9}, rotation = {0,0,0}, width = 0, height = 0, font_size = 240, scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 end
