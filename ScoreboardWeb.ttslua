@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '2.0.0'
+VERSION = '2.0.1'
 DEBUG = false
 COLOR_TABLE = {'White', 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple', 'Pink', 'Teal', 'Brown'}
 BUTT_W = 0
@@ -81,7 +81,7 @@ function onChat(message, player)
     local command
 
     for i in string.gmatch(message, "%S+") do
-            args[#args + 1] = i
+        args[#args + 1] = i
     end
 
     if args[1] ~= nil then
@@ -136,6 +136,26 @@ function onChat(message, player)
     end
 end
 
+function onPlayerConnect(player)
+    local query = "?"
+    if gameType == 'vanilla' then
+        query = query .. 'game_type=vanilla&'
+    else
+        query = query .. 'game_type=expansion&'
+    end
+    query = query .. "steam_id="..player.steam_id
+
+    WebRequest.get('https://shstats.teliot.dev/search.php'..query, function(req)
+        if req.is_done and not req.is_error then
+            local response = req.text
+            local responseJSON = JSON.decode(response)
+            for k,v in pairs(responseJSON) do
+                stats[k] = v
+            end
+        end
+    end)
+end
+
 function checkStarted()
     Wait.time(checkStartedTimer, 5)
 end
@@ -178,12 +198,16 @@ function refreshStart()
             fhWR[i] = ""
             totWR[i] = ""
         else
-            lw = stats[Player[COLOR_TABLE[i]].steam_id].liberal_wins
-            fw = stats[Player[COLOR_TABLE[i]].steam_id].fascist_wins
-            hw = stats[Player[COLOR_TABLE[i]].steam_id].hitler_wins
-            lg= stats[Player[COLOR_TABLE[i]].steam_id].liberal_count
-            fg= stats[Player[COLOR_TABLE[i]].steam_id].fascist_count
-            hg= stats[Player[COLOR_TABLE[i]].steam_id].hitler_count
+            if stats[Player[COLOR_TABLE[i]].steam_id] ~= nil then
+                lw = stats[Player[COLOR_TABLE[i]].steam_id].liberal_wins
+                fw = stats[Player[COLOR_TABLE[i]].steam_id].fascist_wins
+                hw = stats[Player[COLOR_TABLE[i]].steam_id].hitler_wins
+                lg= stats[Player[COLOR_TABLE[i]].steam_id].liberal_count
+                fg= stats[Player[COLOR_TABLE[i]].steam_id].fascist_count
+                hg= stats[Player[COLOR_TABLE[i]].steam_id].hitler_count
+            else
+                lw, fw, hw, lg, fg, hg = 0,0,0,0,0,0
+            end
 
             gamesPlayed[i] = lg + fg + hg
             if gamesPlayed[i] == 0 then
@@ -263,7 +287,7 @@ function toggleGameType(clickedObject, playerColor)
             broadcastToAll('Game type has been set to Vanilla.')
         end
     end
-    refreshStart()
+    getStats()
 end
 
 function recLButtonFunc(clickedObject, playerColor)
@@ -275,7 +299,7 @@ function recLButtonFunc(clickedObject, playerColor)
 end
 
 function recLFunc()
-    if true then
+    if checkValid() then
         broadcastToAll("Liberal victory recorded.", {0,0,1})
         recWin('liberal')
         refreshStart()
@@ -291,8 +315,8 @@ function recHButtonFunc(clickedObject, playerColor)
 end
 
 function recHFunc()
-    if true then
-        broadcastToAll("Hitler victory recorded.", {0,0,1})
+    if checkValid() then
+        broadcastToAll("Hitler victory recorded.", {1,0,0})
         recWin('hitler')
         refreshStart()
     end
@@ -307,7 +331,7 @@ function recFButtonFunc(clickedObject, playerColor)
 end
 
 function recFFunc()
-    if true then
+    if checkValid() then
         broadcastToAll("Fascist victory recorded.", {1,0,0})
         recWin('fascist')
         refreshStart()
@@ -326,8 +350,9 @@ function recWin(winningTeam)
         payload["p_role"..i] = v.role
     end
     WebRequest.post('https://shstats.teliot.dev/record.php', payload, function(req)
-
-
+        if req.is_done and not req.is_error then
+            getStats()
+        end
     end)
 end
 
@@ -937,10 +962,33 @@ function lookupStart()
 
 
     if steam_name ~= '' then
-        --placeholder
+        findPlayerByName(steam_name)
     elseif steam_id ~= '' then
         findPlayerById(steam_id)
     end
+end
+
+function findPlayerByName(name)
+    local query = "?"
+    local id
+    if gameType == 'vanilla' then
+        query = query .. 'game_type=vanilla&'
+    else
+        query = query .. 'game_type=expansion&'
+    end
+    query = query .. "steam_name="..name
+
+    WebRequest.get('https://shstats.teliot.dev/search.php'..query, function(req)
+        if req.is_done and not req.is_error then
+            local response = req.text
+            local responseJSON = JSON.decode(response)
+            for k,v in pairs(responseJSON) do
+                stats[k] = v
+                id = k
+            end
+            displayPlayerStats(id)
+        end
+    end)
 end
 
 function findPlayerById(id)
@@ -952,7 +1000,7 @@ function findPlayerById(id)
     end
     query = query .. "steam_id="..id
 
-    WebRequest.get('https://beta.shstats.teliot.dev/search.php'..query, function(req)
+    WebRequest.get('https://shstats.teliot.dev/search.php'..query, function(req)
         if req.is_done and not req.is_error then
             local response = req.text
             local responseJSON = JSON.decode(response)
@@ -964,27 +1012,26 @@ function findPlayerById(id)
     end)
 end
 
-
-
 function displayPlayerStats(id)
-    local nn, gc, gw, lc, fc, hc, lw, fw, hw, lgr, owr, lwr, fwr, fhwr, hwr
-    nn = stats[id].nickname
-    gc = stats[id].games_count
-    gw = stats[id].games_won
-    lc = stats[id].liberal_count
-    fc = stats[id].fascist_count
-    hc = stats[id].hitler_count
-    lw = stats[id].liberal_wins
-    fw = stats[id].fascist_wins
-    hw = stats[id].hitler_wins
+    local nn, gc, gw, lc, fc, hc, lw, fw, hw, lgr, owr, lwr, fwr, fhwr, hwr = 'Player not found',0,0,0,0,0,0,0,0,0,0,0,0,0,0
+    if stats[id] ~= nil then
+        nn = stats[id].nickname
+        gc = stats[id].games_count
+        gw = stats[id].total_wins
+        lc = stats[id].liberal_count
+        fc = stats[id].fascist_count
+        hc = stats[id].hitler_count
+        lw = stats[id].liberal_wins
+        fw = stats[id].fascist_wins
+        hw = stats[id].hitler_wins
 
-
-    lgr = round(lc/gc * 100) .. "%"
-    owr = round(gw/gc * 100) .. "%"
-    lwr = round(lw/lc * 100) .. "%"
-    fwr = round(fw/fc * 100) .. "%"
-    fhwr = round((fw+hw)/(fc+hc) * 100) .. "%"
-    hwr = round(hw/hc * 100) .. "%"
+        lgr = round(lc/gc * 100) .. "%"
+        owr = round(gw/gc * 100) .. "%"
+        lwr = round(lw/lc * 100) .. "%"
+        fwr = round(fw/fc * 100) .. "%"
+        fhwr = round((fw+hw)/(fc+hc) * 100) .. "%"
+        hwr = round(hw/hc * 100) .. "%"
+    end
 
     local buttonParam = {click_function = 'nullFunc', label = nn, color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
         position = {0,0.2,-0.8}, rotation = {0,0,0}, width = 0, height = 0, font_size = 400, scale = {0.25,0.25,0.25}}
