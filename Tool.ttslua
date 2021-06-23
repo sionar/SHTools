@@ -347,9 +347,11 @@ function gambleCoroutine()
         end
         gambleTable[player] = card.getName()
         gambleResult = 'w'
+        WebRequest.post('https://shstats.teliot.dev/gamble.php?id=' .. Player[player].steam_id .. '&result=win')
     else
         broadcastString = broadcastString .. "lost!"
         gambleResult = 'l'
+        WebRequest.post('https://shstats.teliot.dev/gamble.php?id=' .. Player[player].steam_id .. '&result=lose')
     end
 
     ---Scoreboard code

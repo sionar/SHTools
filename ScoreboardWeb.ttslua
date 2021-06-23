@@ -238,10 +238,15 @@ end
 
 function updatePlayers()
     local entry = {}
+    local roles = {}
+    local started = false
     sessionPlayers = {}
-    roles = Global.getTable('roles')
-    local players
-    local started = Global.getVar('started')
+    local global_name = Global.getVar('MOD_NAME')
+    if global_name == 'Secret Hitler: CE' then
+        roles = Global.getTable('roles')
+        started = Global.getVar('started')
+    end
+    local players = nil
     if not started then
         players = getSeatedPlayers()
     else
@@ -976,7 +981,7 @@ function findPlayerByName(name)
     else
         query = query .. 'game_type=expansion&'
     end
-    query = query .. "steam_name="..name
+    query = query .. "nickname="..name
 
     WebRequest.get('https://shstats.teliot.dev/search.php'..query, function(req)
         if req.is_done and not req.is_error then
