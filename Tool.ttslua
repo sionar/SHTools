@@ -480,7 +480,7 @@ function martyrStart2()
     returnFunc()
 end
 
-function empathStart(clickedButton, playerColor)
+function dervishStart(clickedButton, playerColor)
     if numSelected == 0 then
         broadcastToColor("ERROR: Target not selected", playerColor, {1,0,0})
         return
@@ -1155,7 +1155,7 @@ function mainMenu()
         position = {-0.575,0.2,0.48}, rotation = {0,0,0}, width = 500, height = 225, font_size = 100}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'empathMenu', label = "Empath", color = {1,1,1}, function_owner = self,
+    local buttonParam = {click_function = 'dervishMenu', label = "Dervish", color = {1,1,1}, function_owner = self,
         position = {-0.575,0.2,0.95}, rotation = {0,0,0}, width = 500, height = 225, font_size = 100}
     self.createButton(buttonParam)
 
@@ -1366,7 +1366,7 @@ function martyrMenu()
     createReturnButton()
 end
 
-function empathMenu()
+function dervishMenu()
     self.clearButtons()
     state = 15
 
@@ -1554,7 +1554,7 @@ function createStartButton()
     elseif state == 12 then         buttonParam.click_function = 'fisherStart'
     elseif state == 13 then         buttonParam.click_function = 'randStart'
     elseif state == 14 then         buttonParam.click_function = 'abDrawStart'
-    elseif state == 15 then         buttonParam.click_function = 'empathStart'
+    elseif state == 15 then         buttonParam.click_function = 'dervishStart'
     end
     self.createButton(buttonParam)
 end
@@ -1723,7 +1723,7 @@ function createLabelButton()
     elseif  state == 12 then        buttonParam.label = "Fisherman"
     elseif  state == 13 then        buttonParam.label = "Random\nColor"
     elseif  state == 14 then        buttonParam.label = "Player"
-    elseif  state == 15 then        buttonParam.label = "Empath"
+    elseif  state == 15 then        buttonParam.label = "Dervish"
     end
     self.createButton(buttonParam)
 end
@@ -1836,7 +1836,7 @@ function refreshButtons()
     elseif state == 14 then
        abDrawMenu()
     elseif state == 15 then
-       empathMenu()
+       dervishMenu()
     end
 end
 
