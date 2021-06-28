@@ -480,6 +480,95 @@ function martyrStart2()
     returnFunc()
 end
 
+function empathStart(clickedButton, playerColor)
+    if numSelected == 0 then
+        broadcastToColor("ERROR: Target not selected", playerColor, {1,0,0})
+        return
+    end
+
+    local targetColor
+    local found = false
+    for i,v in ipairs(targSelected) do
+        if v == 1 then
+            targetColor = COLOR_TABLE[i]
+        end
+    end
+    local player1SteamId = Player[player].steam_id
+    local player2SteamId = Player[targetColor].steam_id
+    local roles = Global.getTable('roles')
+    local hitler = Global.getTable('hitler')
+    local fascists = Global.getTable('fascists')
+
+    if roles[player] == nil or roles[targetColor] == nil then
+        broadcastToColor("ERROR: At least one of the seats you selected is not playing.", playerColor, {1,0,0})
+        return
+    end
+    Player[player].changeColor('Grey')
+    Player[targetColor].changeColor('Grey')
+
+    if roles[player] == 'hitler' then
+        hitler[1] = targetColor
+    end
+    if roles[targetColor] == 'hitler' then
+        hitler[1] = player
+    end
+    if roles[player] == 'fascist' then
+        for i,v in ipairs(fascists) do
+            if v == player then
+                fascists[i] = targetColor
+            end
+        end
+    end
+    if roles[targetColor] == 'fascist' then
+        for i,v in ipairs(fascists) do
+            if v == targetColor then
+                fascists[i] = player
+            end
+        end
+    end
+    roles[player], roles[targetColor] = roles[targetColor], roles[player]
+    Global.setTable('roles', roles)
+    Global.setTable('hitler', hitler)
+    Global.setTable('fascists', fascists)
+    Global.call('refreshUI')
+    for k,v in pairs(Player.getPlayers()) do
+        if player1SteamId ~= nil and v.steam_id == player1SteamId then
+            v.changeColor(targetColor)
+        end
+        if player2SteamId ~= nil and v.steam_id == player2SteamId then
+            v.changeColor(player)
+        end
+    end
+    swapObjects(player, targetColor)
+    returnFunc()
+end
+
+function swapObjects(color1, color2)
+    local HIDDEN_ZONE_GUIDS = Global.getTable('HIDDEN_ZONE_GUIDS')
+    local HAND_GUIDS = {White = '607c55', Brown = '502823', Red = '0059ce', Orange = 'f9fa27', Yellow = '0142f7', Green = 'e66061', Teal = 'e1eb39', Blue = '64f06e', Purple = 'd947f6', Pink = '2ee8f0'}
+    local hand1Pos = getObjectFromGUID(HAND_GUIDS[color1]).getPosition()
+    local hand2Pos = getObjectFromGUID(HAND_GUIDS[color2]).getPosition()
+    local hand1Objects = getObjectFromGUID(HIDDEN_ZONE_GUIDS[color1]).getObjects()
+    local hand2Objects = getObjectFromGUID(HIDDEN_ZONE_GUIDS[color2]).getObjects()
+    local rot
+    for k,v in pairs(hand1Objects) do
+        if not string.match(v.getDescription(), 'Ja Card') and not string.match(v.getDescription(), 'Nein Card') then
+            rot = v.getRotation()
+            rot.z = 180
+            v.setRotation(rot)
+            v.setPosition(hand2Pos)
+        end
+    end
+    for k,v in pairs(hand2Objects) do
+        if not string.match(v.getDescription(), 'Ja Card') and not string.match(v.getDescription(), 'Nein Card') then
+            rot = v.getRotation()
+            rot.z = 180
+            v.setRotation(rot)
+            v.setPosition(hand1Pos)
+        end
+    end
+end
+
 function startShufTimer()
     Wait.time(shufCheck, 1)
 end
@@ -1047,23 +1136,27 @@ function mainMenu()
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'inspMenu', label = "Inspect", color = {1,1,1}, function_owner = self,
-        position = {-1.7,0.2,0.95}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
+        position = {-1.7,0.2,0.95}, rotation = {0,0,0}, width = 500, height = 225, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'spelunMenu', label = "Spelunker", color = {1,1,1}, function_owner = self,
-        position = {-0.575,0.2,-0.85}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
+        position = {-0.575,0.2,-0.90}, rotation = {0,0,0}, width = 500, height = 225, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'gambleMenu', label = "Gambler", color = {1,1,1}, function_owner = self,
-        position = {-0.575,0.2,-0.25}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
+        position = {-0.575,0.2,-0.44}, rotation = {0,0,0}, width = 500, height = 225, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'fisherMenu', label = "Fisherman", color = {1,1,1}, function_owner = self,
-        position = {-0.575,0.2,0.35}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
+        position = {-0.575,0.2,0.02}, rotation = {0,0,0}, width = 500, height = 225, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'martyrMenu', label = "Martyr", color = {1,1,1}, function_owner = self,
-        position = {-0.575,0.2,0.95}, rotation = {0,0,0}, width = 500, height = 275, font_size = 100}
+        position = {-0.575,0.2,0.48}, rotation = {0,0,0}, width = 500, height = 225, font_size = 100}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'empathMenu', label = "Empath", color = {1,1,1}, function_owner = self,
+        position = {-0.575,0.2,0.95}, rotation = {0,0,0}, width = 500, height = 225, font_size = 100}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'reshufMenu', label = "Reshuffle", color = {1,1,1}, function_owner = self,
@@ -1273,6 +1366,17 @@ function martyrMenu()
     createReturnButton()
 end
 
+function empathMenu()
+    self.clearButtons()
+    state = 15
+
+    createSingleTargetButtons()
+    createLabelButton()
+    createPlayerButtons()
+    createStartButton()
+    createReturnButton()
+end
+
 
 function givepMenu()
     self.clearButtons()
@@ -1450,6 +1554,7 @@ function createStartButton()
     elseif state == 12 then         buttonParam.click_function = 'fisherStart'
     elseif state == 13 then         buttonParam.click_function = 'randStart'
     elseif state == 14 then         buttonParam.click_function = 'abDrawStart'
+    elseif state == 15 then         buttonParam.click_function = 'empathStart'
     end
     self.createButton(buttonParam)
 end
@@ -1498,7 +1603,7 @@ function createTargetButtons()
     local buttonParam = {}
 
     if state ~= 8 then
-        local buttonParam = {click_function = 'nulFunc', label = "Inspected", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
+        buttonParam = {click_function = 'nulFunc', label = "Inspected", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
             position = {0,0.2,-1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 150}
         self.createButton(buttonParam)
     end
@@ -1520,6 +1625,46 @@ function createTargetButtons()
         buttonParam.position = posTable[i]
         buttonParam.font_color = RGB(COLOR_TABLE[i])
         buttonParam.font_size = 50
+        buttonParam.height = 50
+
+        if targSelected[i] == 1 then
+            buttonParam.color = RGB(COLOR_TABLE[i])
+        else
+            buttonParam.color = {0,0,0,1}
+        end
+        self.createButton(buttonParam)
+    end
+end
+
+function createSingleTargetButtons()
+    local options = Global.getTable('options')
+    local iLimit, posTable
+    local buttonParam = {}
+
+    if state == 15 then
+        buttonParam = {click_function = 'nulFunc', label = "Target", color = {0,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
+            position = {0,0.2,-1}, rotation = {0,0,0}, width = 0, height = 0, font_size = 150}
+        self.createButton(buttonParam)
+    end
+
+    if options.zoneType == 6 then
+        iLimit = 12
+        posTable = TARGET_BUTTON_POS_12P
+        buttonParam.width = 200
+    else
+        iLimit = 10
+        posTable = TARGET_BUTTON_POS_10P
+        buttonParam.width = 300
+    end
+
+    for i = 1,iLimit do
+        buttonParam.click_function = 'setSingleTarget' .. i
+        buttonParam.label = COLOR_TABLE[i]
+        buttonParam.function_owner = self
+        buttonParam.position = posTable[i]
+        buttonParam.font_color = RGB(COLOR_TABLE[i])
+        buttonParam.font_size = 50
+        buttonParam.height = 50
 
         if targSelected[i] == 1 then
             buttonParam.color = RGB(COLOR_TABLE[i])
@@ -1578,6 +1723,7 @@ function createLabelButton()
     elseif  state == 12 then        buttonParam.label = "Fisherman"
     elseif  state == 13 then        buttonParam.label = "Random\nColor"
     elseif  state == 14 then        buttonParam.label = "Player"
+    elseif  state == 15 then        buttonParam.label = "Empath"
     end
     self.createButton(buttonParam)
 end
@@ -1634,6 +1780,30 @@ for k = 1,12 do
     end
 end
 
+function setSingleTarget(clickedButton, playerColor, index)
+    if Player[playerColor].admin or not promOnly then
+        if targSelected[index] == 0 then
+            targSelected[index] = 1
+            numSelected = 1
+            for i,v in pairs(targSelected) do
+                if i ~= index then
+                    targSelected[i] = 0
+                end
+            end
+        else
+            targSelected[index] = 0
+            numSelected = 0
+        end
+        refreshButtons()
+    end
+end
+
+for k = 1,12 do
+    _G['setSingleTarget' .. k] = function(obj, col)
+        setSingleTarget(obj, col, k)
+    end
+end
+
 function refreshButtons()
     if state == 0 then
         mainMenu()
@@ -1665,6 +1835,8 @@ function refreshButtons()
         randMenu()
     elseif state == 14 then
        abDrawMenu()
+    elseif state == 15 then
+       empathMenu()
     end
 end
 
