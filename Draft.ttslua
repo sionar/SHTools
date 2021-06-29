@@ -163,6 +163,11 @@ end
 ------------------Main Functions
 function setupStart(clickedObject, playerColor)
 	if Player[playerColor].admin then
+        if #getSeatedPlayers() < 2 then
+            Player[playerColor].broadcast('Error: You need more than one player seated to start drafting.', {1,0,0})
+            return
+        end
+
         Global.call('deleteCustomBoardCards')
         local options = Global.getTable('options')
         options.shufflePlayers = false

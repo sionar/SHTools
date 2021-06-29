@@ -540,6 +540,7 @@ function dervishStart(clickedButton, playerColor)
         end
     end
     swapObjects(player, targetColor)
+    swapNotes(player, targetColor)
     returnFunc()
 end
 
@@ -567,6 +568,24 @@ function swapObjects(color1, color2)
             v.setPosition(hand1Pos)
         end
     end
+end
+
+function swapNotes(color1, color2)
+    local noteTakerNotes = Global.getTable('noteTakerNotes')
+    for i,v in ipairs(noteTakerNotes) do
+        if v.color1 == color1 then
+            noteTakerNotes[i].color1 = color2
+        elseif v.color1 == color2 then
+            noteTakerNotes[i].color1 = color1
+        end
+        if v.color2 == color1 then
+            noteTakerNotes[i].color2 = color2
+        elseif v.color2 == color2 then
+            noteTakerNotes[i].color2 = color1
+        end
+    end
+    Global.setTable('noteTakerNotes', noteTakerNotes)
+    Global.call('refreshNotes')
 end
 
 function startShufTimer()
