@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '2.0.2'
+VERSION = '2.0.3'
 DEBUG = false
 COLOR_TABLE = {'White', 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple', 'Pink', 'Teal', 'Brown'}
 BUTT_W = 0
@@ -92,13 +92,9 @@ function onChat(message, player)
         if args[2] == nil then
             player.broadcast('Please enter a name.', {1,0,0})
             return false
-        end
-        local key = findPlayer(args[2])
-        if key == nil then
-            player.broadcast('Player not found.', {1,0,0})
         else
             lookupMenu()
-            displayPlayerStats(key)
+            findPlayerByName(args[2])
         end
         return false
     elseif command == '!s1' then
@@ -369,7 +365,9 @@ function getStats()
         query = query .. 'game_type=expansion&'
     end
     for i,v in ipairs(sessionPlayers) do
-        query = query .. "steam_id"..i.."="..v.id.."&"
+        if v.id ~= nil then
+            query = query .. "steam_id"..i.."="..v.id.."&"
+        end
     end
 
     WebRequest.get('https://shstats.teliot.dev/search.php'..query, function(req)
