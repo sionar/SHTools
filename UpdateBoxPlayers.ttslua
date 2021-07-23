@@ -26,6 +26,7 @@ PACKING_LIST = {
    'Rounds Until Death',
    'Rounds Until Aegis Expires',
    'Line Drawer',
+   'Free Stamp',
    'Secret Hitler Probability Calc',
    'Ability Drafter',
    'Timer',

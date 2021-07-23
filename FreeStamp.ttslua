@@ -12,13 +12,12 @@ function onObjectDrop(playerColor, object)
             type         = 1,
         })
 
-        local buttonParams = {click_function = 'nullFunc', function_owner = self, label = 'FREE', position = {0,-2,0}, rotation = {180,180,0}, scale = {1,1,1}, width = 0, height = 0, font_size = 400, font_color = {166/255, 255/255, 122/255}, color = {0,0,0}}
+        local buttonParams = {click_function = 'nullFunc', function_owner = self, label = 'FREE', position = {0,2,0}, rotation = {0,0,0}, scale = {1,1,1}, width = 0, height = 0, font_size = 400, font_color = {166/255, 255/255, 122/255}, color = {0,0,0}}
         for k,v in pairs(objs) do
             obj = v.hit_object
             if obj.getGMNotes() == 'Ability' then
                 local buttons = obj.getButtons()
                 if buttons == nil then
-                    print('hi')
                     obj.createButton(buttonParams)
                 elseif buttons[1].click_function ~= 'nullFunc' then
                     if #buttons < 2 then
@@ -28,12 +27,10 @@ function onObjectDrop(playerColor, object)
                     end
                 else
                     obj.clearButtons()
-                    print('bye')
                 end
             end
         end
     end
-
 end
 
 function nullFunc()
