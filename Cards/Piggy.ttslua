@@ -1,8 +1,7 @@
 function onLoad()
-    local toolObj = findTool()
     local buttonParam = {
 	   click_function = 'piggyCall',
-       function_owner = toolObj,
+       function_owner = self,
 	   label = '★',
 	   position = {0.8, 0.5, 1.2},
 	   rotation = {0, 0, 0},
@@ -14,6 +13,12 @@ function onLoad()
        scale = {0.25,0.25,0.25}
 	}
 	self.createButton(buttonParam)
+end
+
+function piggyCall(clickedObject, playerColor)
+    local params = {player = playerColor}
+    local tool = findTool()
+    tool.call('piggyCall', params)
 end
 
 function findTool()

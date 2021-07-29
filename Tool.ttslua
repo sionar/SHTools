@@ -95,7 +95,6 @@ end
 function piggyCall(params)    --For calling ability draw from the Piggy card.
     player = params.player
     drawNum = 1
-
     abDrawStart(_, player)
 end
 
