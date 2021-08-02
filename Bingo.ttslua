@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.5.1'
+VERSION = '1.5.2'
 NAME = 'Expansion Bingo'
 START_POS = {x = 100, y = 1.1, z = -52}
 X_POS = {}
@@ -84,7 +84,6 @@ BOOK =
     'Hitler saved with Confirmed',
     'Hitler sniped with inspect',
     'Inspected lib conflicts inspector',
-    'Lib Avengers two fas',
     'Lib conflicts two+ fascists',
     'Lib gets all cards stolen',
     'Lib gives fas strong ability with Reporter',
