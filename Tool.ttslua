@@ -314,7 +314,6 @@ function gambleCoroutine()
     local broadcastString = colorString(player) .. " bet on a "
     local allObjs = getAllObjects()
 	local tmpObj
-    local gambleResult
     local cardMemory = false
     local tmpPos, tmpRot, params, card
 
@@ -334,6 +333,8 @@ function gambleCoroutine()
     else
         broadcastString = broadcastString .. "Fascist policy card and "
     end
+    local payload = {}
+    payload.steam_id = Player[player].steam_id
     if (deckTable[1].description == "Liberal Policy" and option == 1) or (deckTable[1].description == "Fascist Policy" and option == 0) then
         broadcastString = broadcastString .. "won!"
         if cardMemory then
@@ -345,26 +346,23 @@ function gambleCoroutine()
             giveObjectToPlayer(card, player, {forward = 16.5, right = 0, up = 0}, rotDown)
         end
         gambleTable[player] = card.getName()
-        gambleResult = 'w'
-        WebRequest.post('https://shstats.teliot.dev/gamble.php?id=' .. Player[player].steam_id .. '&result=win')
+        payload.won = 'true'
+        WebRequest.post('https://shstats.teliot.dev/gamble.php', payload, function(req)
+            if req.is_done and not req.is_error then
+                print('Recorded gambler win')
+            end
+        end)
     else
         broadcastString = broadcastString .. "lost!"
-        gambleResult = 'l'
         WebRequest.post('https://shstats.teliot.dev/gamble.php?id=' .. Player[player].steam_id .. '&result=lose')
+        payload.won = 'false'
+        WebRequest.post('https://shstats.teliot.dev/gamble.php', payload, function(req)
+            if req.is_done and not req.is_error then
+                print('Recorded gambler loss')
+            end
+        end)
     end
 
-    ---Scoreboard code
-    local tab = getAllObjects()
-    for _, v in pairs(tab) do
-        if string.match(v.getName(), "Scoreboard") then
-            tmpObj = v
-            break
-        end
-    end
-    if tmpObj ~= nil then
-        tmpObj.call('recGamble', {player, gambleResult})
-    end
-    ---
     broadcastToAll(broadcastString, {1,1,1})
     local pos2 = drawDeck.getPosition()
 

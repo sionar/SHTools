@@ -408,10 +408,6 @@ function checkValid()
     end
 end
 
-function recGamble(params)
-
-end
-
 function overLeader()
     -- local tab = self.getInputs()
     -- if tab == nil then
