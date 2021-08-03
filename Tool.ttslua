@@ -354,7 +354,6 @@ function gambleCoroutine()
                 for k,v in pairs(objs) do
                     if string.match(v.getName(), 'Scoreboard Web') then
                         local stats = v.getTable('stats')
-                        print(logString(stats[Player[player].steam_id]))
                         stats[Player[player].steam_id].gambler_attempts = stats[Player[player].steam_id].gambler_attempts + 1
                         stats[Player[player].steam_id].gambler_wins = stats[Player[player].steam_id].gambler_wins + 1
                         v.setTable('stats', stats)
