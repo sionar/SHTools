@@ -31,22 +31,19 @@ fasWR = {}
 hitWR = {}
 fhWR = {}
 totWR = {}
-gnum = {}
 gwr = {}
 lrat = {}
 frat = {}
 namesDisp = {}
 gamesDisp = {}
 ratesDisp = {}
-passHash = ''
 recordCheck = false
 startTime = 0
 minGames = 10
 startRank = 1
-fWins = 0
-lWins = 0
 state = 0
 gameType = 'vanilla'
+gameSize = 0
 roles = Global.getTable('roles')
 sessionPlayers = {}
 
@@ -101,7 +98,7 @@ function onChat(message, player)
         refreshStart()
         return false
     elseif command == '!s2' then
-        refreshMisc()
+        miscMenu()
         return false
     elseif command == '!s3' then
         overStart()
@@ -126,6 +123,7 @@ function onChat(message, player)
         if player.admin then
             recHFunc()
         end
+        return false
     elseif command == '!up' then
         updatePlayers()
         return false
@@ -258,26 +256,6 @@ function updatePlayers()
     getStats()
 end
 
-function refreshMisc()
-    refreshStart()
-    for i = 1,10 do
-        if Player[COLOR_TABLE[i]].seated == false then
-            gnum[i] = ""
-            gwr[i] = ""
-            lrat[i] = ""
-            frat[i] = ""
-        else
-            -- if db[Player[COLOR_TABLE[i]].steam_id].gn == nil then
-            --     db[Player[COLOR_TABLE[i]].steam_id].gn = 0
-            --     db[Player[COLOR_TABLE[i]].steam_id].gw = 0
-            -- end
-            -- gnum[i] = db[Player[COLOR_TABLE[i]].steam_id].gn
-            -- gwr[i] = round(db[Player[COLOR_TABLE[i]].steam_id].gw/db[Player[COLOR_TABLE[i]].steam_id].gn * 100) .. "%"
-        end
-    end
-    miscMenu()
-end
-
 function toggleGameType(clickedObject, playerColor)
     if Player[playerColor].admin then
         if gameType == 'vanilla' then
@@ -286,6 +264,20 @@ function toggleGameType(clickedObject, playerColor)
         else
             gameType = 'vanilla'
             broadcastToAll('Game type has been set to Vanilla.')
+        end
+    end
+    getStats()
+end
+
+function changeGameSize(clickedObject, playerColor)
+    if Player[playerColor].admin then
+        if gameSize == 0 then
+            gameSize = 5
+        else
+            gameSize = gameSize + 1
+        end
+        if gameSize == 11 then
+            gameSize = 0
         end
     end
     getStats()
@@ -343,6 +335,7 @@ function recWin(winningTeam)
     local lastFascistPlayed = Global.getVar('lastFascistPlayed')
     local roles = Global.getTable('roles')
     local payload = {}
+    payload.version = 2
     payload.winner = winningTeam
     payload.game_type = gameType
     for i,v in ipairs(sessionPlayers) do
@@ -358,7 +351,7 @@ function recWin(winningTeam)
 end
 
 function getStats()
-    local query = "?gamestats=yes&"
+    local query = "?gamestats=yes&game_size=" .. gameSize .. '&'
     if gameType == 'vanilla' then
         query = query .. 'game_type=vanilla&'
     else
@@ -625,7 +618,7 @@ function mainMenu()
         position = {-1.6,0.2,1.4}, rotation = {0,0,0}, width = 1000, height = 800, font_size = 200, tooltip = '!up', scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
-    buttonParam = {click_function = 'refreshMisc', label = "Misc\nStats", color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
+    buttonParam = {click_function = 'miscMenu', label = "Misc\nStats", color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
         position = {-0.96,0.2,1.4}, rotation = {0,0,0}, width = 1000, height = 800, font_size = 200, tooltip = 'Type !s2 in chat to open up this page', scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
@@ -638,16 +631,25 @@ function mainMenu()
     end
     self.createButton(buttonParam)
 
+    local gameSizeText = 'Any'
+    if gameSize ~= 0 then
+        gameSizeText = gameSize
+    end
+
+    buttonParam = {click_function = 'changeGameSize', label = "Num Players:\n"..gameSizeText, color = {91/255,37/255,206/255}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {0.32,0.2,1.4}, rotation = {0,0,0}, width = 1000, height = 800, font_size = 150, tooltip = 'Set which game size to show stats for.', scale = {0.25,0.25,0.25}}
+    self.createButton(buttonParam)
+
     buttonParam = {click_function = 'recLButtonFunc', label = "Record\nLib Win", color = {0,0,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0.32,0.2,1.4}, rotation = {0,0,0}, width = 1000, height = 800, font_size = 200, tooltip = 'Record a liberal win (!rl)', scale = {0.25,0.25,0.25}}
+        position = {0.96,0.2,1.4}, rotation = {0,0,0}, width = 1000, height = 800, font_size = 200, tooltip = 'Record a liberal win (!rl)', scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'recFButtonFunc', label = "Record\nFas Win", color = {1,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0.96,0.2,1.4}, rotation = {0,0,0}, width = 1000, height = 800, font_size = 200, tooltip = 'Record a fascist win (!rf)', scale = {0.25,0.25,0.25}}
+        position = {1.6,0.2,1.3}, rotation = {0,0,0}, width = 1000, height = 400, font_size = 100, tooltip = 'Record a fascist win (!rf)', scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'recHButtonFunc', label = "Record\nHit Win", color = {1,0,0,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {1.6,0.2,1.4}, rotation = {0,0,0}, width = 1000, height = 800, font_size = 200, tooltip = 'Record a Hitler win - Hitler was elected as chancellor in Hitler territory. (!rh)', scale = {0.25,0.25,0.25}}
+        position = {1.6,0.2,1.5}, rotation = {0,0,0}, width = 1000, height = 400, font_size = 100, tooltip = 'Record a Hitler win - Hitler was elected as chancellor in Hitler territory. (!rh)', scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
 
@@ -702,61 +704,64 @@ function miscMenu()
     local fWins = stats.games.fascist_wins
     local fWinRate = fWins / (fWins + lWins)
     local totalGames = stats.games.total_games
+    local gamblerAttempts, gamblerWins
 
     local buttonParam = {click_function = 'nullFunc', label = "Name", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
         position = {COL[1],0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 320, scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
-    -- local buttonParam = {click_function = 'nullFunc', label = "Liberal\nRating", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-    --     position = {COL[2],0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 200, scale = {0.25,0.25,0.25}}
-    -- self.createButton(buttonParam)
-    --
-    -- local buttonParam = {click_function = 'nullFunc', label = "Fascist\nRating", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-    --     position = {COL[3],0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 200, scale = {0.25,0.25,0.25}}
-    -- self.createButton(buttonParam)
-    --
-    -- local buttonParam = {click_function = 'nullFunc', label = "Gamble\nAttempts", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-    --     position = {COL[4],0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 200, scale = {0.25,0.25,0.25}}
-    -- self.createButton(buttonParam)
-    --
-    -- local buttonParam = {click_function = 'nullFunc', label = "Gamble\nSuccess", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-    --     position = {COL[5],0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 200, scale = {0.25,0.25,0.25}}
-    -- self.createButton(buttonParam)
+    if gameType == 'expansion' then
+        buttonParam = {click_function = 'nullFunc', label = "Gamble\nAttempts", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
+            position = {COL[4],0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 200, scale = {0.25,0.25,0.25}}
+        self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'nullFunc', label = "Total Games\nRecorded", color = BUTT_B_COLOR, font_color = stringColorToRGB('Green'), function_owner = self,
+        buttonParam = {click_function = 'nullFunc', label = "Gamble\nSuccess", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
+            position = {COL[5],0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 200, scale = {0.25,0.25,0.25}}
+        self.createButton(buttonParam)
+    end
+
+    buttonParam = {click_function = 'nullFunc', label = "Total Games\nRecorded", color = BUTT_B_COLOR, font_color = stringColorToRGB('Green'), function_owner = self,
         position = {COL[7],0.2,ROW[1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 200, scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'nullFunc', label = totalGames, color = BUTT_B_COLOR, font_color = stringColorToRGB('Green'), function_owner = self,
+    buttonParam = {click_function = 'nullFunc', label = totalGames, color = BUTT_B_COLOR, font_color = stringColorToRGB('Green'), function_owner = self,
         position = {COL[7],0.2,ROW[2]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 400, scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'nullFunc', label = "Fascist\nWinrate", color = BUTT_B_COLOR, font_color = stringColorToRGB('Green'), function_owner = self,
+    buttonParam = {click_function = 'nullFunc', label = "Fascist\nWinrate", color = BUTT_B_COLOR, font_color = stringColorToRGB('Green'), function_owner = self,
         position = {COL[7],0.2,ROW[4]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 200, scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'nullFunc', label = round(fWinRate*100).."%", color = BUTT_B_COLOR, font_color = stringColorToRGB('Green'), function_owner = self,
+    buttonParam = {click_function = 'nullFunc', label = round(fWinRate*100).."%", color = BUTT_B_COLOR, font_color = stringColorToRGB('Green'), function_owner = self,
         position = {COL[7],0.2,ROW[5]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 400, scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
     for i = 1,10 do
-        if Player[COLOR_TABLE[i]].steam_name ~= nil and string.len(Player[COLOR_TABLE[i]].steam_name) > 10 then
-            name_size = 120
-        else
-            name_size = 200
-        end
-        local buttonParam = {click_function = 'nullFunc', label = Player[COLOR_TABLE[i]].steam_name, color = BUTT_B_COLOR, font_color = stringColorToRGB(COLOR_TABLE[i]), function_owner = self,
-            position = {COL[1],0.2,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = name_size, scale = {0.25,0.25,0.25}}
-        self.createButton(buttonParam)
+        if Player[COLOR_TABLE[i]].seated then
+            if Player[COLOR_TABLE[i]].steam_name ~= nil and string.len(Player[COLOR_TABLE[i]].steam_name) > 10 then
+                name_size = 120
+            else
+                name_size = 200
+            end
+            buttonParam = {click_function = 'nullFunc', label = Player[COLOR_TABLE[i]].steam_name, color = BUTT_B_COLOR, font_color = stringColorToRGB(COLOR_TABLE[i]), function_owner = self,
+                position = {COL[1],0.2,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = name_size, scale = {0.25,0.25,0.25}}
+            self.createButton(buttonParam)
 
-        -- local buttonParam = {click_function = 'nullFunc', label = gnum[i], color = BUTT_B_COLOR, font_color = stringColorToRGB(COLOR_TABLE[i]), function_owner = self,
-        --     position = {COL[4],0.2,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 200, scale = {0.25,0.25,0.25}}
-        -- self.createButton(buttonParam)
-        --
-        -- local buttonParam = {click_function = 'nullFunc', label = gwr[i], font_color = stringColorToRGB(COLOR_TABLE[i]), function_owner = self,
-        --     position = {COL[5],0.2,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 200, scale = {0.25,0.25,0.25}}
-        -- self.createButton(buttonParam)
+            if gameType == 'expansion' then
+                gamblerAttempts = stats[Player[COLOR_TABLE[i]].steam_id].gambler_attempts
+                gamblerWR = round(stats[Player[COLOR_TABLE[i]].steam_id].gambler_wins / gamblerAttempts * 100) .. "%"
+
+                buttonParam = {click_function = 'nullFunc', label = gamblerAttempts, color = BUTT_B_COLOR, font_color = stringColorToRGB(COLOR_TABLE[i]), function_owner = self,
+                    position = {COL[4],0.2,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 200, scale = {0.25,0.25,0.25}}
+                self.createButton(buttonParam)
+
+                buttonParam = {click_function = 'nullFunc', label = gamblerWR, font_color = stringColorToRGB(COLOR_TABLE[i]), function_owner = self,
+                    position = {COL[5],0.2,ROW[i+1]}, rotation = {0,0,0}, width = BUTT_W, height = BUTT_H, font_size = 200, scale = {0.25,0.25,0.25}}
+                self.createButton(buttonParam)
+            end
+        end
     end
+
 
     createMiscButtons()
 end
@@ -766,7 +771,7 @@ function createMiscButtons()
         position = {-1.6,0.2,1.4}, rotation = {0,0,0}, width = 1000, height = 800, font_size = 200, tooltip = 'Type !s1 in chat to open up this page', scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 
-    local buttonParam = {click_function = 'refreshMisc', label = "Misc\nStats", color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
+    local buttonParam = {click_function = 'miscMenu', label = "Misc\nStats", color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
         position = {-0.96,0.2,1.4}, rotation = {0,0,0}, width = 1000, height = 800, font_size = 200, tooltip = 'Type !s2 in chat to open up this page', scale = {0.25,0.25,0.25}}
     self.createButton(buttonParam)
 

@@ -347,9 +347,23 @@ function gambleCoroutine()
         end
         gambleTable[player] = card.getName()
         payload.won = 'true'
+        payload.version = 2
         WebRequest.post('https://shstats.teliot.dev/gamble.php', payload, function(req)
             if req.is_done and not req.is_error then
-                print('Recorded gambler win')
+                local objs = getAllObjects()
+                for k,v in pairs(objs) do
+                    if string.match(v.getName(), 'Scoreboard Web') then
+                        local stats = v.getTable('stats')
+                        print(logString(stats[Player[player].steam_id]))
+                        stats[Player[player].steam_id].gambler_attempts = stats[Player[player].steam_id].gambler_attempts + 1
+                        stats[Player[player].steam_id].gambler_wins = stats[Player[player].steam_id].gambler_wins + 1
+                        v.setTable('stats', stats)
+                        local state = v.getVar('state')
+                        if state == 1 then
+                            v.call('miscMenu')
+                        end
+                    end
+                end
             end
         end)
     else
@@ -358,7 +372,18 @@ function gambleCoroutine()
         payload.won = 'false'
         WebRequest.post('https://shstats.teliot.dev/gamble.php', payload, function(req)
             if req.is_done and not req.is_error then
-                print('Recorded gambler loss')
+                local objs = getAllObjects()
+                for k,v in pairs(objs) do
+                    if string.match(v.getName(), 'Scoreboard Web') then
+                        local stats = v.getTable('stats')
+                        stats[Player[player].steam_id].gambler_attempts = stats[Player[player].steam_id].gambler_attempts + 1
+                        v.setTable('stats', stats)
+                        local state = v.getVar('state')
+                        if state == 1 then
+                            v.call('miscMenu')
+                        end
+                    end
+                end
             end
         end)
     end
