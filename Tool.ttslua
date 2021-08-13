@@ -533,24 +533,27 @@ function dervishStart(clickedButton, playerColor)
     if roles[targetColor] == 'hitler' then
         hitler[1] = player
     end
-    if roles[player] == 'fascist' then
-        for i,v in ipairs(fascists) do
-            if v == player then
-                fascists[i] = targetColor
+    if roles[player] ~= roles[targetColor] then
+        if roles[player] == 'fascist' then
+            for i,v in ipairs(fascists) do
+                if v == player then
+                    fascists[i] = targetColor
+                end
             end
         end
-    end
-    if roles[targetColor] == 'fascist' then
-        for i,v in ipairs(fascists) do
-            if v == targetColor then
-                fascists[i] = player
+        if roles[targetColor] == 'fascist' then
+            for i,v in ipairs(fascists) do
+                if v == targetColor then
+                    fascists[i] = player
+                end
             end
         end
+        roles[player], roles[targetColor] = roles[targetColor], roles[player]
+        Global.setTable('roles', roles)
+        Global.setTable('hitler', hitler)
+        Global.setTable('fascists', fascists)
     end
-    roles[player], roles[targetColor] = roles[targetColor], roles[player]
-    Global.setTable('roles', roles)
-    Global.setTable('hitler', hitler)
-    Global.setTable('fascists', fascists)
+
     Global.call('refreshUI')
     for k,v in pairs(Player.getPlayers()) do
         if player1SteamId ~= nil and v.steam_id == player1SteamId then
