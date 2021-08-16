@@ -21,6 +21,7 @@ PACKING_LIST = {
    'Secret Hitler Probability Calc',
    'Ability Drafter',
    'Timer',
+   'Rulings',
 }
 
 function onLoad()
